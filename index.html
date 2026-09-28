@@ -1,0 +1,3902 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<base target="_top">
+<script src="web-shim.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="application-name" content="GS25 Binh Dien Warehouse">
+<meta name="apple-mobile-web-app-title" content="GS25 Binh Dien Warehouse">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0A1930">
+<title>GS25 Binh Dien · Tote Tracking</title>
+
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNiIgZmlsbD0iIzBBMTkzMCIgc3Ryb2tlPSIjMDBEMkEwIiBzdHJva2Utd2lkdGg9IjgiLz48L3N2Zz4K">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNiIgZmlsbD0iIzBBMTkzMCIgc3Ryb2tlPSIjMDBEMkEwIiBzdHJva2Utd2lkdGg9IjgiLz48L3N2Zz4K">
+
+<style>
+  /* ===================================================================
+     GS25 BINH DIEN WAREHOUSE — enterprise SaaS design system
+     Navy #0A1930 + Cyan #00D2A0 · soft cards, subtle elevation, roomy layout.
+     =================================================================== */
+  :root{
+    --navy:#0A1930;
+    --navy-2:#132A4D;
+    --navy-3:#173A6B;
+    --cyan:#00D2A0;
+    --cyan-deep:#00A784;
+    --bg:#F5F7FA;
+    --card:#FFFFFF;
+    --border:#E4E9F0;
+    --ink:#101828;
+    --muted:#667085;
+    --amber:#D97706;
+    --amber-soft:#FFF6E2;
+    --red:#E1364A;
+    --red-soft:#FCE9EB;
+    --green-soft:#E9FBF5;
+    --blue-soft:#EFF3FF;
+    --radius:14px;
+    --radius-sm:10px;
+    --radius-lg:18px;
+    --shadow: 0 1px 2px rgba(16,24,40,.04), 0 6px 16px rgba(16,24,40,.06);
+  }
+
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{
+    width:100%; height:100%; margin:0; padding:0;
+    font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    background:var(--bg); color:var(--ink); overflow:hidden;
+  }
+  button, input, select{ font-family:inherit; color:inherit; }
+  button{ cursor:pointer; touch-action:manipulation; border:0; background:none; }
+  .hidden{ display:none !important; }
+  b{ font-weight:800; }
+
+  /* ---------------- LOGIN ---------------- */
+  /* width/height 100% (KHÔNG dùng 100vw/100vh) - Apps Script luôn nhúng app
+     vào 1 iframe sandbox bên trong script.google.com; vw/vh đo theo viewport
+     trình duyệt NGOÀI CÙNG chứ không phải khung iframe thực tế, nên trên
+     nhiều trình duyệt mobile (đặc biệt Safari iOS) app bị bó lại trong 1
+     khung nhỏ hơn màn hình thật, còn lại là khoảng trống xám. */
+  .login-screen{ width:100%; height:100%; display:flex; flex-direction:column; overflow:hidden; }
+  /* Cao CỐ ĐỊNH (không dùng % chiều cao màn hình) - trên PDA/mobile, mỗi lần
+     bật bàn phím ảo để gõ Login ID/Password, chiều cao khả dụng của trình
+     duyệt co lại, nếu hero cao theo % thì nó sẽ co/nhảy theo, nhìn như bị
+     "thu hẹp". Cố định px thì hero luôn đứng yên, chỉ có login-panel bên
+     dưới tự cuộn nếu bị bàn phím che bớt. */
+  .login-hero{
+    position:relative; height:180px; flex-shrink:0; overflow:hidden;
+    background:linear-gradient(160deg,#081324 0%, #0A1930 50%, #10315C 100%);
+    display:flex; flex-direction:column; justify-content:flex-start; padding:22px 22px 0;
+  }
+  .login-hero::after{
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background:radial-gradient(circle at 88% 8%, rgba(0,210,160,.22), transparent 42%);
+  }
+  .brand-mark{ position:relative; z-index:2; display:flex; align-items:center; gap:8px; }
+  .brand-mark-icon{ width:24px; height:24px; object-fit:contain; }
+  .brand-mark span{ color:#fff; font-weight:800; font-size:12px; letter-spacing:1.6px; }
+  .hero-copy{ position:relative; z-index:2; margin-top:12px; }
+  .hero-copy h1{ color:#fff; font-size:21px; line-height:1.28; font-weight:800; margin:0 0 6px; }
+  .hero-copy p{ color:#AEC0DA; font-size:12px; line-height:1.5; margin:0; max-width:70%; }
+  .hero-illustration{ position:absolute; right:-14px; bottom:-4px; z-index:1; width:56%; height:auto; }
+
+  .login-panel{ flex:1; background:var(--card); padding:22px 20px; overflow-y:auto; }
+  .login-panel h2{ font-size:19px; font-weight:800; margin:0 0 3px; }
+  .login-panel .sub{ color:var(--muted); font-size:12px; margin:0 0 18px; }
+  .field{ margin-bottom:13px; }
+  .field label{ display:block; font-size:11px; font-weight:800; color:var(--ink); margin-bottom:6px; letter-spacing:.3px; text-transform:uppercase; }
+  .field input{
+    width:100%; height:48px; border:1.5px solid var(--border); border-radius:var(--radius-sm);
+    padding:0 14px; font-size:16px; outline:none; background:#FBFCFD;
+  }
+  .field input:focus{ border-color:var(--cyan-deep); box-shadow:0 0 0 3px rgba(0,210,160,.14); background:#fff; }
+  .btn-primary{
+    width:100%; height:50px; border-radius:var(--radius-sm); background:var(--navy); color:#fff;
+    font-size:15px; font-weight:800; margin-top:6px; box-shadow:var(--shadow); letter-spacing:.4px;
+  }
+  .btn-primary:active{ background:#081527; }
+  .login-msg{
+    margin-top:14px; padding:12px 14px; border-radius:var(--radius-sm); font-size:13px; font-weight:700;
+    text-align:center; display:none; background:var(--blue-soft); color:var(--navy);
+  }
+
+  /* ---------------- APP SHELL ---------------- */
+  /* flex-direction:row-reverse => thanh điều hướng (.rail, phần tử thứ 2 trong
+     HTML) sẽ hiện bên TRÁI thay vì bên phải, không cần đổi thứ tự HTML. */
+  .page{ width:100%; height:100%; display:flex; flex-direction:row-reverse; background:var(--bg); }
+  .main{ flex:1; min-width:0; display:flex; flex-direction:column; }
+
+  .topbar{
+    height:58px; flex-shrink:0; display:flex; align-items:center; justify-content:space-between;
+    padding:0 16px; background:var(--card); border-bottom:1px solid var(--border);
+  }
+  .topbar-left{ display:flex; align-items:center; gap:8px; min-width:0; }
+  .topbar-logo{ width:20px; height:20px; object-fit:contain; flex-shrink:0; }
+  .topbar-left b{ font-size:12px; letter-spacing:.3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .avatar{ width:32px; height:32px; border-radius:50%; background:var(--navy); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:12px; flex-shrink:0; }
+
+  .content{ flex:1; overflow-y:auto; padding:16px; -webkit-overflow-scrolling:touch; }
+  .screen{ display:none; }
+  .screen.active{ display:block; animation:appear .12s ease-out; }
+  @keyframes appear{ from{ opacity:.4; } to{ opacity:1; } }
+
+  /* ---------------- LEFT NAV RAIL (thanh điều hướng bên trái) ---------------- */
+  .rail{
+    width:64px; flex-shrink:0; background:var(--navy); display:flex; flex-direction:column; align-items:center;
+    padding:14px 0 10px; gap:3px; overflow-y:auto;
+  }
+  .rail::-webkit-scrollbar{ display:none; }
+  .rail-logo{ width:26px; height:26px; margin-bottom:8px; flex-shrink:0; object-fit:contain; }
+  .rail-item{
+    width:54px; padding:8px 2px; border-radius:10px; display:flex; flex-direction:column; align-items:center; gap:3px;
+    color:#9FB3D1; flex-shrink:0;
+  }
+  .rail-item svg{ width:16px; height:16px; }
+  .rail-item span{ font-size:8px; font-weight:800; letter-spacing:.1px; }
+  /* Mọi mục trong thanh điều hướng (Home, OUT, IN, Store, Tồn, ...) dùng
+     CHUNG một kiểu "đang chọn" (active) - không còn màu riêng cho OUT/IN
+     nữa, để cả thanh nhìn đồng nhất 1 màu. */
+  .rail-item.active{ background:rgba(0,210,160,.16); color:#fff; }
+  .rail-item.active svg{ color:var(--cyan); }
+  .rail-spacer{ flex:1; min-height:6px; }
+  .rail-logout{ width:54px; padding:8px 2px; border-radius:10px; display:flex; flex-direction:column; align-items:center; gap:3px; color:#7C8CA8; flex-shrink:0; }
+  .rail-logout svg{ width:15px; height:15px; }
+  .rail-logout span{ font-size:8px; font-weight:800; }
+
+  /* ---------------- HOME (landing) ---------------- */
+  .greet h1{ font-size:17px; font-weight:800; margin:0 0 2px; }
+  .greet p{ color:var(--muted); margin:0 0 16px; font-size:11.5px; }
+
+  .kpi-row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+  .kpi{ background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:13px; box-shadow:var(--shadow); }
+  .kpi .top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:9px; }
+  .kpi .icon{ width:28px; height:28px; border-radius:8px; display:flex; align-items:center; justify-content:center; }
+  .kpi .icon svg{ width:15px; height:15px; }
+  .kpi .num{ font-size:21px; font-weight:800; }
+  .kpi .lbl{ font-size:10.5px; color:var(--muted); margin-top:2px; }
+
+  .quick-row{ display:flex; flex-direction:column; gap:10px; margin-bottom:14px; }
+  .quick{
+    border-radius:var(--radius); padding:16px; color:#fff; display:flex; align-items:center; justify-content:space-between;
+    box-shadow:var(--shadow);
+  }
+  .quick.out{ background:linear-gradient(135deg,#0A1930,#173A6B); }
+  .quick.in{ background:linear-gradient(135deg,#00A784,#00D2A0); }
+  .quick .txt div:first-child{ font-size:14.5px; font-weight:800; margin-bottom:2px; }
+  .quick .txt div:last-child{ font-size:11px; opacity:.85; }
+  .quick svg{ width:28px; height:28px; opacity:.9; flex-shrink:0; }
+
+  .panel{ background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:15px; box-shadow:var(--shadow); margin-bottom:14px; }
+  .panel h3{ margin:0 0 12px; font-size:12.5px; font-weight:800; }
+  .chart-bars{ display:flex; align-items:flex-end; gap:7px; height:100px; }
+  .chart-bars .bar{ flex:1; background:linear-gradient(180deg,#00D2A0,#00A784); border-radius:4px 4px 0 0; position:relative; min-height:2px; }
+  .chart-bars .bar span{ position:absolute; bottom:-16px; left:0; right:0; text-align:center; font-size:8.5px; color:var(--muted); }
+  .activity-item{ display:flex; gap:9px; padding:9px 0; border-bottom:1px solid #F0F2F5; font-size:11px; }
+  .activity-item:last-child{ border-bottom:0; }
+  .dot{ width:7px; height:7px; border-radius:50%; margin-top:4px; flex-shrink:0; }
+  .empty-note{ color:var(--muted); font-size:12px; padding:6px 0; }
+
+  /* ---------------- FORM ELEMENTS ---------------- */
+  label{ display:block; font-size:12px; font-weight:800; letter-spacing:.3px; text-transform:uppercase; color:var(--navy); margin:14px 0 7px; }
+  input, .select-input{
+    width:100%; height:48px; font-size:16px; font-weight:600; padding:8px 14px; border:1.5px solid var(--border);
+    border-radius:var(--radius-sm); background:var(--card); color:var(--ink); outline:none;
+  }
+  input:focus, .select-input:focus{ border-color:var(--navy); box-shadow:0 0 0 3px rgba(10,25,48,.08); }
+  input.upper{ text-transform:uppercase; }
+
+  .scan-input{
+    height:80px; font-size:30px; font-weight:800; text-align:center; letter-spacing:.5px;
+    border:2px solid var(--amber); border-radius:var(--radius); background:var(--amber-soft); color:var(--navy);
+  }
+  .scan-input::placeholder{ color:#a06a05; opacity:.7; font-size:20px; }
+  .scan-input.no-keyboard{ caret-color:transparent; }
+  .manual-on{ background:var(--amber) !important; color:#fff !important; border-color:var(--amber) !important; }
+
+  .btn{
+    width:100%; min-height:50px; margin-top:10px; font-size:14.5px; font-weight:800; letter-spacing:.2px;
+    border-radius:var(--radius-sm); background:var(--navy); color:#fff; box-shadow:var(--shadow);
+  }
+  .btn:active{ background:#081527; }
+  .btn:disabled{ background:#C7CEDA; color:#8592A8; box-shadow:none; }
+  .btn-gray{ background:var(--card); color:var(--navy); border:1.5px solid var(--border); box-shadow:none; }
+  .btn-gray:active{ background:var(--bg); }
+  .btn-link{
+    background:none; border:none; padding:0; margin:0; width:auto; min-height:0;
+    color:#fff; font-weight:800; font-size:11.5px; text-decoration:underline;
+  }
+
+  /* ---------------- "PHIÊN QUÉT" (session) cho màn OUT ---------------- */
+  .active-session-bar{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    background:var(--navy); color:#fff; padding:10px 14px; border-radius:var(--radius-sm);
+    margin-bottom:12px; font-size:12.5px; font-weight:700;
+  }
+  /* Overlay mờ toàn màn hình + hộp xác nhận nổi lên giữa, dùng khi bấm
+     "KẾT THÚC PHIÊN" để bắt xem lại tổng kết trước khi xác nhận. */
+  .session-overlay{
+    position:fixed; inset:0; background:rgba(10,25,48,.55); z-index:200;
+    display:flex; align-items:center; justify-content:center; padding:20px;
+  }
+  .session-confirm-box{
+    width:100%; max-width:340px; background:var(--card); border-radius:var(--radius);
+    padding:18px; box-shadow:0 20px 40px rgba(10,25,48,.35);
+  }
+  .session-confirm-box h3{ margin:0 0 12px; font-size:16px; color:var(--navy); }
+  .session-summary{ margin-bottom:14px; }
+  .session-summary div{
+    display:flex; align-items:center; justify-content:space-between; padding:8px 0;
+    border-bottom:1px solid #F0F2F5; font-size:13px; color:var(--muted);
+  }
+  .session-summary div b{ font-size:15px; color:var(--navy); }
+  .session-confirm-actions{ display:flex; gap:8px; }
+  .session-confirm-actions .btn{ margin-top:0; }
+  .btn-danger{ background:var(--red); }
+  .btn-danger:active{ background:#B22239; }
+
+  /* Thanh phiên khi ở chế độ IN dùng tông cyan (giống mode-banner.in) thay
+     vì navy, để phân biệt rõ đang IN hay OUT dù không hiện tên store. */
+  .active-session-bar.in{ background:linear-gradient(135deg,#00A784,#00D2A0); color:var(--navy); }
+  .active-session-bar.in .btn-link{ color:var(--navy); }
+
+  .session-bar-actions{ display:flex; align-items:center; gap:16px; }
+  .btn-link-danger{ color:#FFD9DE; }
+  .active-session-bar.in .btn-link-danger{ color:#7A1220; }
+
+  /* ---------------- MÀN TÀI XẾ: chọn loại phiên + camera quét ---------------- */
+  .driver-mode-switch{ display:flex; gap:8px; margin-bottom:12px; }
+  .driver-mode-btn{ margin-top:0; font-size:12px; }
+  .driver-mode-btn.active{ background:var(--navy); color:#fff; }
+
+  .driver-camera-box{
+    position:relative; width:100%; aspect-ratio:4/3; border-radius:var(--radius);
+    overflow:hidden; background:#000; box-shadow:var(--shadow);
+  }
+  .driver-camera-box video{ width:100%; height:100%; object-fit:cover; display:block; }
+  .driver-camera-frame{
+    position:absolute; inset:14%; border:3px solid var(--cyan); border-radius:var(--radius-sm);
+    box-shadow:0 0 0 999px rgba(0,0,0,.28); pointer-events:none;
+  }
+
+  .mode-banner{
+    display:flex; align-items:center; justify-content:space-between; padding:12px 14px; border-radius:var(--radius);
+    color:#fff; font-weight:800; font-size:13px; margin-bottom:14px; box-shadow:var(--shadow);
+  }
+  .mode-banner.out{ background:linear-gradient(135deg,#0A1930,#173A6B); }
+  .mode-banner.in{ background:linear-gradient(135deg,#00A784,#00D2A0); }
+  .mode-banner span.tag{ font-size:10px; background:rgba(255,255,255,.22); padding:3px 8px; border-radius:999px; letter-spacing:.5px; }
+
+  /* ---------------- CARDS / PANELS (shared render templates) ---------------- */
+  .store-box, .dashboard-card, .summary-box, .history-row{
+    background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:14px; margin-bottom:12px;
+    font-size:13.5px; line-height:20px; box-shadow:var(--shadow);
+  }
+  .summary-box{ border-left:4px solid var(--cyan-deep); }
+  .summary-title{ font-size:15px; font-weight:800; color:var(--navy); margin-bottom:6px; }
+  .status-store{ color:var(--red); font-weight:800; }
+  .status-warehouse{ color:var(--cyan-deep); font-weight:800; }
+  .status-transit{ color:var(--amber); font-weight:800; }
+  .history-row{ margin-top:10px; border-left:4px solid var(--border); }
+  .history-ok{ border-left-color:var(--cyan-deep); }
+  .history-bad{ border-left-color:var(--red); background:var(--red-soft); }
+
+  /* store-combo + store-list: ô tìm store kiểu "dropdown" - gõ tới đâu,
+     gợi ý hiện ra ngay bên dưới ô nhập tới đó (không hiện sẵn toàn bộ
+     danh sách), chọn xong thì gợi ý tự đóng lại. */
+  .store-combo{ position:relative; }
+  .store-list{
+    position:absolute; left:0; right:0; top:calc(100% + 6px);
+    max-height:240px; overflow-y:auto; border:1px solid var(--border); border-radius:var(--radius-sm);
+    background:var(--card); box-shadow:0 12px 28px rgba(10,25,48,.20);
+    z-index:30; display:none;
+  }
+  .store-list.open{ display:block; }
+  .store-item{ padding:12px 14px; border-bottom:1px solid #F0F2F5; font-size:13.5px; line-height:19px; }
+  .store-item:active{ background:var(--bg); }
+  .store-item b{ font-size:15px; color:var(--navy); }
+  .selected-store{
+    margin-top:10px; padding:12px 14px; font-size:13.5px; font-weight:800; color:var(--navy);
+    background:var(--green-soft); border-radius:var(--radius-sm); border:1.5px solid var(--cyan-deep);
+  }
+
+  .result{
+    margin-top:12px; padding:14px; min-height:60px; font-size:15px; font-weight:800; text-align:center;
+    border-radius:var(--radius);
+  }
+  .ok{ background:var(--green-soft); color:var(--cyan-deep); }
+  .fail{ background:var(--red-soft); color:var(--red); }
+  .pending{ background:var(--amber-soft); color:var(--amber); }
+
+  .counter{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:12px; }
+  .counter div{ border:1px solid var(--border); border-radius:var(--radius-sm); padding:9px 3px; text-align:center; font-size:9.5px; font-weight:800; letter-spacing:.2px; background:var(--card); text-transform:uppercase; color:var(--muted); }
+  .counter span{ display:block; font-size:20px; margin-top:3px; font-weight:800; color:var(--ink); }
+
+  .recent{ margin-top:12px; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+  .recent:empty{ display:none; }
+  .recent-item{ padding:11px 13px; border-bottom:1px solid #F0F2F5; font-size:12.5px; line-height:18px; }
+  .recent-item:last-child{ border-bottom:0; }
+
+  .dashboard-header{ display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:10px; }
+  .dashboard-title{ font-size:14px; font-weight:800; line-height:19px; flex:1; color:var(--navy); }
+  .qty{ min-width:44px; padding:5px 9px; font-size:18px; font-weight:800; color:#fff; background:var(--red); text-align:center; border-radius:var(--radius-sm); }
+
+  .chip{ display:inline-block; border:1px solid var(--border); border-radius:999px; padding:5px 10px; margin:3px; font-size:11.5px; font-weight:800; background:var(--bg); color:var(--navy); }
+
+  /* ---------------- Bảng xếp hạng "nợ tote nhiều nhất" (tab Tồn) ---------------- */
+  .rank-row{ display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid #F0F2F5; font-size:12.5px; }
+  .rank-row:last-child{ border-bottom:0; }
+  .rank-badge{
+    width:22px; height:22px; border-radius:50%; background:var(--navy); color:#fff; font-size:11px; font-weight:800;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .rank-badge.top1{ background:var(--red); }
+  .rank-name{ flex:1; font-weight:700; color:var(--ink); }
+  .rank-qty{ font-weight:800; color:var(--navy); font-size:14px; }
+
+  h3{ margin:18px 0 10px; padding:0; font-size:13px; font-weight:800; color:var(--navy); text-transform:uppercase; letter-spacing:.5px; }
+
+  details{ border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px; margin-top:10px; background:var(--bg); }
+  summary{ font-size:12px; font-weight:800; color:var(--navy); }
+
+  /* ---------------- INSTALL BANNER ---------------- */
+  .install-banner{
+    position:fixed; left:10px; right:10px; bottom:10px; z-index:9999; display:none; gap:12px; align-items:center;
+    padding:12px; color:#fff; background:var(--navy); border-radius:var(--radius); box-shadow:var(--shadow);
+  }
+  .install-banner.show{ display:flex; }
+  .install-icon{ width:40px; height:40px; flex:0 0 40px; display:grid; place-items:center; font-size:11px; font-weight:800; background:var(--cyan); color:var(--navy); border-radius:10px; }
+  .install-text{ flex:1; min-width:0; }
+  .install-title{ font-size:13px; font-weight:800; line-height:17px; }
+  .install-sub{ margin-top:2px; font-size:10.5px; line-height:14px; color:#BFD3E6; font-weight:600; }
+  .install-actions{ display:flex; gap:8px; align-items:center; }
+  .install-btn, .install-close{ height:34px; border:0; font-weight:800; border-radius:8px; }
+  .install-btn{ padding:0 12px; background:var(--cyan); color:var(--navy); }
+  .install-close{ width:34px; background:rgba(255,255,255,.16); color:#fff; font-size:16px; }
+  .app-standalone .install-banner{ display:none !important; }
+
+  /* ---------------- WIDE SCREEN ---------------- */
+  @media (min-width:480px){
+    html,body{ font-size:16.5px; }
+    .rail{ width:76px; }
+    .rail-item{ width:64px; }
+    .rail-item span{ font-size:9px; }
+    .content{ padding:20px; }
+  }
+  @media (min-width:640px){
+    body{ background:#DCE3EA; }
+    .login-screen, .page{ max-width:520px; margin:0 auto; box-shadow:0 0 0 1px var(--border); }
+  }
+</style>
+</head>
+
+<body>
+
+  <div id="installBanner" class="install-banner">
+    <div class="install-icon">CS</div>
+    <div class="install-text">
+      <div class="install-title">Cài GS25 Bình Điền Warehouse ra màn hình chính</div>
+      <div id="installHelp" class="install-sub">Mở như app thật, nhanh hơn cho PDA/kho.</div>
+    </div>
+    <div class="install-actions">
+      <button id="installBtn" class="install-btn" onclick="installAppShortcut()">CÀI</button>
+      <button class="install-close" onclick="hideInstallBanner(true)">×</button>
+    </div>
+  </div>
+
+  <div id="loginPage" class="login-screen">
+    <div class="login-hero">
+      <div class="brand-mark">
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNiIgZmlsbD0iIzBBMTkzMCIgc3Ryb2tlPSIjMDBEMkEwIiBzdHJva2Utd2lkdGg9IjgiLz48L3N2Zz4K" alt="GS25 Binh Dien" class="brand-mark-icon">
+        <span>GS25 BÌNH ĐIỀN WAREHOUSE</span>
+      </div>
+      <div class="hero-copy">
+        <h1>GS25 - Bình Điền<br>Warehouse</h1>
+        <p>Real time tracking basket.</p>
+      </div>
+
+      <svg class="hero-illustration" viewBox="0 0 230 220" preserveAspectRatio="xMaxYMax meet">
+        <g transform="translate(4,6)" opacity="0.95">
+          <line x1="10" y1="20" x2="10" y2="190" stroke="#2C4E82" stroke-width="5"/>
+          <line x1="150" y1="0" x2="150" y2="170" stroke="#2C4E82" stroke-width="5"/>
+          <line x1="4" y1="60" x2="156" y2="40" stroke="#3A5C93" stroke-width="4"/>
+          <line x1="4" y1="120" x2="156" y2="100" stroke="#3A5C93" stroke-width="4"/>
+          <line x1="4" y1="180" x2="156" y2="160" stroke="#3A5C93" stroke-width="4"/>
+
+          <rect x="18" y="34" width="26" height="22" rx="3" fill="#00D2A0"/>
+          <rect x="50" y="30" width="26" height="22" rx="3" fill="#173A6B"/>
+          <rect x="82" y="27" width="26" height="22" rx="3" fill="#00A784"/>
+          <rect x="114" y="23" width="26" height="22" rx="3" fill="#2C4E82"/>
+
+          <rect x="14" y="94" width="26" height="22" rx="3" fill="#173A6B"/>
+          <rect x="46" y="90" width="26" height="22" rx="3" fill="#00D2A0"/>
+          <rect x="78" y="87" width="26" height="22" rx="3" fill="#2C4E82"/>
+          <rect x="110" y="83" width="26" height="22" rx="3" fill="#00A784"/>
+
+          <rect x="10" y="154" width="26" height="22" rx="3" fill="#00A784"/>
+          <rect x="42" y="150" width="26" height="22" rx="3" fill="#2C4E82"/>
+          <rect x="74" y="147" width="26" height="22" rx="3" fill="#00D2A0"/>
+        </g>
+
+        <g transform="translate(150,150)">
+          <rect x="0" y="18" width="46" height="22" rx="4" fill="#00D2A0"/>
+          <rect x="6" y="4" width="20" height="18" rx="3" fill="#00A784"/>
+          <rect x="44" y="-2" width="5" height="42" fill="#0A1930"/>
+          <rect x="49" y="2" width="16" height="4" fill="#0A1930"/>
+          <rect x="49" y="14" width="16" height="4" fill="#0A1930"/>
+          <circle cx="10" cy="42" r="7" fill="#0A1930"/>
+          <circle cx="36" cy="42" r="7" fill="#0A1930"/>
+        </g>
+
+        <path d="M10,205 Q90,225 130,205 T210,190" fill="none" stroke="#00D2A0" stroke-width="2" stroke-dasharray="4 6" opacity=".6"/>
+        <circle cx="10" cy="205" r="5" fill="#00D2A0"/>
+        <circle cx="210" cy="190" r="5" fill="#00D2A0"/>
+      </svg>
+    </div>
+
+    <div class="login-panel">
+      <h2>Đăng nhập</h2>
+      <p class="sub">Nhập tài khoản kho vận của bạn</p>
+      <div class="field"><label>Login ID</label><input id="loginId" class="upper" placeholder="VD: WH001" autocomplete="off"></div>
+      <div class="field"><label>Password</label><input id="password" type="password" placeholder="••••••••" autocomplete="off" onkeydown="handleLoginKey(event)"></div>
+      <button class="btn-primary" onclick="doLogin()">ĐĂNG NHẬP</button>
+      <div id="loginMsg" class="login-msg"></div>
+    </div>
+  </div>
+
+  <div id="appPage" class="page hidden">
+    <div class="main">
+      <div class="topbar">
+        <div class="topbar-left">
+          <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNiIgZmlsbD0iIzBBMTkzMCIgc3Ryb2tlPSIjMDBEMkEwIiBzdHJva2Utd2lkdGg9IjgiLz48L3N2Zz4K" alt="GS25" class="topbar-logo">
+          <b>GS25 - Bình Điền</b>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="text-align:right;">
+            <div id="userLine" style="font-size:11.5px;font-weight:800;">USER</div>
+            <div id="roleLine" style="font-size:9.5px;color:var(--muted);">ROLE</div>
+          </div>
+          <div class="avatar" id="userAvatar">--</div>
+        </div>
+      </div>
+
+      <div class="content">
+
+        <div id="screen-home" class="screen active">
+          <div class="greet">
+            <h1 id="homeGreetName">Chào bạn 👋</h1>
+            <p id="homeGreetSub">Tổng quan hoạt động hôm nay</p>
+          </div>
+
+          <div class="kpi-row">
+            <div class="kpi">
+              <div class="top"><div class="icon" style="background:var(--blue-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" stroke-width="2"><rect x="3" y="9" width="18" height="11"/><path d="M3 9l9-5 9 5"/></svg></div></div>
+              <div class="num" id="kpiStoreQty">--</div>
+              <div class="lbl">Tote tại Store</div>
+            </div>
+            <div class="kpi">
+              <div class="top"><div class="icon" style="background:var(--green-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="#00A784" stroke-width="2"><path d="M12 3v12M6 9l6 6 6-6"/></svg></div></div>
+              <div class="num" id="kpiOutToday">--</div>
+              <div class="lbl">OUT hôm nay</div>
+            </div>
+            <div class="kpi">
+              <div class="top"><div class="icon" style="background:var(--amber-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2"><path d="M12 21V9M6 15l6-6 6 6"/></svg></div></div>
+              <div class="num" id="kpiInToday">--</div>
+              <div class="lbl">IN hôm nay</div>
+            </div>
+            <div class="kpi">
+              <div class="top"><div class="icon" style="background:var(--red-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="#E1364A" stroke-width="2"><path d="M12 3l9 16H3z"/><path d="M12 9v5M12 17h.01"/></svg></div></div>
+              <div class="num" id="kpiAbnormalToday">--</div>
+              <div class="lbl">Bất thường hôm nay</div>
+            </div>
+            <!-- Chỉ ADMIN/WAREHOUSE thấy - số mã đã "đặt trước" trong Kho Ảo
+                 (sheet TOTE_RESERVE) nhưng chưa dán label thật + quét lần đầu. -->
+            <div class="kpi hidden" id="kpiReservedBox">
+              <div class="top"><div class="icon" style="background:var(--blue-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2" stroke-dasharray="3 3"/></svg></div></div>
+              <div class="num" id="kpiReservedQty">--</div>
+              <div class="lbl">Kho ảo còn lại (chưa dán label)</div>
+            </div>
+          </div>
+
+          <div id="homeQuickRow" class="quick-row">
+            <div class="quick out" onclick="goToScan('OUT')">
+              <div class="txt"><div>XUẤT KHO — OUT</div><div>Chọn store & bắt đầu scan</div></div>
+              <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M12 20V4M6 10l6-6 6 6"/></svg>
+            </div>
+            <div class="quick in" onclick="goToScan('IN')">
+              <div class="txt"><div>NHẬP KHO — IN</div><div>Thu hồi tote về kho</div></div>
+              <svg viewBox="0 0 24 24" fill="none" stroke="#0A1930" stroke-width="1.8"><path d="M12 4v16M6 14l6 6 6-6"/></svg>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h3 style="margin:0 0 12px;padding:0;background:none;color:var(--ink);text-transform:none;letter-spacing:0;font-size:12.5px;">Xu hướng xuất kho 7 ngày</h3>
+            <div class="chart-bars" id="homeTrendChart"></div>
+          </div>
+
+          <div class="panel">
+            <h3 style="margin:0 0 4px;padding:0;background:none;color:var(--ink);text-transform:none;letter-spacing:0;font-size:12.5px;">Hoạt động gần đây</h3>
+            <div id="homeActivity"></div>
+          </div>
+        </div>
+
+        <div id="screen-pda" class="screen">
+          <div id="modeBanner" class="mode-banner out">
+            <span>Chế độ hiện tại</span>
+            <span class="tag" id="modeTag">XUẤT KHO — OUT</span>
+          </div>
+
+          <!-- =============================================================
+               BƯỚC 1 CỦA "PHIÊN QUÉT" (chỉ áp dụng cho chế độ OUT):
+               Bắt buộc CHỌN STORE xong mới được bấm "Bắt đầu phiên quét".
+               Khối này TỰ ẨN đi ngay khi phiên đã bắt đầu, hoặc khi đang ở
+               chế độ IN (chế độ IN không cần chọn store).
+               ============================================================= -->
+          <div id="sessionSetup" class="store-box">
+            <label>Chọn Store</label>
+            <!-- store-combo: khung bọc riêng cho ô nhập + danh sách gợi ý,
+                 để danh sách gợi ý (store-list) có thể "nổi" (dropdown) ngay
+                 bên dưới ô nhập thay vì đẩy các phần tử khác xuống. -->
+            <div class="store-combo">
+              <input
+                id="storeSearch"
+                placeholder="GÕ ID / TÊN CỬA HÀNG ĐỂ TÌM..."
+                autocomplete="off"
+                oninput="onStoreSearch()"
+                onfocus="onStoreSearch()"
+                onblur="closeStoreListSoon()"
+              >
+              <div id="storeList" class="store-list"></div>
+            </div>
+            <div id="selectedStore" class="selected-store">CHƯA CHỌN STORE</div>
+
+            <!-- Nút này CHỈ bấm được khi đã chọn store (xem enableStartSessionBtn()) -->
+            <button id="startSessionBtn" class="btn" disabled onclick="startScanSession()">
+              BẮT ĐẦU PHIÊN QUÉT
+            </button>
+          </div>
+
+          <!-- =============================================================
+               BƯỚC 1 CỦA "PHIÊN NHẬP" (chỉ áp dụng cho chế độ IN):
+               IN không cần chọn store (tự thu hồi đúng store cũ của từng
+               tote) nhưng vẫn cần bấm "Bắt đầu" để tạo ranh giới phiên rõ
+               ràng - tránh số liệu của phiên IN mới bị lẫn với phiên trước.
+               ============================================================= -->
+          <div id="inSessionSetup" class="store-box hidden">
+            <div style="font-size:13px;color:var(--muted);line-height:19px;margin-bottom:12px;">
+              Quét tote để tự động thu hồi về đúng kho - không cần chọn store.
+            </div>
+            <button class="btn" onclick="startInSession()">BẮT ĐẦU PHIÊN NHẬP</button>
+          </div>
+
+          <!-- =============================================================
+               BƯỚC 2: KHU VỰC QUÉT THỰC TẾ.
+               Chỉ hiện SAU KHI đã bấm "Bắt đầu phiên quét" (OUT) hoặc
+               "Bắt đầu phiên nhập" (IN) - cả 2 chế độ đều bắt buộc qua bước
+               bắt đầu để đảm bảo mỗi phiên có số liệu độc lập, không kế thừa
+               số liệu còn sót của phiên trước đó (dù cùng mode hay khác mode).
+               ============================================================= -->
+          <div id="scanArea">
+            <!-- Thanh này chỉ hiện khi đang trong 1 phiên OUT, nhắc rõ đang
+                 quét cho store nào + cho phép kết thúc phiên bất cứ lúc nào -->
+            <div id="activeSessionBar" class="active-session-bar hidden">
+              <span id="activeSessionLabel">
+                <span id="activeSessionOutLabel">Đang quét cho: <b id="activeSessionStore">-</b></span>
+                <span id="activeSessionInLabel" class="hidden">Đang thu hồi về kho (IN)</span>
+              </span>
+              <span class="session-bar-actions">
+                <button class="btn-link btn-link-danger" onclick="askCancelCurrentSession()">HỦY PHIÊN</button>
+                <button class="btn-link" onclick="askEndScanSession()">KẾT THÚC PHIÊN</button>
+              </span>
+            </div>
+
+            <label>Scan Tote</label>
+            <input
+              id="scanInput"
+              class="scan-input no-keyboard"
+              autocomplete="off"
+              inputmode="none"
+              enterkeyhint="done"
+              placeholder="SCAN TOTE..."
+              onkeydown="handleScanKey(event)"
+              onclick="focusScan()"
+              ontouchstart="focusScan()"
+            >
+
+            <!-- Nút "XÁC NHẬN" chỉ hiện khi đang NHẬP TAY - dự phòng cho lúc
+                 gõ xong: một số PDA/trình duyệt cũ không bắn sự kiện Enter
+                 khi bấm nút "Done"/"Next" trên bàn phím ảo, nên không thể
+                 chỉ dựa vào phím Enter để xác nhận mã đã gõ. -->
+            <button id="manualSubmitBtn" class="btn hidden" onclick="submitManualScan()">XÁC NHẬN</button>
+
+            <button id="manualBtn" class="btn btn-gray" onclick="toggleManualInput()">NHẬP TAY</button>
+
+            <div id="lastResult" class="result pending">SẴN SÀNG SCAN</div>
+
+            <div class="counter">
+              <div>TỔNG<span id="cTotal">0</span></div>
+              <div>OK<span id="cOk">0</span></div>
+              <div>LỖI<span id="cFail">0</span></div>
+              <div>CHỜ<span id="cQueue">0</span></div>
+            </div>
+
+            <div class="recent" id="recentList"></div>
+          </div>
+
+          <!-- =============================================================
+               POPUP XÁC NHẬN "KẾT THÚC PHIÊN QUÉT" (chỉ dùng cho OUT).
+               Hiện tổng kết số đã quét được rồi mới hỏi xác nhận, đúng như
+               yêu cầu: bắt đầu phiên -> scan -> xem tổng -> kết thúc + confirm.
+               ============================================================= -->
+          <div id="sessionConfirmOverlay" class="session-overlay hidden">
+            <div class="session-confirm-box">
+              <h3>Kết thúc phiên quét?</h3>
+              <div class="session-summary">
+                <div id="sumStoreRow">Store<b id="sumStore">-</b></div>
+                <div>Tổng đã quét<b id="sumTotal">0</b></div>
+                <div>OK<b id="sumOk">0</b></div>
+                <div>Lỗi<b id="sumFail">0</b></div>
+              </div>
+
+              <!-- Xem lại chi tiết từng tote đã quét trong phiên - GẤP LẠI
+                   mặc định, chỉ để kiểm tra lại nếu người dùng muốn, không
+                   bắt buộc phải xem mới kết thúc được phiên. -->
+              <div id="sessionScanLogDetails"></div>
+
+              <div class="session-confirm-actions">
+                <button class="btn btn-gray" onclick="cancelEndScanSession()">TIẾP TỤC QUÉT</button>
+                <button class="btn" onclick="confirmEndScanSession()">XÁC NHẬN KẾT THÚC</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- =============================================================
+               POPUP "HỦY PHIÊN" CHO OUT: vì mỗi mã đã ghi ngay lên server lúc
+               quét (không đợi đóng phiên), hủy phiên KHÔNG xoá được lịch sử -
+               thay vào đó hệ thống tự động gọi nghiệp vụ CANCEL_OUT hoàn tác
+               toàn bộ tote đã OUT trong phiên này để trả về kho, giữ nguyên
+               audit trail.
+               ============================================================= -->
+          <div id="cancelSessionOverlay" class="session-overlay hidden">
+            <div class="session-confirm-box">
+              <h3>Hủy phiên quét?</h3>
+              <div class="session-summary">
+                <div>Store<b id="cancelSessionStoreLabel">-</b></div>
+                <div>Tote đã xuất trong phiên<b id="cancelSessionCount">0</b></div>
+              </div>
+              <div style="font-size:11.5px;color:var(--muted);line-height:16px;margin-bottom:14px;">
+                Hệ thống sẽ tự động quét IN hoàn tác các tote trên, trả về kho. Lịch sử vẫn được lưu đầy đủ (không xoá dữ liệu đã quét).
+              </div>
+              <div id="cancelSessionStatus" class="result pending hidden"></div>
+              <div class="session-confirm-actions">
+                <button class="btn btn-gray" onclick="closeCancelSessionOverlay()">TIẾP TỤC QUÉT</button>
+                <button class="btn btn-danger" id="cancelSessionConfirmBtn" onclick="confirmCancelScanSession()">XÁC NHẬN HỦY</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Popup "Hủy phiên" cho IN: thu hồi về kho vốn là trạng thái an
+               toàn/trung tính nên KHÔNG tự động xuất lại - chỉ xoá bộ đếm và
+               lịch sử hiển thị của phiên này trên máy. -->
+          <div id="cancelInSessionOverlay" class="session-overlay hidden">
+            <div class="session-confirm-box">
+              <h3>Hủy phiên nhập?</h3>
+              <div class="session-summary">
+                <div>Tote đã nhập trong phiên<b id="cancelInSessionCount">0</b></div>
+              </div>
+              <div style="font-size:11.5px;color:var(--muted);line-height:16px;margin-bottom:14px;">
+                Các tote đã quét IN vẫn ở trong kho (không tự động xuất lại). Hủy phiên chỉ xoá bộ đếm/lịch sử hiển thị của phiên này trên máy quét.
+              </div>
+              <div class="session-confirm-actions">
+                <button class="btn btn-gray" onclick="closeCancelInSessionOverlay()">TIẾP TỤC QUÉT</button>
+                <button class="btn btn-danger" onclick="confirmCancelInSession()">XÁC NHẬN HỦY</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- =============================================================
+             MÀN HÌNH TÀI XẾ (role DRIVER): giao/nhận tote tại cửa hàng
+             bằng camera điện thoại (không có máy quét vật lý như PDA kho).
+             Quy trình 4 trạng thái: kho OUT -> ĐANG GIAO -> tài xế NHẬN ->
+             TẠI CH -> tài xế XUẤT -> ĐANG VỀ KHO -> kho IN. Xem NHÓM 22.
+             Theo yêu cầu: NHẬN và XUẤT là 2 PHIÊN TÁCH RIÊNG (không gộp) -
+             giống hệt tinh thần OUT/IN bên kho, không cho đổi qua lại loại
+             phiên khi đang quét dở, tránh lẫn số liệu giữa 2 phiên.
+             ============================================================= -->
+        <div id="screen-driver" class="screen">
+          <div id="driverModeBanner" class="mode-banner out">
+            <span>Chế độ hiện tại</span>
+            <span class="tag" id="driverModeTag">NHẬN RỔ TẠI CH</span>
+          </div>
+
+          <!-- Chọn loại phiên - CHỈ bấm được lúc chưa bắt đầu phiên nào,
+               tránh đổi loại phiên giữa chừng làm lẫn số liệu. -->
+          <div id="driverModeSwitch" class="driver-mode-switch">
+            <button id="driverModeReceiveBtn" class="btn driver-mode-btn active" onclick="setDriverMode('STORE_RECEIVE')">NHẬN RỔ</button>
+            <button id="driverModeReturnBtn" class="btn btn-gray driver-mode-btn" onclick="setDriverMode('STORE_RETURN')">XUẤT RỔ (LẤY VỎ)</button>
+          </div>
+
+          <div id="driverSessionSetup" class="store-box">
+            <!-- Role DRIVER: đi nhiều store, phải tự chọn đang ở store nào. -->
+            <div id="driverStorePickBox">
+              <label>Chọn Store</label>
+              <div class="store-combo">
+                <input
+                  id="driverStoreSearch"
+                  placeholder="GÕ ID / TÊN CỬA HÀNG ĐỂ TÌM..."
+                  autocomplete="off"
+                  oninput="onDriverStoreSearch()"
+                  onfocus="onDriverStoreSearch()"
+                  onblur="closeDriverStoreListSoon()"
+                >
+                <div id="driverStoreList" class="store-list"></div>
+              </div>
+              <div id="driverSelectedStore" class="selected-store">CHƯA CHỌN STORE</div>
+            </div>
+
+            <!-- Role STORE: đã khoá cứng đúng 1 store của chính họ
+                 (session.storeId) - khỏi cần chọn, chỉ hiện để xác nhận. -->
+            <div id="driverStoreFixedBox" class="hidden">
+              <label>Cửa hàng của bạn</label>
+              <div id="driverStoreFixedLabel" class="selected-store">-</div>
+            </div>
+
+            <button id="driverStartSessionBtn" class="btn" disabled onclick="startDriverSession()">
+              BẮT ĐẦU PHIÊN
+            </button>
+          </div>
+
+          <div id="driverScanArea" class="hidden">
+            <div id="driverActiveSessionBar" class="active-session-bar">
+              <span>Đang thao tác tại: <b id="driverActiveStore">-</b></span>
+              <span class="session-bar-actions">
+                <button class="btn-link btn-link-danger" onclick="askCancelDriverSession()">HỦY PHIÊN</button>
+                <button class="btn-link" onclick="askEndDriverSession()">KẾT THÚC PHIÊN</button>
+              </span>
+            </div>
+
+            <!-- Camera quét trực tiếp - CHỈ dùng luồng camera sống
+                 (getUserMedia + ZXing giải mã liên tục), KHÔNG dùng
+                 <input type="file"> nên không có lựa chọn "chọn ảnh từ
+                 album" tồn tại trong luồng này. Cần host NGOÀI Apps Script
+                 (VD GitHub Pages) mới chạy được - Apps Script bọc trang
+                 trong iframe không cấp quyền Camera ở tầng Permissions
+                 Policy của trình duyệt, chặn cứng getUserMedia. -->
+            <div id="driverCameraBox" class="driver-camera-box">
+              <video id="driverVideo" playsinline autoplay muted></video>
+              <div class="driver-camera-frame"></div>
+            </div>
+
+            <!-- Nhập tay - dự phòng khi camera không quét được (mã bị
+                 nhăn/rách, thiếu sáng...), giống hệt nút "NHẬP TAY" bên
+                 màn PDA kho. -->
+            <input
+              id="driverManualInput"
+              class="scan-input hidden"
+              autocomplete="off"
+              enterkeyhint="done"
+              placeholder="GÕ TOTE ID..."
+              onkeydown="handleDriverManualKey(event)"
+            >
+
+            <!-- Nút "XÁC NHẬN" dự phòng - xem ghi chú ở nút manualSubmitBtn
+                 bên màn PDA kho (không phải bàn phím ảo nào cũng bắn được
+                 sự kiện Enter). -->
+            <button id="driverManualSubmitBtn" class="btn hidden" onclick="submitDriverManualScan()">XÁC NHẬN</button>
+
+            <div id="driverCameraMsg" class="result pending">BẤM "CHỤP TOTE" ĐỂ QUÉT</div>
+
+            <button id="driverManualBtn" class="btn btn-gray" onclick="toggleDriverManualInput()">NHẬP TAY</button>
+
+            <div class="counter">
+              <div>TỔNG<span id="driverCTotal">0</span></div>
+              <div>OK<span id="driverCOk">0</span></div>
+              <div>LỖI<span id="driverCFail">0</span></div>
+              <div>CHỜ<span id="driverCQueue">0</span></div>
+            </div>
+
+            <div class="recent" id="driverRecentList"></div>
+          </div>
+
+          <div id="driverSessionConfirmOverlay" class="session-overlay hidden">
+            <div class="session-confirm-box">
+              <h3>Kết thúc phiên?</h3>
+              <div class="session-summary">
+                <div>Store<b id="driverSumStore">-</b></div>
+                <div>Tổng đã quét<b id="driverSumTotal">0</b></div>
+                <div>OK<b id="driverSumOk">0</b></div>
+                <div>Lỗi<b id="driverSumFail">0</b></div>
+              </div>
+
+              <div id="driverScanLogDetails"></div>
+
+              <div class="session-confirm-actions">
+                <button class="btn btn-gray" onclick="cancelEndDriverSession()">TIẾP TỤC QUÉT</button>
+                <button class="btn" onclick="confirmEndDriverSession()">XÁC NHẬN KẾT THÚC</button>
+              </div>
+            </div>
+          </div>
+
+          <div id="driverCancelSessionOverlay" class="session-overlay hidden">
+            <div class="session-confirm-box">
+              <h3>Hủy phiên?</h3>
+              <div class="session-summary">
+                <div>Tote đã quét trong phiên<b id="driverCancelCount">0</b></div>
+              </div>
+              <div style="font-size:11.5px;color:var(--muted);line-height:16px;margin-bottom:14px;">
+                Hệ thống sẽ tự động hoàn tác các tote đã quét thành công trong phiên này (trả về đúng trạng thái trước khi quét, tồn kho cửa hàng cũng được cập nhật lại). Lịch sử vẫn được lưu đầy đủ (không xoá dữ liệu đã quét).
+              </div>
+              <div id="driverCancelSessionStatus" class="result pending hidden"></div>
+              <div class="session-confirm-actions">
+                <button class="btn btn-gray" onclick="closeDriverCancelOverlay()">TIẾP TỤC QUÉT</button>
+                <button class="btn btn-danger" id="driverCancelSessionConfirmBtn" onclick="confirmCancelDriverSession()">XÁC NHẬN HỦY</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="screen-store" class="screen">
+          <label>Store ID</label>
+          <input id="newStoreId" class="upper" placeholder="VD: VN0123">
+          <label>Store Name</label>
+          <input id="newStoreName" placeholder="TÊN CỬA HÀNG">
+          <button class="btn" onclick="addNewStore()">THÊM STORE</button>
+          <div id="storeMsg" class="result pending">---</div>
+          <div id="allStores"></div>
+        </div>
+
+        <div id="screen-dash" class="screen">
+          <!-- Thống kê tổng quan (chỉ ADMIN/WAREHOUSE) - LUÔN tính trên TOÀN
+               BỘ dữ liệu, không bị ảnh hưởng bởi ô tìm kiếm bên dưới, để số
+               liệu tổng và "nợ nhiều nhất" luôn đúng thực tế toàn hệ thống. -->
+          <div id="dashStats" class="hidden"></div>
+
+          <label id="dashLabel">Tìm Store Đang Nợ Tote</label>
+          <input id="dashSearch" placeholder="STORE ID / NAME" onkeydown="handleDashKey(event)">
+          <button class="btn" onclick="loadDashboard()">TÌM KIẾM</button>
+          <div id="dashResult"></div>
+        </div>
+
+        <div id="screen-transit" class="screen">
+          <div class="summary-box">
+            <div class="summary-title">Tote Đang Trên Đường</div>
+            <div>Theo dõi tote đang ở 2 trạng thái vận chuyển - <b>đang giao tới cửa hàng</b> (kho đã xuất, chưa ai quét nhận) và <b>đang về kho</b> (cửa hàng đã trả vỏ, kho chưa quét nhận lại).</div>
+            <div>Sắp xếp theo tote nằm lâu nhất trước - dùng để phát hiện tote bị quên quét/thất lạc.</div>
+          </div>
+
+          <div id="transitStats" class="kpi-row" style="margin-bottom:14px">
+            <div class="kpi">
+              <div class="num" id="transitToStoreQty">0</div>
+              <div class="lbl">Đang giao tới cửa hàng</div>
+            </div>
+            <div class="kpi">
+              <div class="num" id="transitToWarehouseQty">0</div>
+              <div class="lbl">Đang về kho</div>
+            </div>
+          </div>
+
+          <button class="btn btn-gray" onclick="loadInTransitSummary()">LÀM MỚI</button>
+
+          <h3 style="margin-top:18px">Đang Giao Tới Cửa Hàng</h3>
+          <div id="transitToStoreResult"></div>
+
+          <h3 style="margin-top:18px">Đang Về Kho</h3>
+          <div id="transitToWarehouseResult"></div>
+        </div>
+
+        <div id="screen-dailyOut" class="screen">
+          <div class="summary-box">
+            <div class="summary-title">Tổng Hợp Tote Xuất Theo Ngày</div>
+            <div>Dùng để đối chiếu số tote xuất thực tế với chứng từ viết tay.</div>
+            <div>Hệ thống lấy dữ liệu từ log <b>OUT / OK</b> trong ngày đã chọn.</div>
+          </div>
+
+          <label>Ngày Xuất</label>
+          <input id="dailyOutDate" type="date">
+
+          <label id="dailyOutSearchLabel">Tìm Store</label>
+          <input id="dailyOutSearch" placeholder="STORE ID / NAME" onkeydown="handleDailyOutKey(event)">
+
+          <button class="btn" onclick="loadDailyOutSummary()">XEM TỔNG HỢP</button>
+          <div id="dailyOutResult"></div>
+        </div>
+
+        <div id="screen-abnormal" class="screen">
+          <div class="summary-box">
+            <div class="summary-title">Abnormal In / Out</div>
+            <div>Theo dõi các lần scan bất thường để kho xử lý ngay trong ngày.</div>
+            <div>Dữ liệu lấy từ log có <b>RESULT = ABNORMAL</b>.</div>
+          </div>
+
+          <label>Ngày</label>
+          <input id="abnormalDate" type="date">
+
+          <label>Loại Bất Thường</label>
+          <select id="abnormalAction" class="select-input" onchange="loadAbnormalSummary()">
+            <option value="ALL">TẤT CẢ NGHIỆP VỤ</option>
+            <option value="OUT">XUẤT KHO</option>
+            <option value="IN">NHẬP KHO</option>
+            <option value="STORE_RECEIVE">NHẬN TẠI CH</option>
+            <option value="STORE_RETURN">XUẤT TẠI CH (TRẢ VỎ)</option>
+            <option value="CANCEL_OUT">HỦY XUẤT KHO</option>
+            <option value="CANCEL_STORE_RECEIVE">HỦY NHẬN TẠI CH</option>
+            <option value="CANCEL_STORE_RETURN">HỦY XUẤT TẠI CH</option>
+          </select>
+
+          <label id="abnormalSearchLabel">Tìm Store / Tote / User</label>
+          <input id="abnormalSearch" placeholder="STORE ID / TOTE ID / USER" onkeydown="handleAbnormalKey(event)">
+
+          <button class="btn" onclick="loadAbnormalSummary()">XEM ABNORMAL</button>
+          <div id="abnormalResult"></div>
+        </div>
+
+        <!-- =============================================================
+             MÀN "KIỂM KÊ TẠI CỬA HÀNG" - TẠM TẮT theo yêu cầu (giữ nguyên
+             backend submitStoreAudit()/getStoreAuditHistory(), có thể cần
+             dùng lại sau). Muốn bật lại: bỏ comment khối HTML này + bỏ
+             comment 3 chỗ JS đánh dấu "BẬT LẠI KIỂM KÊ" (tabInv trong
+             setupRoleUI(), 2 dòng trong showScreen()).
+        <div id="screen-inv" class="screen">
+          <div class="summary-box">
+            <div class="summary-title">Kiểm Kê Tote Cửa Hàng</div>
+            <div>Scan toàn bộ tote thực tế đang có tại cửa hàng.</div>
+            <div>Hệ thống sẽ so sánh <b>số lượng thực tế</b> với <b>số lượng kho đang theo dõi</b>.</div>
+          </div>
+
+          <label>Scan Tote Kiểm Kê</label>
+          <input
+            id="invScanInput"
+            class="scan-input no-keyboard"
+            autocomplete="off"
+            inputmode="none"
+            placeholder="SCAN TOTE..."
+            onkeydown="handleInvKey(event)"
+            onclick="focusInventoryScan()"
+            ontouchstart="focusInventoryScan()"
+          >
+
+          <div class="counter">
+            <div>ĐÃ SCAN<span id="invTotal">0</span></div>
+            <div>HỢP LỆ<span id="invValid">0</span></div>
+            <div>LỖI<span id="invInvalid">0</span></div>
+            <div>TRÙNG<span id="invDup">0</span></div>
+          </div>
+
+          <button class="btn" onclick="submitInventory()">CHỐT KIỂM KÊ</button>
+          <button class="btn btn-gray" onclick="clearInventory()">XÓA DANH SÁCH SCAN</button>
+
+          <div id="invResult" class="result pending">SẴN SÀNG KIỂM KÊ</div>
+          <button class="btn btn-gray" onclick="loadInventoryHistory()">XEM LỊCH SỬ KIỂM KÊ</button>
+          <div id="invHistoryList"></div>
+          <div class="recent" id="invRecentList"></div>
+        </div>
+        -->
+
+        <div id="screen-track" class="screen">
+          <label>Tra Lịch Sử Tote</label>
+          <input id="trackToteInput" placeholder="SCAN / NHẬP TOTE ID" onkeydown="handleTrackKey(event)">
+          <button class="btn" onclick="loadToteHistory()">TRA CỨU</button>
+          <div id="trackResult"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="rail">
+      <img class="rail-logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNiIgZmlsbD0iIzBBMTkzMCIgc3Ryb2tlPSIjMDBEMkEwIiBzdHJva2Utd2lkdGg9IjgiLz48L3N2Zz4K" alt="GS25 Binh Dien">
+
+      <div id="tabHome" class="rail-item active" onclick="showScreen('home')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7"/><path d="M5 10v9h14v-9"/></svg>
+        <span>Home</span>
+      </div>
+
+      <div id="railOut" class="rail-item" onclick="goToScan('OUT')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V4M6 10l6-6 6 6"/></svg>
+        <span>OUT</span>
+      </div>
+      <div id="railIn" class="rail-item" onclick="goToScan('IN')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v16M6 14l6 6 6-6"/></svg>
+        <span>IN</span>
+      </div>
+
+      <div id="tabDriver" class="rail-item" onclick="showScreen('driver')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="13" height="10" rx="1"/><path d="M16 10h3l2 3v4h-5"/><circle cx="7.5" cy="18" r="1.6"/><circle cx="17.5" cy="18" r="1.6"/></svg>
+        <span>Giao Nhận</span>
+      </div>
+
+      <div id="tabStore" class="rail-item" onclick="showScreen('store')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l1-5h16l1 5M4 9v11h16V9M9 20v-6h6v6"/></svg>
+        <span>Store</span>
+      </div>
+      <div id="tabDash" class="rail-item" onclick="showScreen('dash')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M4 20V10M11 20V4M18 20v-7"/></svg>
+        <span>Tồn</span>
+      </div>
+      <div id="tabTransit" class="rail-item" onclick="showScreen('transit')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="6" width="15" height="10" rx="1"/><path d="M16 9h4l3 3v4h-7"/><circle cx="6" cy="18" r="1.8"/><circle cx="18" cy="18" r="1.8"/><path d="M4 3l3 3-3 3"/></svg>
+        <span>Vận Chuyển</span>
+      </div>
+      <div id="tabDailyOut" class="rail-item" onclick="showScreen('dailyOut')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16"/><path d="M3 9h18M8 3v4M16 3v4M8 14l2.5 2.5L16 12"/></svg>
+        <span>Daily</span>
+      </div>
+      <div id="tabAbnormal" class="rail-item" onclick="showScreen('abnormal')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l10 18H2z"/><path d="M12 9v6M12 18h.01"/></svg>
+        <span>Lỗi</span>
+      </div>
+      <!-- Tab "K.Kê" (kiểm kê tại cửa hàng) - TẠM TẮT, xem ghi chú ở
+           #screen-inv phía trên trong <div class="content">.
+      <div id="tabInv" class="rail-item" onclick="showScreen('inv')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="4" width="14" height="17"/><rect x="9" y="2" width="6" height="4"/><path d="M8 13l3 3 5-6"/></svg>
+        <span>K.Kê</span>
+      </div>
+      -->
+      <div id="tabTrack" class="rail-item" onclick="showScreen('track')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="10" r="6"/><path d="M15 15l6 6"/></svg>
+        <span>Track</span>
+      </div>
+
+      <div class="rail-spacer"></div>
+      <div class="rail-logout" onclick="doLogout()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+        <span>Thoát</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Thư viện giải mã mã vạch chạy trên luồng camera sống (ZXing), dùng
+       riêng cho màn Tài Xế (role DRIVER) - không tải/khởi tạo gì nếu
+       không dùng tới màn đó. -->
+  <script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.20.0/umd/index.min.js"></script>
+
+  <script>
+    let session = null;
+    let mode = 'OUT';
+    let stores = [];
+    let selectedStoreId = '';
+
+    // "Phiên quét" - CẢ OUT VÀ IN đều bắt buộc bấm "Bắt đầu" riêng, và có
+    // trạng thái hoàn toàn ĐỘC LẬP với nhau (đổi qua lại giữa 2 màn không
+    // làm lẫn số liệu của nhau) - xem NHÓM 11b phía dưới.
+    let sessionActive = false;    // đang trong 1 phiên quét OUT hay chưa
+    let inSessionActive = false;  // đang trong 1 phiên quét IN hay chưa
+    let sessionStoreLabel = '';   // tên store hiển thị trong lúc phiên OUT đang chạy
+
+    // Theo dõi tote đã ghi THÀNH CÔNG trong phiên hiện tại, để "Hủy phiên"
+    // biết cần hoàn tác (OUT) hoặc chỉ cần xoá bộ đếm (IN) - xem NHÓM 11b.
+    let sessionOutTotesMap = {}; // { toteId: true } - tote đã OUT thành công trong phiên OUT hiện tại
+    let sessionInTotesMap = {};  // { toteId: true } - tote đã IN thành công trong phiên IN hiện tại
+
+    // total/ok/fail/recentList (danh sách "gần đây") là biến DÙNG CHUNG cho
+    // màn quét, vì tại 1 thời điểm chỉ 1 trong 2 màn OUT/IN hiển thị. Khi đổi
+    // mode, setMode() sẽ CẤT số liệu của mode đang rời đi vào đây và LẤY LẠI
+    // số liệu của mode sắp tới, để mỗi phiên giữ đúng số liệu của riêng nó dù
+    // người dùng nhảy qua lại giữa 2 màn nhiều lần (xem NHÓM 11b).
+    const sessionSnapshot = {
+      OUT: { total: 0, ok: 0, fail: 0, recentHtml: '', scanLog: [] },
+      IN: { total: 0, ok: 0, fail: 0, recentHtml: '', scanLog: [] }
+    };
+    let cancellingSession = false; // đang gửi yêu cầu hoàn tác IN, khoá nút Xác nhận hủy tạm thời
+
+    // Toàn bộ kết quả quét trong phiên hiện tại (KHÔNG giới hạn 20 dòng như
+    // recentList) - chỉ để dựng màn "Xem chi tiết" lúc Kết thúc phiên, xem
+    // renderSessionScanLogDetails() ở NHÓM 11c.
+    let scanLog = [];
+
+    // ---- Trạng thái riêng cho màn TÀI XẾ (role DRIVER) - xem NHÓM 22 ----
+    let driverMode = 'STORE_RECEIVE'; // 'STORE_RECEIVE' (nhận hàng) | 'STORE_RETURN' (xuất hàng lấy vỏ)
+    let driverSessionActive = false;
+    let driverStoreId = '';
+    let driverStoreLabel = '';
+    let driverTotal = 0, driverOk = 0, driverFail = 0;
+    let driverPendingQueue = [];
+    let driverSending = false;
+    let driverFlushTimer = null;
+    let driverRecentScanMap = {};
+    // Theo dõi tote đã ghi THÀNH CÔNG trong phiên hiện tại, để "Hủy phiên"
+    // biết cần hoàn tác tote nào (giống sessionOutTotesMap bên kho, NHÓM 11b).
+    let driverSessionTotesMap = {}; // { toteId: true }
+    let cancellingDriverSession = false; // đang gửi yêu cầu hoàn tác, khoá nút Xác nhận hủy tạm thời
+    let driverStream = null;      // MediaStream của camera đang mở
+    let driverCodeReader = null;  // instance ZXing đang chạy
+    let driverManualInputMode = false; // đang ở chế độ nhập tay (camera tắt) hay không
+    let driverScanLog = []; // toàn bộ kết quả quét trong phiên hiện tại (xem scanLog bên kho)
+
+    let pendingQueue = [];
+    let sending = false;
+    let flushTimer = null;
+    let total = 0;
+    let ok = 0;
+    let fail = 0;
+
+    let manualInputMode = false;
+    let scanBuffer = '';
+
+    let invItems = [];
+    let invMap = {};
+    let invInvalid = 0;
+    let invDup = 0;
+
+    const batchSize = 10;
+    const flushDelayMs = 1500;
+    const doubleScanMs = 2500;
+    let recentScanMap = {};
+
+    let deferredInstallPrompt = null;
+
+    // =====================================================================
+    // NHÓM 1: "CÀI APP RA MÀN HÌNH" (PWA install prompt)
+    // Mấy hàm dưới đây chỉ lo việc hiện cái banner "CÀI" ở trên cùng để
+    // người dùng thêm web app này ra màn hình chính điện thoại/PDA như 1 app
+    // riêng (không liên quan gì tới nghiệp vụ xuất/nhập kho).
+    // =====================================================================
+    function isStandaloneApp() {
+      return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    }
+
+    function setupInstallPrompt() {
+      if (isStandaloneApp()) {
+        document.body.classList.add('app-standalone');
+        return;
+      }
+
+      const dismissed = localStorage.getItem('TOTE_INSTALL_DISMISSED');
+      if (dismissed === '1') return;
+
+      window.addEventListener('beforeinstallprompt', function(e) {
+        e.preventDefault();
+        deferredInstallPrompt = e;
+        showInstallBanner('Bấm CÀI để thêm app vào màn hình chính.');
+      });
+
+      setTimeout(function() {
+        if (!isStandaloneApp() && !deferredInstallPrompt) {
+          const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+          const isAndroid = /android/i.test(navigator.userAgent);
+
+          if (isIOS) {
+            showInstallBanner('iPhone/iPad: bấm Share → Add to Home Screen.');
+          } else if (isAndroid) {
+            showInstallBanner('Android/PDA: bấm menu trình duyệt ⋮ → Add to Home screen.');
+          } else {
+            showInstallBanner('Bấm menu trình duyệt → Add to Home screen để ghim app.');
+          }
+        }
+      }, 1200);
+    }
+
+    function showInstallBanner(helpText) {
+      const banner = document.getElementById('installBanner');
+      const help = document.getElementById('installHelp');
+      if (!banner || isStandaloneApp()) return;
+      if (helpText) help.innerText = helpText;
+      banner.classList.add('show');
+    }
+
+    function hideInstallBanner(remember) {
+      const banner = document.getElementById('installBanner');
+      if (banner) banner.classList.remove('show');
+      if (remember) localStorage.setItem('TOTE_INSTALL_DISMISSED', '1');
+    }
+
+    function installAppShortcut() {
+      if (deferredInstallPrompt) {
+        deferredInstallPrompt.prompt();
+        deferredInstallPrompt.userChoice.finally(function() {
+          deferredInstallPrompt = null;
+          hideInstallBanner(false);
+        });
+        return;
+      }
+
+      const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+      const isAndroid = /android/i.test(navigator.userAgent);
+
+      if (isIOS) {
+        alert('Cài trên iPhone/iPad: bấm nút Share, sau đó chọn Add to Home Screen.');
+      } else if (isAndroid) {
+        alert('Cài trên Android/PDA: bấm menu ⋮ của Chrome, sau đó chọn Add to Home screen.');
+      } else {
+        alert('Mở menu trình duyệt và chọn Add to Home screen / Install app.');
+      }
+    }
+
+    // =====================================================================
+    // NHÓM 2: KHỞI ĐỘNG APP (chạy 1 lần duy nhất khi mở trang)
+    // init() sẽ kiểm tra xem trong máy đã lưu phiên đăng nhập (session) cũ
+    // chưa. Nếu có, nó hỏi lại server xem phiên đó còn hợp lệ không rồi mới
+    // cho vào thẳng app; nếu không/hết hạn thì bắt đăng nhập lại.
+    // =====================================================================
+    function init() {
+      setupInstallPrompt();
+      document.addEventListener('keydown', globalScannerKeyHandler, true);
+
+      const saved = localStorage.getItem('TOTE_SESSION');
+      if (!saved) {
+        showLogin();
+        return;
+      }
+
+      // Không được tin session trong localStorage ngay lập tức.
+      // Token trên server có thể đã hết hạn/đã bị CacheService thu hồi.
+      try {
+        const savedSession = JSON.parse(saved);
+
+        if (!savedSession || !savedSession.token) {
+          clearLocalSession();
+          showLogin();
+          return;
+        }
+
+        google.script.run
+          .withSuccessHandler(function(serverSession) {
+            if (!serverSession) {
+              forceRelogin('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
+              return;
+            }
+
+            session = serverSession;
+            localStorage.setItem('TOTE_SESSION', JSON.stringify(session));
+            enterApp();
+          })
+          .withFailureHandler(function(err) {
+            clearLocalSession();
+            showLogin();
+            showLoginMsg('Không kiểm tra được phiên đăng nhập: ' + getErrorMessage(err));
+          })
+          .getSession(savedSession.token);
+
+        return;
+      } catch (e) {
+        clearLocalSession();
+        showLogin();
+      }
+    }
+
+    // =====================================================================
+    // NHÓM 3: XỬ LÝ LỖI DÙNG CHUNG
+    // Các hàm này chỉ để: (1) lấy nội dung lỗi dễ hiểu, (2) phát hiện lỗi do
+    // hết phiên đăng nhập, (3) tự động đưa người dùng quay lại màn hình đăng
+    // nhập khi phiên hết hạn giữa chừng.
+    // =====================================================================
+    function getErrorMessage(err) {
+      if (!err) return 'Lỗi không xác định';
+      return String(err.message || err);
+    }
+
+    function isSessionExpiredError(err) {
+      const msg = getErrorMessage(err)
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[̀-ͯ]/g, '');
+
+      return msg.includes('phien dang nhap het han');
+    }
+
+    function clearLocalSession() {
+      localStorage.removeItem('TOTE_SESSION');
+      session = null;
+    }
+
+    function forceRelogin(message) {
+      if (flushTimer) {
+        clearTimeout(flushTimer);
+        flushTimer = null;
+      }
+
+      sending = false;
+      clearLocalSession();
+      showLogin();
+      showLoginMsg(message || 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
+    }
+
+    function handleSessionError(err) {
+      if (!isSessionExpiredError(err)) return false;
+      forceRelogin('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
+      return true;
+    }
+
+    // =====================================================================
+    // NHÓM 4: MÀN HÌNH ĐĂNG NHẬP
+    // showLogin() hiện form đăng nhập; doLogin() gửi tài khoản/mật khẩu lên
+    // server (hàm login() trong Code.gs); doLogout() xoá phiên và quay lại
+    // màn đăng nhập.
+    // =====================================================================
+    function showLogin() {
+      document.getElementById('loginPage').classList.remove('hidden');
+      document.getElementById('appPage').classList.add('hidden');
+      document.getElementById('password').value = '';
+      setTimeout(() => document.getElementById('loginId').focus(), 100);
+    }
+
+    function handleLoginKey(e) {
+      if (e.key === 'Enter') doLogin();
+    }
+
+    function doLogin() {
+      const loginId = document.getElementById('loginId').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      showLoginMsg('Đang đăng nhập...');
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          if (!res.success) {
+            showLoginMsg(res.message);
+            return;
+          }
+
+          session = res.session;
+          localStorage.setItem('TOTE_SESSION', JSON.stringify(session));
+          enterApp();
+
+          // Nếu phiên hết hạn đúng lúc đang ghi batch, batch đã được giữ lại.
+          if (pendingQueue.length > 0) scheduleFlush();
+        })
+        .withFailureHandler(function(err) {
+          showLoginMsg('Lỗi: ' + getErrorMessage(err));
+        })
+        .login({ loginId, password });
+    }
+
+    function showLoginMsg(msg) {
+      const box = document.getElementById('loginMsg');
+      box.innerText = msg;
+      box.style.display = 'block';
+    }
+
+    function doLogout() {
+      const token = session ? session.token : '';
+      google.script.run.logout(token);
+      clearLocalSession();
+      showLogin();
+    }
+
+    // =====================================================================
+    // NHÓM 5: VÀO APP SAU KHI ĐĂNG NHẬP THÀNH CÔNG
+    // enterApp() thiết lập giao diện theo đúng vai trò (ADMIN/WAREHOUSE/STORE)
+    // rồi đưa người dùng tới Trang chủ (Home). setupRoleUI() là nơi quyết
+    // định vai trò nào được thấy mục nào trên thanh điều hướng bên phải.
+    // =====================================================================
+    function enterApp() {
+      document.getElementById('loginPage').classList.add('hidden');
+      document.getElementById('appPage').classList.remove('hidden');
+
+      document.getElementById('userLine').innerText = session.loginId;
+      document.getElementById('roleLine').innerText =
+        session.role + (session.storeId ? ' | ' + session.storeId : '');
+      document.getElementById('userAvatar').innerText =
+        String(session.loginId || '??').slice(0, 2).toUpperCase();
+
+      setupRoleUI();
+      setupDriverForRole();
+      setMode('OUT');
+
+      if (session.role === 'ADMIN' || session.role === 'WAREHOUSE' || session.role === 'DRIVER') {
+        loadStores();
+      }
+
+      showScreen('home');
+      focusScanLoop();
+    }
+
+    function setupRoleUI() {
+      const role = session.role;
+      const canScan = (role === 'ADMIN' || role === 'WAREHOUSE');
+      // DRIVER: quét ở nhiều store, phải tự chọn. STORE: quét NHẬN/XUẤT
+      // cho ĐÚNG store của chính họ (không chọn được store khác) - xem
+      // setupDriverForRole(). Cả 2 đều dùng chung màn "Giao Nhận".
+      const canDriverScan = (role === 'ADMIN' || role === 'DRIVER' || role === 'STORE');
+
+      document.getElementById('railOut').classList.toggle('hidden', !canScan);
+      document.getElementById('railIn').classList.toggle('hidden', !canScan);
+      document.getElementById('tabDriver').classList.toggle('hidden', !canDriverScan);
+      document.getElementById('tabStore').classList.toggle('hidden', role !== 'ADMIN');
+      document.getElementById('tabTransit').classList.toggle('hidden', !(role === 'ADMIN' || role === 'WAREHOUSE'));
+      document.getElementById('tabDailyOut').classList.toggle('hidden', !(role === 'ADMIN' || role === 'WAREHOUSE' || role === 'STORE'));
+      document.getElementById('tabAbnormal').classList.toggle('hidden', !(role === 'ADMIN' || role === 'WAREHOUSE' || role === 'STORE'));
+      // Tab K.Kê (kiểm kê) TẠM TẮT - bỏ comment dòng dưới để bật lại:
+      // document.getElementById('tabInv').classList.toggle('hidden', role !== 'STORE');
+      document.getElementById('homeQuickRow').classList.toggle('hidden', !canScan);
+      document.getElementById('kpiReservedBox').classList.toggle('hidden', !(role === 'ADMIN' || role === 'WAREHOUSE'));
+
+      if (role === 'STORE') {
+        document.getElementById('dashSearch').classList.add('hidden');
+        document.getElementById('dashLabel').innerText = 'Công Nợ Tote Cửa Hàng Của Bạn';
+        document.getElementById('dailyOutSearch').classList.add('hidden');
+        document.getElementById('dailyOutSearchLabel').innerText = 'Tote Đã Xuất Cho Cửa Hàng Của Bạn';
+        document.getElementById('abnormalSearchLabel').innerText = 'Abnormal Cửa Hàng Của Bạn';
+      } else {
+        document.getElementById('dashSearch').classList.remove('hidden');
+        document.getElementById('dashLabel').innerText = 'Tìm Store Đang Nợ Tote';
+        document.getElementById('dailyOutSearch').classList.remove('hidden');
+        document.getElementById('dailyOutSearchLabel').innerText = 'Tìm Store';
+        document.getElementById('abnormalSearchLabel').innerText = 'Tìm Store / Tote / User';
+      }
+    }
+
+    // =====================================================================
+    // NHÓM 6: ĐIỀU HƯỚNG GIỮA CÁC MÀN HÌNH (routing)
+    // showScreen(name) là hàm trung tâm để chuyển qua lại giữa các màn:
+    // Home, Quét OUT/IN, Cửa hàng, Tồn kho, Xuất trong ngày, Bất thường,
+    // Kiểm kho, Tra cứu. goToScan()/setMode() lo việc chuyển giữa 2 chế độ
+    // quét OUT (xuất kho) và IN (nhập kho).
+    // =====================================================================
+    function isTypingField() {
+      const active = document.activeElement;
+      if (!active) return false;
+
+      if (active.id === 'scanInput') {
+        return manualInputMode;
+      }
+
+      return [
+        'storeSearch',
+        'driverStoreSearch',
+        'driverManualInput',
+        'newStoreId',
+        'newStoreName',
+        'dashSearch',
+        'dailyOutSearch',
+        'abnormalSearch',
+        'trackToteInput',
+        'loginId',
+        'password'
+      ].includes(active.id);
+    }
+
+    function showScreen(name) {
+      document.querySelectorAll('.screen').forEach(x => x.classList.remove('active'));
+      document.querySelectorAll('.rail-item').forEach(x => x.classList.remove('active'));
+
+      document.getElementById('screen-' + name).classList.add('active');
+
+      if (name === 'home') document.getElementById('tabHome').classList.add('active');
+      // Khi vào màn Quét (pda), tô sáng đúng nút OUT hoặc IN đang chọn -
+      // y hệt cách các mục khác (Home, Store...) được tô sáng khi active.
+      if (name === 'pda') document.getElementById(mode === 'OUT' ? 'railOut' : 'railIn').classList.add('active');
+      if (name === 'driver') document.getElementById('tabDriver').classList.add('active');
+      if (name === 'store') document.getElementById('tabStore').classList.add('active');
+      if (name === 'dash') document.getElementById('tabDash').classList.add('active');
+      if (name === 'transit') document.getElementById('tabTransit').classList.add('active');
+      if (name === 'dailyOut') document.getElementById('tabDailyOut').classList.add('active');
+      if (name === 'abnormal') document.getElementById('tabAbnormal').classList.add('active');
+      // Tab K.Kê (kiểm kê) TẠM TẮT - bỏ comment dòng dưới để bật lại:
+      // if (name === 'inv') document.getElementById('tabInv').classList.add('active');
+      if (name === 'track') document.getElementById('tabTrack').classList.add('active');
+
+      // Rời khỏi màn Tài xế thì phải tắt camera ngay - không để camera bật
+      // ngầm tốn pin/lộ hình ảnh khi tài xế đang xem màn khác.
+      if (name !== 'driver') stopDriverCamera();
+
+      if (name === 'home') loadHomeSummary();
+      if (name === 'pda') focusScan();
+      if (name === 'driver') renderDriverSessionUI();
+      if (name === 'dash') loadDashboard();
+      if (name === 'transit') loadInTransitSummary();
+      if (name === 'dailyOut') { initDailyOutDate(); loadDailyOutSummary(); }
+      if (name === 'abnormal') { initAbnormalDate(); loadAbnormalSummary(); }
+      // Tab K.Kê (kiểm kê) TẠM TẮT - bỏ comment dòng dưới để bật lại:
+      // if (name === 'inv') { focusInventoryScan(); loadInventoryHistory(); }
+      if (name === 'track') setTimeout(() => document.getElementById('trackToteInput').focus(), 50);
+    }
+
+    function goToScan(value) {
+      setMode(value);
+      showScreen('pda');
+    }
+
+    function setMode(value) {
+      if (mode === value) {
+        renderPdaSessionUI();
+        focusScan();
+        return;
+      }
+
+      // Gửi nốt mã còn trong hàng đợi của mode CŨ trước khi đổi, để không
+      // bị gửi nhầm lên server với action của mode MỚI (flushNow() chốt
+      // action/store ngay lúc gọi, nên phải gọi TRƯỚC khi đổi biến mode).
+      if (pendingQueue.length > 0) flushNow();
+
+      // Cất số liệu (tổng/OK/lỗi/danh sách gần đây) của mode đang rời đi,
+      // rồi lấy lại số liệu riêng của mode sắp chuyển tới - đảm bảo 2 phiên
+      // OUT/IN không bao giờ lẫn số liệu của nhau dù đổi qua lại nhiều lần.
+      sessionSnapshot[mode] = {
+        total, ok, fail, scanLog,
+        recentHtml: document.getElementById('recentList').innerHTML
+      };
+
+      mode = value;
+
+      const restored = sessionSnapshot[mode];
+      total = restored.total;
+      ok = restored.ok;
+      fail = restored.fail;
+      scanLog = restored.scanLog;
+      document.getElementById('recentList').innerHTML = restored.recentHtml;
+      updateCounter();
+
+      // Ghi chú: nút OUT/IN trên thanh điều hướng giờ không còn tô màu
+      // riêng nữa (xem showScreen) - banner màu bên dưới vẫn cho biết rõ
+      // đang ở chế độ XUẤT hay NHẬP.
+      const banner = document.getElementById('modeBanner');
+      const tag = document.getElementById('modeTag');
+      banner.classList.toggle('out', mode === 'OUT');
+      banner.classList.toggle('in', mode === 'IN');
+      tag.innerText = mode === 'OUT' ? 'XUẤT KHO — OUT' : 'NHẬP KHO — IN';
+
+      // Quyết định hiện "bắt đầu phiên" hay hiện luôn khu vực quét - xem
+      // renderPdaSessionUI() ở NHÓM 11b.
+      renderPdaSessionUI();
+
+      focusScan();
+    }
+
+    // =====================================================================
+    // NHÓM 7: NHẬP MÃ THỦ CÔNG (khi không có máy quét trong tay)
+    // Cho phép gõ tay mã thùng (TOT...) thay vì dùng máy quét.
+    // =====================================================================
+    function toggleManualInput() {
+      manualInputMode = !manualInputMode;
+
+      const input = document.getElementById('scanInput');
+      const btn = document.getElementById('manualBtn');
+
+      const submitBtn = document.getElementById('manualSubmitBtn');
+
+      if (manualInputMode) {
+        input.removeAttribute('readonly');
+        input.setAttribute('inputmode', 'text');
+        input.classList.remove('no-keyboard');
+        btn.innerText = 'TẮT NHẬP TAY';
+        btn.classList.add('manual-on');
+        submitBtn.classList.remove('hidden');
+        input.value = '';
+        input.focus();
+        showResult('ĐANG BẬT NHẬP TAY', true);
+      } else {
+        // QUAN TRỌNG: không dùng readonly nữa.
+        // Một số PDA/Zebra chỉ đổ mã scan vào input editable; readonly sẽ làm scan không vào textbox.
+        input.removeAttribute('readonly');
+        input.setAttribute('inputmode', 'none');
+        input.classList.add('no-keyboard');
+        btn.innerText = 'NHẬP TAY';
+        btn.classList.remove('manual-on');
+        submitBtn.classList.add('hidden');
+        input.value = '';
+        scanBuffer = '';
+        focusScan();
+        showResult('ĐÃ TẮT BÀN PHÍM - SẴN SÀNG SCAN', true);
+      }
+    }
+
+    // Gửi mã đang gõ trong ô NHẬP TAY - dùng chung cho cả phím Enter
+    // (handleScanKey) và nút "XÁC NHẬN" (một số PDA/trình duyệt cũ không
+    // bắn sự kiện Enter khi bấm "Done"/"Next" trên bàn phím ảo).
+    function submitManualScan() {
+      const input = document.getElementById('scanInput');
+      const toteId = (input.value || scanBuffer).trim().toUpperCase();
+      input.value = '';
+      scanBuffer = '';
+
+      if (toteId) receiveScanCode(toteId);
+
+      if (manualInputMode) input.focus();
+      else focusScan();
+    }
+
+    // =====================================================================
+    // NHÓM 8: BẮT TÍN HIỆU TỪ MÁY QUÉT MÃ VẠCH (PDA SCANNER)
+    // Máy quét thực chất "gõ phím" rất nhanh rồi bấm Enter. Hai hàm dưới
+    // đây lắng nghe toàn trang để bắt được chuỗi ký tự đó ngay cả khi con
+    // trỏ không nằm đúng trong ô nhập liệu, và để không bật bàn phím ảo
+    // (mềm) trên màn hình làm phiền người dùng.
+    // KHÔNG ĐƯỢC sửa phần này nếu không hiểu rõ máy quét hoạt động ra sao -
+    // đây là phần nhạy cảm nhất, dễ làm hỏng việc quét mã.
+    // =====================================================================
+    function globalScannerKeyHandler(e) {
+      if (!session) return;
+      if (manualInputMode) return;
+      if (!document.getElementById('screen-pda').classList.contains('active')) return;
+
+      const input = document.getElementById('scanInput');
+      if (!input) return;
+
+      // Nếu focus đang ở ô scan thì để PDA tự đổ ký tự vào textbox.
+      // Khi scanner gửi Enter, handleScanKey() sẽ xử lý.
+      if (document.activeElement === input) return;
+
+      // Không bắt scanner khi anh đang gõ ở ô tìm store / dashboard / tracking / login.
+      if (isTypingField()) return;
+
+      // Trường hợp scanner bắn phím vào body/button/banner: gom buffer toàn trang.
+      input.removeAttribute('readonly');
+      input.setAttribute('inputmode', 'none');
+      input.classList.add('no-keyboard');
+
+      if (e.key === 'Enter') {
+        e.preventDefault();
+
+        const code = scanBuffer.trim().toUpperCase();
+        scanBuffer = '';
+        input.value = '';
+
+        if (code) receiveScanCode(code);
+        else focusScan();
+        return;
+      }
+
+      if (e.key === 'Backspace') {
+        e.preventDefault();
+        scanBuffer = scanBuffer.slice(0, -1);
+        input.value = scanBuffer;
+        return;
+      }
+
+      if (e.key && e.key.length === 1) {
+        e.preventDefault();
+        scanBuffer += e.key.toUpperCase();
+        input.value = scanBuffer;
+      }
+    }
+
+    function handleScanKey(e) {
+      const input = document.getElementById('scanInput');
+      if (!input) return;
+
+      // Bắt Enter cho cả chế độ scan thường và NHẬP TAY.
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        submitManualScan();
+        return;
+      }
+
+      // Ở chế độ scan thường: giữ chữ hoa và không bật bàn phím mềm.
+      if (!manualInputMode) {
+        input.removeAttribute('readonly');
+        input.setAttribute('inputmode', 'none');
+        input.classList.add('no-keyboard');
+      }
+    }
+
+    // =====================================================================
+    // NHÓM 9: XỬ LÝ 1 MÃ THÙNG SAU KHI QUÉT/NHẬP XONG
+    // receiveScanCode() kiểm tra mã hợp lệ (phải bắt đầu bằng "TOT"), chặn
+    // trường hợp quét trùng mã quá nhanh (double-scan) trong 2.5 giây, phát
+    // âm thanh + rung phản hồi, rồi đẩy mã vào hàng đợi để gửi lên server.
+    // =====================================================================
+    function receiveScanCode(toteId) {
+      focusScan();
+
+      // Đang hoàn tác (Hủy phiên OUT) thì chặn quét mới - máy quét vật lý
+      // vẫn có thể bắn phím vào trang dù popup đang che màn hình, nên phải
+      // chặn ở đây chứ không chỉ dựa vào overlay che UI.
+      if (cancellingSession) {
+        showResult('ĐANG HỦY PHIÊN, VUI LÒNG ĐỢI...', false);
+        beep(false);
+        return;
+      }
+
+      if (!toteId) return;
+
+      if (!toteId.startsWith('TOT')) {
+        showResult('MÃ KHÔNG HỢP LỆ: ' + toteId, false);
+        addRecent(toteId, 'Không phải Tote ID - không ghi dữ liệu', false);
+        beepInvalid();
+
+        if (navigator.vibrate) {
+          navigator.vibrate([200, 100, 200]);
+        }
+
+        return;
+      }
+
+      // Phòng hờ: về lý thuyết không thể chạm tới đây vì ô scan chỉ hiện ra
+      // SAU KHI đã bấm "Bắt đầu phiên" (OUT bắt buộc chọn store trước đó) -
+      // nhưng vẫn giữ lại điều kiện chặn này cho chắc chắn, không để lọt.
+      if (mode === 'OUT' && (!sessionActive || !selectedStoreId)) {
+        showResult('CHƯA CHỌN STORE', false);
+        beep(false);
+        return;
+      }
+
+      if (mode === 'IN' && !inSessionActive) {
+        showResult('CHƯA BẮT ĐẦU PHIÊN NHẬP', false);
+        beep(false);
+        return;
+      }
+
+      const now = Date.now();
+      const scanKey = mode + '|' + selectedStoreId + '|' + toteId;
+
+      if (recentScanMap[scanKey] && now - recentScanMap[scanKey] < doubleScanMs) {
+        showResult('DOUBLE SCAN BỎ QUA: ' + toteId, false);
+        addRecent(toteId, 'Double scan - không ghi', false);
+        beep(false);
+        return;
+      }
+
+      recentScanMap[scanKey] = now;
+      total++;
+
+      pendingQueue.push({
+        toteId,
+        clientScanId: 'S' + now + '_' + Math.floor(Math.random() * 100000)
+      });
+
+      addRecent(toteId, 'Đã nhận scan - chờ ghi', true);
+      showResult('NHẬN: ' + toteId, true);
+      beep(true);
+      updateCounter();
+
+      if (pendingQueue.length >= batchSize) flushNow();
+      else scheduleFlush();
+    }
+
+    // =====================================================================
+    // NHÓM 10: GỬI DỮ LIỆU LÊN SERVER THEO LÔ (BATCH)
+    // Thay vì gửi lên server ngay từng mã một (chậm, tốn mạng), app gom mã
+    // quét được vào 1 hàng đợi (pendingQueue) rồi gửi 1 lần khi đủ 10 mã
+    // hoặc sau 1.5 giây không quét thêm gì mới - gọi hàm scanBatch() bên
+    // Code.gs.
+    // =====================================================================
+    function scheduleFlush() {
+      if (flushTimer) clearTimeout(flushTimer);
+      flushTimer = setTimeout(flushNow, flushDelayMs);
+    }
+
+    function flushNow() {
+      if (sending || pendingQueue.length === 0) return;
+
+      sending = true;
+
+      // Chốt lại mode/store NGAY LÚC GỬI, không đọc biến global mode/selectedStoreId
+      // trong success handler nữa - tránh ghi nhầm phiên nếu người dùng đổi
+      // mode trong lúc đợi phản hồi (batch trước đó phải luôn được tính đúng
+      // cho phiên đã tạo ra nó).
+      const flushMode = mode;
+      const batch = pendingQueue.splice(0, batchSize);
+      updateCounter();
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          sending = false;
+
+          if (!res.success) {
+            fail += batch.length;
+            showResult(res.message, false);
+            batch.forEach(x => {
+              addRecent(x.toteId, res.message, false);
+              scanLog.push({ toteId: x.toteId, message: res.message, success: false });
+            });
+            beep(false);
+          } else {
+            res.results.forEach(r => {
+              if (r.success) {
+                ok++;
+                addRecent(r.toteId, r.message, true);
+
+                // Ghi nhớ tote đã ghi thành công trong phiên hiện tại, để
+                // "Hủy phiên" biết cần hoàn tác (OUT) hay chỉ xoá bộ đếm (IN).
+                if (flushMode === 'OUT') sessionOutTotesMap[r.toteId] = true;
+                else if (flushMode === 'IN') sessionInTotesMap[r.toteId] = true;
+              } else {
+                fail++;
+                addRecent(r.toteId, r.message, false);
+              }
+
+              scanLog.push({ toteId: r.toteId, message: r.message, success: r.success });
+              showResult(r.message, r.success);
+            });
+          }
+
+          updateCounter();
+
+          if (pendingQueue.length > 0) flushNow();
+          if (!manualInputMode && !isTypingField()) focusScan();
+        })
+        .withFailureHandler(function(err) {
+          sending = false;
+
+          // Hết phiên không được tính batch là NG và không được làm mất mã đã scan.
+          if (isSessionExpiredError(err)) {
+            pendingQueue = batch.concat(pendingQueue);
+            updateCounter();
+            forceRelogin('Phiên đăng nhập đã hết hạn. Đăng nhập lại để tiếp tục ghi các mã đang chờ.');
+            return;
+          }
+
+          fail += batch.length;
+          const msg = 'LỖI GHI: ' + getErrorMessage(err);
+
+          showResult(msg, false);
+          batch.forEach(x => {
+            addRecent(x.toteId, msg, false);
+            scanLog.push({ toteId: x.toteId, message: msg, success: false });
+          });
+
+          updateCounter();
+          beep(false);
+
+          if (pendingQueue.length > 0) scheduleFlush();
+          if (!manualInputMode && !isTypingField()) focusScan();
+        })
+        .scanBatch({
+          token: session.token,
+          action: mode,
+          store: selectedStoreId,
+          items: batch
+        });
+    }
+
+    // =====================================================================
+    // NHÓM 11: QUẢN LÝ DANH SÁCH CỬA HÀNG
+    // Tải danh sách cửa hàng từ server (getStores), tìm kiếm/lọc theo tên,
+    // chọn cửa hàng đang thao tác, và thêm cửa hàng mới (addStore) - chỉ
+    // ADMIN/WAREHOUSE mới thấy phần thêm mới.
+    // =====================================================================
+    function loadStores() {
+      google.script.run
+        .withSuccessHandler(function(data) {
+          stores = data || [];
+          renderStoreList();
+          renderAllStores();
+        })
+        .withFailureHandler(function(err) {
+          if (handleSessionError(err)) return;
+          showResult('LỖI STORE: ' + getErrorMessage(err), false);
+        })
+        .getStores(session.token);
+    }
+
+    // onStoreSearch() chạy mỗi khi gõ chữ VÀ mỗi khi bấm vào ô tìm store
+    // (onfocus). Store đang chọn (selectedStoreId) CHỈ đổi khi người dùng
+    // bấm chọn 1 gợi ý mới trong danh sách - gõ tìm kiếm không tự xoá lựa
+    // chọn hiện tại, để tránh nhấp nháy "CHƯA CHỌN STORE" trong lúc gõ.
+    function onStoreSearch() {
+      renderStoreList();
+    }
+
+    function renderStoreList() {
+      const input = document.getElementById('storeSearch');
+      const q = normalizeText(input.value);
+      const box = document.getElementById('storeList');
+
+      box.innerHTML = '';
+
+      // QUAN TRỌNG: đây là chỗ tạo cảm giác "dropdown gợi ý" thay vì xổ hết
+      // danh sách ra. Nếu ô tìm đang trống thì KHÔNG hiện gì cả - phải gõ
+      // ít nhất 1 ký tự mới bắt đầu gợi ý.
+      if (q.length === 0) {
+        box.classList.remove('open');
+        return;
+      }
+
+      // Chỉ lấy tối đa 8 gợi ý gần đúng nhất để danh sách gọn, đúng kiểu
+      // thanh gợi ý (autocomplete) chứ không phải danh sách đầy đủ.
+      const MAX_SUGGESTIONS = 8;
+      const matches = stores.filter(s => normalizeText(`${s.id} ${s.name}`).includes(q));
+      const filtered = matches.slice(0, MAX_SUGGESTIONS);
+
+      if (filtered.length === 0) {
+        const div = document.createElement('div');
+        div.className = 'store-item';
+        div.innerHTML = 'KHÔNG TÌM THẤY STORE';
+        box.appendChild(div);
+        box.classList.add('open');
+        return;
+      }
+
+      filtered.forEach(s => {
+        const div = document.createElement('div');
+
+        div.className = 'store-item';
+        div.innerHTML = `<b>${s.id}</b><br>${s.name}`;
+
+        // Dùng onmousedown (thay vì onclick) để việc CHỌN gợi ý xảy ra
+        // TRƯỚC khi sự kiện "blur" (rời khỏi ô nhập) kịp đóng dropdown lại.
+        div.onmousedown = function(e) {
+          e.preventDefault(); // giữ focus, tránh bàn phím ảo nhấp nháy
+          selectedStoreId = s.id;
+          document.getElementById('selectedStore').innerText = `ĐÃ CHỌN: ${s.id} - ${s.name}`;
+          input.value = '';
+          box.innerHTML = '';
+          box.classList.remove('open');
+
+          // Chọn xong store thì mở khoá nút "Bắt đầu phiên quét" (nếu đang
+          // ở màn thiết lập phiên OUT) và đưa focus tới đó luôn cho nhanh.
+          refreshStartSessionBtn();
+          const startBtn = document.getElementById('startSessionBtn');
+          if (startBtn && !startBtn.disabled) startBtn.focus();
+        };
+
+        box.appendChild(div);
+      });
+
+      // Nếu còn nhiều kết quả hơn số đang hiện, nhắc người dùng gõ thêm
+      // để thu hẹp danh sách.
+      if (matches.length > MAX_SUGGESTIONS) {
+        const hint = document.createElement('div');
+        hint.className = 'store-item';
+        hint.style.color = 'var(--muted)';
+        hint.style.fontWeight = '700';
+        hint.innerHTML = `Còn ${matches.length - MAX_SUGGESTIONS} kết quả khác - gõ thêm để thu hẹp`;
+        box.appendChild(hint);
+      }
+
+      box.classList.add('open');
+    }
+
+    // Được gọi khi người dùng rời khỏi (blur) ô tìm store. Đóng dropdown lại
+    // sau 1 khoảng trễ ngắn (150ms) để kịp cho sự kiện chọn gợi ý
+    // (onmousedown ở trên) chạy trước, tránh trường hợp dropdown đóng mất
+    // ngay khi vừa bấm chọn.
+    function closeStoreListSoon() {
+      setTimeout(() => {
+        document.getElementById('storeList').classList.remove('open');
+      }, 150);
+    }
+
+    // Vẫn giữ lại hàm này (không còn nút riêng ngoài giao diện) để có thể
+    // gọi từ nơi khác nếu cần xoá trắng lựa chọn + ô tìm store.
+    function clearStoreSearch() {
+      selectedStoreId = '';
+      document.getElementById('storeSearch').value = '';
+      document.getElementById('selectedStore').innerText = 'CHƯA CHỌN STORE';
+      renderStoreList();
+      refreshStartSessionBtn();
+      document.getElementById('storeSearch').focus();
+    }
+
+    function addNewStore() {
+      const storeId = document.getElementById('newStoreId').value.trim().toUpperCase();
+      const storeName = document.getElementById('newStoreName').value.trim();
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          const box = document.getElementById('storeMsg');
+          box.className = 'result ' + (res.success ? 'ok' : 'fail');
+          box.innerText = res.message;
+
+          if (res.success) {
+            document.getElementById('newStoreId').value = '';
+            document.getElementById('newStoreName').value = '';
+            loadStores();
+          }
+        })
+        .withFailureHandler(function(err) {
+          if (handleSessionError(err)) return;
+          const box = document.getElementById('storeMsg');
+          box.className = 'result fail';
+          box.innerText = getErrorMessage(err);
+        })
+        .addStore({
+          token: session.token,
+          storeId,
+          storeName
+        });
+    }
+
+    function renderAllStores() {
+      const box = document.getElementById('allStores');
+      box.innerHTML = '';
+
+      stores.forEach(s => {
+        const div = document.createElement('div');
+        div.className = 'recent-item';
+        div.innerHTML = `<b>${s.id}</b> - ${s.name}`;
+        box.appendChild(div);
+      });
+    }
+
+    // =====================================================================
+    // NHÓM 11b (MỚI): "PHIÊN QUÉT" CHO CHẾ ĐỘ OUT
+    // Thay vì cho quét tự do ngay khi vào màn OUT, giờ bắt buộc theo đúng
+    // thứ tự: chọn store -> bấm "Bắt đầu phiên quét" -> quét -> bấm "Kết
+    // thúc phiên" -> xem lại tổng kết -> xác nhận.
+    // Chế độ IN KHÔNG cần phiên (không cần chọn store) nên khu vực quét
+    // luôn hiện sẵn cho IN.
+    // QUAN TRỌNG: mỗi mã quét vẫn được gửi lên server NGAY LẬP TỨC như cũ
+    // (xem scheduleFlush/flushNow ở NHÓM 10) - "phiên" ở đây CHỈ là một lớp
+    // giao diện giúp nhân viên biết rõ đang quét cho store nào và xem lại
+    // tổng kết trước khi đóng phiên. Nó KHÔNG làm thay đổi cách dữ liệu
+    // được lưu, nên không sợ mất dữ liệu nếu PDA tắt máy/mất mạng giữa
+    // chừng (khác với kiểu "giữ hết tới cuối mới lưu" - đã trao đổi và
+    // KHÔNG chọn phương án đó vì rủi ro mất dữ liệu).
+    // =====================================================================
+    function renderPdaSessionUI() {
+      const showOutSetup = (mode === 'OUT' && !sessionActive);
+      const showInSetup = (mode === 'IN' && !inSessionActive);
+      const showScanArea = (mode === 'OUT' && sessionActive) || (mode === 'IN' && inSessionActive);
+      const showActiveBar = showScanArea;
+
+      document.getElementById('sessionSetup').classList.toggle('hidden', !showOutSetup);
+      document.getElementById('inSessionSetup').classList.toggle('hidden', !showInSetup);
+      document.getElementById('scanArea').classList.toggle('hidden', !showScanArea);
+      document.getElementById('activeSessionBar').classList.toggle('hidden', !showActiveBar);
+      document.getElementById('activeSessionBar').classList.toggle('in', mode === 'IN');
+
+      document.getElementById('activeSessionOutLabel').classList.toggle('hidden', mode !== 'OUT');
+      document.getElementById('activeSessionInLabel').classList.toggle('hidden', mode !== 'IN');
+
+      if (showActiveBar && mode === 'OUT') {
+        document.getElementById('activeSessionStore').innerText = sessionStoreLabel;
+      }
+    }
+
+    // Bật/tắt nút "Bắt đầu phiên quét" tuỳ theo đã chọn store hay chưa.
+    function refreshStartSessionBtn() {
+      const btn = document.getElementById('startSessionBtn');
+      if (btn) btn.disabled = !selectedStoreId;
+    }
+
+    function startScanSession() {
+      if (!selectedStoreId) return;
+
+      sessionActive = true;
+      sessionStoreLabel = document.getElementById('selectedStore').innerText.replace('ĐÃ CHỌN: ', '');
+      sessionOutTotesMap = {};
+
+      // Bắt đầu phiên mới = reset bộ đếm + danh sách gần đây + chống quét
+      // trùng, để số liệu hiển thị đúng là số liệu CỦA PHIÊN NÀY, không bị
+      // cộng dồn từ phiên trước đó (store trước có thể khác store này, hoặc
+      // trước đó đang ở màn IN).
+      total = 0;
+      ok = 0;
+      fail = 0;
+      scanLog = [];
+      recentScanMap = {};
+      document.getElementById('recentList').innerHTML = '';
+      updateCounter();
+
+      renderPdaSessionUI();
+
+      showResult('SẴN SÀNG SCAN', true);
+      focusScan();
+    }
+
+    // Bấm "BẮT ĐẦU PHIÊN NHẬP" (IN) - y hệt tinh thần startScanSession() bên
+    // OUT nhưng không cần chọn store, để tạo ranh giới phiên rõ ràng, đảm
+    // bảo số liệu của phiên IN mới không dính số liệu của phiên trước.
+    function startInSession() {
+      inSessionActive = true;
+      sessionInTotesMap = {};
+
+      total = 0;
+      ok = 0;
+      fail = 0;
+      scanLog = [];
+      recentScanMap = {};
+      document.getElementById('recentList').innerHTML = '';
+      updateCounter();
+
+      renderPdaSessionUI();
+
+      showResult('SẴN SÀNG SCAN', true);
+      focusScan();
+    }
+
+    // Gói kết quả quét trong 1 phiên thành 2 khối <details> GẤP LẠI mặc
+    // định - "Xem N tote OK" (chỉ cần mã, gọn) và "Xem N tote LỖI/BẤT
+    // THƯỜNG" (hiện kèm lý do vì mỗi mã có thể lỗi khác nhau). Dùng chung
+    // cho cả popup Kết thúc phiên bên kho lẫn bên tài xế/cửa hàng.
+    function renderSessionScanLogDetails(log) {
+      if (!log || !log.length) return '';
+
+      const okItems = log.filter(x => x.success);
+      const failItems = log.filter(x => !x.success);
+
+      const okBlock = okItems.length ? `
+        <details>
+          <summary>Xem ${okItems.length} tote OK</summary>
+          <div style="margin-top:8px">${okItems.map(x => `<span class="chip">${x.toteId}</span>`).join('')}</div>
+        </details>` : '';
+
+      const failBlock = failItems.length ? `
+        <details>
+          <summary style="color:#E1364A">Xem ${failItems.length} tote LỖI/BẤT THƯỜNG</summary>
+          <div style="margin-top:8px">
+            ${failItems.map(x => `<div class="recent-item"><b>${x.toteId}</b> - <span style="color:#E1364A">${x.message}</span></div>`).join('')}
+          </div>
+        </details>` : '';
+
+      return okBlock + failBlock;
+    }
+
+    // Bấm "KẾT THÚC PHIÊN": gửi nốt dữ liệu còn trong hàng đợi (nếu có) rồi
+    // hiện màn tổng kết để nhân viên xem lại TRƯỚC KHI xác nhận thật sự.
+    // Dùng chung cho cả OUT và IN - hàng Store trong bảng tổng kết chỉ hiện
+    // khi đang ở chế độ OUT (IN không gắn với 1 store cụ thể).
+    function askEndScanSession() {
+      if (pendingQueue.length > 0) flushNow();
+
+      document.getElementById('sumStoreRow').classList.toggle('hidden', mode !== 'OUT');
+      document.getElementById('sumStore').innerText = sessionStoreLabel;
+      document.getElementById('sumTotal').innerText = total;
+      document.getElementById('sumOk').innerText = ok;
+      document.getElementById('sumFail').innerText = fail;
+      document.getElementById('sessionScanLogDetails').innerHTML = renderSessionScanLogDetails(scanLog);
+
+      document.getElementById('sessionConfirmOverlay').classList.remove('hidden');
+    }
+
+    // Bấm "TIẾP TỤC QUÉT" trong popup xác nhận: chỉ đóng popup lại, KHÔNG
+    // kết thúc phiên - mọi thứ giữ nguyên như trước khi bấm "Kết thúc phiên".
+    function cancelEndScanSession() {
+      document.getElementById('sessionConfirmOverlay').classList.add('hidden');
+      focusScan();
+    }
+
+    // Bấm "XÁC NHẬN KẾT THÚC": đóng hẳn phiên hiện tại, quay lại màn "Bắt
+    // đầu phiên" (OUT: chọn store lại; IN: bấm Bắt đầu phiên nhập lại) để
+    // phiên tiếp theo luôn bắt đầu từ số liệu sạch.
+    function confirmEndScanSession() {
+      document.getElementById('sessionConfirmOverlay').classList.add('hidden');
+
+      if (mode === 'OUT') {
+        doResetOutSession();
+      } else {
+        doResetInSession();
+        showResult('ĐÃ KẾT THÚC PHIÊN NHẬP', true);
+      }
+    }
+
+    // Đưa màn OUT về trạng thái "chưa có phiên" - dùng chung cho cả kết thúc
+    // phiên bình thường VÀ hủy phiên (sau khi đã hoàn tác xong, nếu có).
+    function doResetOutSession() {
+      sessionActive = false;
+      sessionStoreLabel = '';
+      selectedStoreId = '';
+      sessionOutTotesMap = {};
+      document.getElementById('selectedStore').innerText = 'CHƯA CHỌN STORE';
+      document.getElementById('storeSearch').value = '';
+      refreshStartSessionBtn();
+      renderPdaSessionUI();
+    }
+
+    // Đưa màn IN về trạng thái "chưa có phiên" (quay lại nút Bắt đầu phiên
+    // nhập) - dùng chung cho cả kết thúc phiên bình thường VÀ hủy phiên.
+    // Không đụng gì tới dữ liệu đã ghi trên server - các tote đã IN trong
+    // phiên vừa đóng vẫn ở trong kho như bình thường.
+    function doResetInSession() {
+      inSessionActive = false;
+      sessionInTotesMap = {};
+      renderPdaSessionUI();
+      focusScan();
+    }
+
+    // =====================================================================
+    // NHÓM 11c (MỚI): "HỦY PHIÊN"
+    // OUT: vì mỗi mã đã ghi thẳng lên server ngay lúc quét (xem NHÓM 10),
+    // hủy phiên KHÔNG xoá được các dòng đã ghi - thay vào đó tự động gọi
+    // CANCEL_OUT hoàn tác toàn bộ tote đã OUT trong phiên để trả về kho, giữ
+    // nguyên lịch sử (đúng triết lý "thực tế luôn đúng, không xoá dữ liệu").
+    // IN (kho nhận): thu hồi về kho vốn là trạng thái an toàn/trung tính,
+    // không có "nơi cũ" hợp lý nào để lùi về - hủy phiên IN chỉ xoá bộ đếm
+    // hiển thị trên máy, không hoàn tác gì trên server.
+    // NHẬN/XUẤT tại cửa hàng (NHÓM 22 bên dưới): giống OUT, mỗi mã cũng ghi
+    // thẳng lên server ngay lúc quét VÀ có ảnh hưởng tới tồn kho cửa hàng, nên
+    // hủy phiên cũng tự động gọi CANCEL_STORE_RECEIVE/CANCEL_STORE_RETURN để
+    // hoàn tác đúng các tote vừa quét, không để tồn kho bị lệch.
+    // =====================================================================
+    function askCancelCurrentSession() {
+      if (mode === 'OUT') askCancelScanSession();
+      else askCancelInSession();
+    }
+
+    function askCancelScanSession() {
+      const outCount = Object.keys(sessionOutTotesMap).length;
+
+      // Chưa quét được tote nào (và không còn gì trong hàng đợi) thì hủy
+      // ngay, không cần hỏi lại - không có gì để hoàn tác cả.
+      if (outCount === 0 && pendingQueue.length === 0 && !sending) {
+        doResetOutSession();
+        showResult('ĐÃ HỦY PHIÊN (CHƯA QUÉT TOTE NÀO)', true);
+        return;
+      }
+
+      document.getElementById('cancelSessionStoreLabel').innerText = sessionStoreLabel;
+      document.getElementById('cancelSessionCount').innerText = outCount;
+
+      const statusBox = document.getElementById('cancelSessionStatus');
+      statusBox.classList.add('hidden');
+      statusBox.innerText = '';
+
+      const btn = document.getElementById('cancelSessionConfirmBtn');
+      btn.disabled = false;
+      btn.innerText = 'XÁC NHẬN HỦY';
+
+      document.getElementById('cancelSessionOverlay').classList.remove('hidden');
+    }
+
+    function closeCancelSessionOverlay() {
+      document.getElementById('cancelSessionOverlay').classList.add('hidden');
+      focusScan();
+    }
+
+    function confirmCancelScanSession() {
+      if (cancellingSession) return;
+
+      const statusBox = document.getElementById('cancelSessionStatus');
+
+      // Còn mã trong hàng đợi/đang gửi thì đợi gửi xong trước, để không bỏ
+      // sót tote nào khi tính danh sách cần hoàn tác.
+      if (pendingQueue.length > 0 || sending) {
+        statusBox.classList.remove('hidden');
+        statusBox.className = 'result pending';
+        statusBox.innerText = 'ĐANG GỬI NỐT DỮ LIỆU CÒN LẠI...';
+        if (pendingQueue.length > 0 && !sending) flushNow();
+        setTimeout(confirmCancelScanSession, 400);
+        return;
+      }
+
+      const toteIds = Object.keys(sessionOutTotesMap);
+
+      if (toteIds.length === 0) {
+        document.getElementById('cancelSessionOverlay').classList.add('hidden');
+        doResetOutSession();
+        showResult('ĐÃ HỦY PHIÊN', true);
+        return;
+      }
+
+      cancellingSession = true;
+
+      const btn = document.getElementById('cancelSessionConfirmBtn');
+      btn.disabled = true;
+
+      statusBox.classList.remove('hidden');
+      statusBox.className = 'result pending';
+      statusBox.innerText = 'ĐANG HOÀN TÁC ' + toteIds.length + ' TOTE (HỦY XUẤT, TRẢ VỀ KHO)...';
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          cancellingSession = false;
+          btn.disabled = false;
+
+          if (!res.success) {
+            statusBox.className = 'result fail';
+            statusBox.innerText = 'LỖI HOÀN TÁC: ' + res.message;
+            return;
+          }
+
+          res.results.forEach(r => {
+            if (r.success) delete sessionOutTotesMap[r.toteId];
+          });
+
+          const remain = Object.keys(sessionOutTotesMap).length;
+
+          if (remain === 0) {
+            document.getElementById('cancelSessionOverlay').classList.add('hidden');
+            doResetOutSession();
+            showResult('ĐÃ HỦY PHIÊN - HOÀN TÁC XONG', true);
+          } else {
+            statusBox.className = 'result fail';
+            statusBox.innerText = 'CÒN ' + remain + ' TOTE CHƯA HOÀN TÁC ĐƯỢC - BẤM XÁC NHẬN HỦY ĐỂ THỬ LẠI';
+            btn.innerText = 'THỬ LẠI (' + remain + ')';
+          }
+        })
+        .withFailureHandler(function(err) {
+          cancellingSession = false;
+          btn.disabled = false;
+
+          if (handleSessionError(err)) return;
+
+          statusBox.className = 'result fail';
+          statusBox.innerText = 'LỖI HOÀN TÁC: ' + getErrorMessage(err);
+        })
+        .scanBatch({
+          token: session.token,
+          action: 'CANCEL_OUT',
+          store: '',
+          items: toteIds.map(id => ({ toteId: id, clientScanId: 'CANCEL_' + Date.now() + '_' + id }))
+        });
+    }
+
+    function askCancelInSession() {
+      const inCount = Object.keys(sessionInTotesMap).length;
+
+      if (inCount === 0 && pendingQueue.length === 0 && !sending) {
+        doResetInSession();
+        showResult('ĐÃ HỦY PHIÊN NHẬP', true);
+        return;
+      }
+
+      document.getElementById('cancelInSessionCount').innerText = inCount;
+      document.getElementById('cancelInSessionOverlay').classList.remove('hidden');
+    }
+
+    function closeCancelInSessionOverlay() {
+      document.getElementById('cancelInSessionOverlay').classList.add('hidden');
+      focusScan();
+    }
+
+    function confirmCancelInSession() {
+      document.getElementById('cancelInSessionOverlay').classList.add('hidden');
+      doResetInSession();
+      showResult('ĐÃ HỦY PHIÊN NHẬP - TOTE VẪN Ở TRONG KHO', true);
+    }
+
+    // =====================================================================
+    // NHÓM 22: MÀN HÌNH TÀI XẾ (role DRIVER) - giao/nhận tote tại cửa hàng
+    // bằng CAMERA điện thoại thay vì máy quét vật lý như PDA kho.
+    //
+    // 2 loại phiên TÁCH RIÊNG hoàn toàn (không gộp, không đổi qua lại giữa
+    // chừng): "NHẬN HÀNG" (STORE_RECEIVE - hàng vừa được kho giao tới, tài
+    // xế xác nhận đã đưa tới đúng store) và "XUẤT HÀNG" (STORE_RETURN - lấy
+    // vỏ tote rỗng ở store về, chuẩn bị chở lại kho). Bắt buộc chọn store +
+    // bấm "Bắt đầu phiên" giống hệt tinh thần OUT/IN bên kho.
+    //
+    // Quét bằng CAMERA SỐNG (getUserMedia + ZXing giải mã liên tục) - không
+    // dùng <input type="file"> nên không tồn tại lựa chọn "chọn ảnh từ
+    // album" trong luồng này, chỉ có thể quét trực tiếp qua camera. Cần
+    // host NGOÀI Apps Script (GitHub Pages) để tránh bị chặn iframe.
+    // =====================================================================
+
+    function setDriverMode(value) {
+      if (driverSessionActive) return; // không cho đổi loại phiên giữa chừng
+
+      driverMode = value;
+
+      document.getElementById('driverModeReceiveBtn').classList.toggle('active', value === 'STORE_RECEIVE');
+      document.getElementById('driverModeReceiveBtn').classList.toggle('btn-gray', value !== 'STORE_RECEIVE');
+      document.getElementById('driverModeReturnBtn').classList.toggle('active', value === 'STORE_RETURN');
+      document.getElementById('driverModeReturnBtn').classList.toggle('btn-gray', value !== 'STORE_RETURN');
+
+      const banner = document.getElementById('driverModeBanner');
+      banner.classList.toggle('out', value === 'STORE_RECEIVE');
+      banner.classList.toggle('in', value === 'STORE_RETURN');
+      document.getElementById('driverModeTag').innerText =
+        value === 'STORE_RECEIVE' ? 'NHẬN RỔ TẠI CH' : 'XUẤT RỔ TẠI CH (LẤY VỎ)';
+    }
+
+    function renderDriverSessionUI() {
+      document.getElementById('driverModeSwitch').classList.toggle('hidden', driverSessionActive);
+      document.getElementById('driverSessionSetup').classList.toggle('hidden', driverSessionActive);
+      document.getElementById('driverScanArea').classList.toggle('hidden', !driverSessionActive);
+
+      if (driverSessionActive) {
+        document.getElementById('driverActiveStore').innerText = driverStoreLabel;
+      }
+    }
+
+    function refreshDriverStartSessionBtn() {
+      const btn = document.getElementById('driverStartSessionBtn');
+      if (btn) btn.disabled = !driverStoreId;
+    }
+
+    function onDriverStoreSearch() {
+      renderDriverStoreList();
+    }
+
+    function renderDriverStoreList() {
+      const input = document.getElementById('driverStoreSearch');
+      const q = normalizeText(input.value);
+      const box = document.getElementById('driverStoreList');
+
+      box.innerHTML = '';
+
+      if (q.length === 0) {
+        box.classList.remove('open');
+        return;
+      }
+
+      const MAX_SUGGESTIONS = 8;
+      const matches = stores.filter(s => normalizeText(`${s.id} ${s.name}`).includes(q));
+      const filtered = matches.slice(0, MAX_SUGGESTIONS);
+
+      if (filtered.length === 0) {
+        const div = document.createElement('div');
+        div.className = 'store-item';
+        div.innerHTML = 'KHÔNG TÌM THẤY STORE';
+        box.appendChild(div);
+        box.classList.add('open');
+        return;
+      }
+
+      filtered.forEach(s => {
+        const div = document.createElement('div');
+        div.className = 'store-item';
+        div.innerHTML = `<b>${s.id}</b><br>${s.name}`;
+
+        div.onmousedown = function(e) {
+          e.preventDefault();
+          driverStoreId = s.id;
+          driverStoreLabel = `${s.id} - ${s.name}`;
+          document.getElementById('driverSelectedStore').innerText = `ĐÃ CHỌN: ${driverStoreLabel}`;
+          input.value = '';
+          box.innerHTML = '';
+          box.classList.remove('open');
+
+          refreshDriverStartSessionBtn();
+          const startBtn = document.getElementById('driverStartSessionBtn');
+          if (startBtn && !startBtn.disabled) startBtn.focus();
+        };
+
+        box.appendChild(div);
+      });
+
+      if (matches.length > MAX_SUGGESTIONS) {
+        const hint = document.createElement('div');
+        hint.className = 'store-item';
+        hint.style.color = 'var(--muted)';
+        hint.style.fontWeight = '700';
+        hint.innerHTML = `Còn ${matches.length - MAX_SUGGESTIONS} kết quả khác - gõ thêm để thu hẹp`;
+        box.appendChild(hint);
+      }
+
+      box.classList.add('open');
+    }
+
+    function closeDriverStoreListSoon() {
+      setTimeout(() => {
+        document.getElementById('driverStoreList').classList.remove('open');
+      }, 150);
+    }
+
+    function startDriverSession() {
+      if (!driverStoreId) return;
+
+      driverSessionActive = true;
+      driverTotal = 0;
+      driverOk = 0;
+      driverFail = 0;
+      driverScanLog = [];
+      driverRecentScanMap = {};
+      driverSessionTotesMap = {};
+      document.getElementById('driverRecentList').innerHTML = '';
+      updateDriverCounter();
+
+      // Phiên mới luôn bắt đầu bằng camera - không giữ lại chế độ nhập tay
+      // của phiên trước, để hành vi luôn dễ đoán.
+      driverManualInputMode = false;
+      document.getElementById('driverManualInput').classList.add('hidden');
+      document.getElementById('driverCameraBox').classList.remove('hidden');
+      document.getElementById('driverManualBtn').innerText = 'NHẬP TAY';
+      document.getElementById('driverManualBtn').classList.remove('manual-on');
+
+      renderDriverSessionUI();
+      startDriverCamera();
+    }
+
+    function doResetDriverSession() {
+      driverSessionActive = false;
+      driverSessionTotesMap = {};
+
+      // Role STORE bị khoá cứng đúng 1 store của chính họ - giữ nguyên
+      // driverStoreId/Label qua các phiên, không reset về "chưa chọn" như
+      // DRIVER (DRIVER đi nhiều store nên phải chọn lại mỗi phiên mới).
+      if (session.role !== 'STORE') {
+        driverStoreId = '';
+        driverStoreLabel = '';
+        document.getElementById('driverSelectedStore').innerText = 'CHƯA CHỌN STORE';
+        document.getElementById('driverStoreSearch').value = '';
+      }
+
+      refreshDriverStartSessionBtn();
+      stopDriverCamera();
+      renderDriverSessionUI();
+    }
+
+    // Thiết lập màn Giao Nhận theo đúng vai trò - gọi 1 lần lúc đăng nhập:
+    // - DRIVER/ADMIN: hiện ô chọn store (đi nhiều store).
+    // - STORE: khoá cứng đúng store của chính họ, ẩn ô chọn, mở khoá nút
+    //   Bắt đầu phiên ngay (không cần chọn gì thêm).
+    function setupDriverForRole() {
+      const isStoreRole = (session.role === 'STORE');
+
+      document.getElementById('driverStorePickBox').classList.toggle('hidden', isStoreRole);
+      document.getElementById('driverStoreFixedBox').classList.toggle('hidden', !isStoreRole);
+
+      if (isStoreRole) {
+        driverStoreId = String(session.storeId || '').toUpperCase();
+        driverStoreLabel = `${session.storeId} - ${session.storeName || ''}`;
+        document.getElementById('driverStoreFixedLabel').innerText = driverStoreLabel;
+        refreshDriverStartSessionBtn();
+      }
+    }
+
+    // ---------------- Kết thúc phiên (bình thường) ----------------
+    function askEndDriverSession() {
+      if (driverPendingQueue.length > 0) driverFlushNow();
+
+      document.getElementById('driverSumStore').innerText = driverStoreLabel;
+      document.getElementById('driverSumTotal').innerText = driverTotal;
+      document.getElementById('driverSumOk').innerText = driverOk;
+      document.getElementById('driverSumFail').innerText = driverFail;
+      document.getElementById('driverScanLogDetails').innerHTML = renderSessionScanLogDetails(driverScanLog);
+
+      document.getElementById('driverSessionConfirmOverlay').classList.remove('hidden');
+    }
+
+    function cancelEndDriverSession() {
+      document.getElementById('driverSessionConfirmOverlay').classList.add('hidden');
+    }
+
+    function confirmEndDriverSession() {
+      document.getElementById('driverSessionConfirmOverlay').classList.add('hidden');
+      doResetDriverSession();
+      showDriverMsg('ĐÃ KẾT THÚC PHIÊN', true);
+    }
+
+    // ---------------- Hủy phiên (tự động hoàn tác các tote đã quét thành
+    // công trong phiên - giống hệt tinh thần "Hủy phiên OUT" bên kho, vì mỗi
+    // mã cũng đã ghi thẳng lên server ngay lúc quét và ảnh hưởng tồn kho cửa
+    // hàng, không thể chỉ xoá bộ đếm hiển thị) ----------------
+    function askCancelDriverSession() {
+      const doneCount = Object.keys(driverSessionTotesMap).length;
+
+      if (doneCount === 0 && driverPendingQueue.length === 0 && !driverSending) {
+        doResetDriverSession();
+        showDriverMsg('ĐÃ HỦY PHIÊN', true);
+        return;
+      }
+
+      document.getElementById('driverCancelCount').innerText = doneCount;
+
+      const statusBox = document.getElementById('driverCancelSessionStatus');
+      statusBox.classList.add('hidden');
+      statusBox.innerText = '';
+
+      const btn = document.getElementById('driverCancelSessionConfirmBtn');
+      btn.disabled = false;
+      btn.innerText = 'XÁC NHẬN HỦY';
+
+      document.getElementById('driverCancelSessionOverlay').classList.remove('hidden');
+    }
+
+    function closeDriverCancelOverlay() {
+      document.getElementById('driverCancelSessionOverlay').classList.add('hidden');
+    }
+
+    function confirmCancelDriverSession() {
+      if (cancellingDriverSession) return;
+
+      const statusBox = document.getElementById('driverCancelSessionStatus');
+
+      // Còn mã trong hàng đợi/đang gửi thì đợi gửi xong trước, để không bỏ
+      // sót tote nào khi tính danh sách cần hoàn tác.
+      if (driverPendingQueue.length > 0 || driverSending) {
+        statusBox.classList.remove('hidden');
+        statusBox.className = 'result pending';
+        statusBox.innerText = 'ĐANG GỬI NỐT DỮ LIỆU CÒN LẠI...';
+        if (driverPendingQueue.length > 0 && !driverSending) driverFlushNow();
+        setTimeout(confirmCancelDriverSession, 400);
+        return;
+      }
+
+      const toteIds = Object.keys(driverSessionTotesMap);
+
+      if (toteIds.length === 0) {
+        document.getElementById('driverCancelSessionOverlay').classList.add('hidden');
+        doResetDriverSession();
+        showDriverMsg('ĐÃ HỦY PHIÊN', true);
+        return;
+      }
+
+      cancellingDriverSession = true;
+
+      const btn = document.getElementById('driverCancelSessionConfirmBtn');
+      btn.disabled = true;
+
+      statusBox.classList.remove('hidden');
+      statusBox.className = 'result pending';
+      statusBox.innerText = 'ĐANG HOÀN TÁC ' + toteIds.length + ' TOTE...';
+
+      const cancelAction = driverMode === 'STORE_RECEIVE' ? 'CANCEL_STORE_RECEIVE' : 'CANCEL_STORE_RETURN';
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          cancellingDriverSession = false;
+          btn.disabled = false;
+
+          if (!res.success) {
+            statusBox.className = 'result fail';
+            statusBox.innerText = 'LỖI HOÀN TÁC: ' + res.message;
+            return;
+          }
+
+          res.results.forEach(r => {
+            if (r.success) delete driverSessionTotesMap[r.toteId];
+          });
+
+          const remain = Object.keys(driverSessionTotesMap).length;
+
+          if (remain === 0) {
+            document.getElementById('driverCancelSessionOverlay').classList.add('hidden');
+            doResetDriverSession();
+            showDriverMsg('ĐÃ HỦY PHIÊN - HOÀN TÁC XONG', true);
+          } else {
+            statusBox.className = 'result fail';
+            statusBox.innerText = 'CÒN ' + remain + ' TOTE CHƯA HOÀN TÁC ĐƯỢC - BẤM XÁC NHẬN HỦY ĐỂ THỬ LẠI';
+            btn.innerText = 'THỬ LẠI (' + remain + ')';
+          }
+        })
+        .withFailureHandler(function(err) {
+          cancellingDriverSession = false;
+          btn.disabled = false;
+
+          if (handleSessionError(err)) return;
+
+          statusBox.className = 'result fail';
+          statusBox.innerText = 'LỖI HOÀN TÁC: ' + getErrorMessage(err);
+        })
+        .scanBatch({
+          token: session.token,
+          action: cancelAction,
+          store: driverStoreId,
+          items: toteIds.map(id => ({ toteId: id, clientScanId: 'CANCEL_' + Date.now() + '_' + id }))
+        });
+    }
+
+    // ---------------- Nhận mã đã giải mã từ camera ----------------
+    function driverReceiveScanCode(toteId) {
+      if (!toteId) return;
+
+      if (!toteId.startsWith('TOT')) {
+        showDriverMsg('MÃ KHÔNG HỢP LỆ: ' + toteId, false);
+        addDriverRecent(toteId, 'Không phải Tote ID - không ghi dữ liệu', false);
+        beepInvalid();
+        if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+        return;
+      }
+
+      const now = Date.now();
+      const scanKey = driverMode + '|' + driverStoreId + '|' + toteId;
+
+      if (driverRecentScanMap[scanKey] && now - driverRecentScanMap[scanKey] < doubleScanMs) {
+        showDriverMsg('DOUBLE SCAN BỎ QUA: ' + toteId, false);
+        addDriverRecent(toteId, 'Double scan - không ghi', false);
+        beep(false);
+        return;
+      }
+
+      driverRecentScanMap[scanKey] = now;
+      driverTotal++;
+
+      driverPendingQueue.push({
+        toteId,
+        clientScanId: 'D' + now + '_' + Math.floor(Math.random() * 100000)
+      });
+
+      addDriverRecent(toteId, 'Đã nhận scan - chờ ghi', true);
+      showDriverMsg('NHẬN: ' + toteId, true);
+      beep(true);
+      updateDriverCounter();
+
+      if (driverPendingQueue.length >= batchSize) driverFlushNow();
+      else driverScheduleFlush();
+    }
+
+    function driverScheduleFlush() {
+      if (driverFlushTimer) clearTimeout(driverFlushTimer);
+      driverFlushTimer = setTimeout(driverFlushNow, flushDelayMs);
+    }
+
+    function driverFlushNow() {
+      if (driverSending || driverPendingQueue.length === 0) return;
+
+      driverSending = true;
+
+      const flushMode = driverMode;
+      const flushStore = driverStoreId;
+      const batch = driverPendingQueue.splice(0, batchSize);
+      updateDriverCounter();
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          driverSending = false;
+
+          if (!res.success) {
+            driverFail += batch.length;
+            showDriverMsg(res.message, false);
+            batch.forEach(x => {
+              addDriverRecent(x.toteId, res.message, false);
+              driverScanLog.push({ toteId: x.toteId, message: res.message, success: false });
+            });
+            beep(false);
+          } else {
+            res.results.forEach(r => {
+              if (r.success) {
+                driverOk++;
+                driverSessionTotesMap[r.toteId] = true;
+                addDriverRecent(r.toteId, r.message, true);
+              } else {
+                driverFail++;
+                addDriverRecent(r.toteId, r.message, false);
+              }
+              driverScanLog.push({ toteId: r.toteId, message: r.message, success: r.success });
+              showDriverMsg(r.message, r.success);
+            });
+          }
+
+          updateDriverCounter();
+          if (driverPendingQueue.length > 0) driverFlushNow();
+        })
+        .withFailureHandler(function(err) {
+          driverSending = false;
+
+          if (isSessionExpiredError(err)) {
+            driverPendingQueue = batch.concat(driverPendingQueue);
+            updateDriverCounter();
+            forceRelogin('Phiên đăng nhập đã hết hạn. Đăng nhập lại để tiếp tục ghi các mã đang chờ.');
+            return;
+          }
+
+          driverFail += batch.length;
+          const msg = 'LỖI GHI: ' + getErrorMessage(err);
+          showDriverMsg(msg, false);
+          batch.forEach(x => {
+            addDriverRecent(x.toteId, msg, false);
+            driverScanLog.push({ toteId: x.toteId, message: msg, success: false });
+          });
+
+          updateDriverCounter();
+          beep(false);
+          if (driverPendingQueue.length > 0) driverScheduleFlush();
+        })
+        .scanBatch({
+          token: session.token,
+          action: flushMode,
+          store: flushStore,
+          items: batch
+        });
+    }
+
+    function showDriverMsg(msg, success) {
+      const box = document.getElementById('driverCameraMsg');
+      box.className = 'result ' + (success ? 'ok' : 'fail');
+      box.innerText = msg;
+    }
+
+    function addDriverRecent(toteId, msg, success) {
+      const box = document.getElementById('driverRecentList');
+      const div = document.createElement('div');
+      div.className = 'recent-item';
+      div.innerHTML = `<b>${toteId}</b> - <span style="color:${success ? '#00A784' : '#E1364A'}">${msg}</span>`;
+      box.prepend(div);
+      while (box.children.length > 20) box.removeChild(box.lastChild);
+    }
+
+    function updateDriverCounter() {
+      document.getElementById('driverCTotal').innerText = driverTotal;
+      document.getElementById('driverCOk').innerText = driverOk;
+      document.getElementById('driverCFail').innerText = driverFail;
+      document.getElementById('driverCQueue').innerText = driverPendingQueue.length + (driverSending ? 1 : 0);
+    }
+
+    // ---------------- Nhập tay (dự phòng khi camera không quét được) ----------------
+    // Bật lên thì TẮT camera (đỡ tốn pin, tránh vừa nhập tay vừa bị camera
+    // tự bắt trùng mã đang gõ dở); tắt đi thì bật lại camera như cũ.
+    function toggleDriverManualInput() {
+      driverManualInputMode = !driverManualInputMode;
+
+      const cameraBox = document.getElementById('driverCameraBox');
+      const manualInput = document.getElementById('driverManualInput');
+      const btn = document.getElementById('driverManualBtn');
+
+      const submitBtn = document.getElementById('driverManualSubmitBtn');
+
+      if (driverManualInputMode) {
+        stopDriverCamera();
+        cameraBox.classList.add('hidden');
+        manualInput.classList.remove('hidden');
+        submitBtn.classList.remove('hidden');
+        btn.innerText = 'TẮT NHẬP TAY - DÙNG CAMERA';
+        btn.classList.add('manual-on');
+        manualInput.value = '';
+        manualInput.focus();
+        showDriverMsg('ĐANG NHẬP TAY', true);
+      } else {
+        manualInput.value = '';
+        manualInput.classList.add('hidden');
+        submitBtn.classList.add('hidden');
+        cameraBox.classList.remove('hidden');
+        btn.innerText = 'NHẬP TAY';
+        btn.classList.remove('manual-on');
+        startDriverCamera();
+      }
+    }
+
+    // Gửi mã đang gõ trong ô NHẬP TAY - dùng chung cho cả phím Enter
+    // (handleDriverManualKey) và nút "XÁC NHẬN" (xem ghi chú ở
+    // submitManualScan() bên màn PDA kho).
+    function submitDriverManualScan() {
+      const input = document.getElementById('driverManualInput');
+      const toteId = input.value.trim().toUpperCase();
+      input.value = '';
+
+      if (toteId) driverReceiveScanCode(toteId);
+      input.focus();
+    }
+
+    function handleDriverManualKey(e) {
+      if (e.key !== 'Enter') return;
+      e.preventDefault();
+      submitDriverManualScan();
+    }
+
+    // ---------------- Camera: chỉ quét trực tiếp, KHÔNG chọn ảnh từ album ----------------
+    // Toàn bộ luồng này dùng getUserMedia (camera sống) + ZXing giải mã
+    // liên tục - không có bất kỳ <input type="file"> nào trong luồng, nên
+    // không tồn tại đường nào để chọn ảnh từ album cả. Yêu cầu host NGOÀI
+    // Apps Script (VD GitHub Pages) - trong Apps Script, iframe bọc trang
+    // không cấp quyền Camera ở tầng Permissions Policy nên getUserMedia sẽ
+    // luôn bị chặn (đã xác nhận qua DevTools).
+    function startDriverCamera() {
+      if (typeof ZXingBrowser === 'undefined' && typeof ZXing === 'undefined') {
+        showDriverMsg('Thiếu thư viện quét mã - kiểm tra kết nối mạng rồi tải lại trang', false);
+        return;
+      }
+
+      const ZX = window.ZXingBrowser || window.ZXing;
+      const videoEl = document.getElementById('driverVideo');
+
+      showDriverMsg('ĐANG MỞ CAMERA...', true);
+
+      try {
+        driverCodeReader = new ZX.BrowserMultiFormatReader();
+      } catch (e) {
+        showDriverMsg('Không khởi tạo được bộ quét mã: ' + e.message, false);
+        return;
+      }
+
+      driverCodeReader.decodeFromConstraints(
+        { audio: false, video: { facingMode: { ideal: 'environment' } } },
+        videoEl,
+        function(result, err) {
+          if (result) {
+            const text = String(result.getText() || '').trim().toUpperCase();
+            if (text) driverReceiveScanCode(text);
+          }
+          // "err" bắn liên tục khi CHƯA thấy mã trong khung hình - đây là
+          // hành vi bình thường của vòng quét liên tục, không phải lỗi.
+        }
+      ).then(function(controls) {
+        driverStream = videoEl.srcObject;
+        if (driverSessionActive) showDriverMsg('SẴN SÀNG QUÉT - ĐƯA MÃ VÀO KHUNG HÌNH', true);
+      }).catch(function(err) {
+        // In thêm err.name (VD NotAllowedError, NotFoundError,
+        // OverconstrainedError, SecurityError...) để biết chính xác loại
+        // lỗi ngay trên màn hình PDA, khỏi cần máy tính mở DevTools mới xem được.
+        const errName = (err && err.name) ? err.name + ' - ' : '';
+        showDriverMsg('KHÔNG MỞ ĐƯỢC CAMERA: ' + errName + getErrorMessage(err) + ' (kiểm tra đã cho phép quyền Camera chưa)', false);
+      });
+    }
+
+    function stopDriverCamera() {
+      try {
+        if (driverCodeReader) {
+          driverCodeReader.reset();
+          driverCodeReader = null;
+        }
+      } catch (e) {}
+
+      try {
+        if (driverStream) {
+          driverStream.getTracks().forEach(t => t.stop());
+          driverStream = null;
+        }
+      } catch (e) {}
+
+      const videoEl = document.getElementById('driverVideo');
+      if (videoEl) videoEl.srcObject = null;
+    }
+
+    // =====================================================================
+    // NHÓM 12: MÀN HÌNH "TỒN KHO" (DASHBOARD CÔNG NỢ THÙNG THEO CỬA HÀNG)
+    // loadDashboard() luôn lấy TOÀN BỘ dữ liệu (không truyền query lên
+    // server) để khối thống kê (dashStats) tính đúng tổng số + "nợ nhiều
+    // nhất" trên CẢ HỆ THỐNG, không bị lệch theo ô tìm kiếm. Ô tìm kiếm chỉ
+    // lọc danh sách hiển thị bên dưới NGAY TRÊN TRÌNH DUYỆT (không gọi lại
+    // server), nên gõ tìm là ra kết quả tức thì.
+    // =====================================================================
+    let dashboardData = [];
+    let dashboardWarehouseQty = 0;
+
+    function handleDashKey(e) {
+      if (e.key === 'Enter') loadDashboard();
+    }
+
+    function loadDashboard() {
+      document.getElementById('dashResult').innerHTML = 'ĐANG TẢI...';
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          dashboardData = (res && res.stores) || [];
+          dashboardWarehouseQty = (res && res.warehouseQty) || 0;
+          renderDashboard();
+        })
+        .withFailureHandler(function(err) {
+          if (handleSessionError(err)) return;
+          document.getElementById('dashStats').classList.add('hidden');
+          document.getElementById('dashResult').innerHTML = 'LỖI: ' + getErrorMessage(err);
+        })
+        .getDashboard({
+          token: session.token,
+          query: ''
+        });
+    }
+
+    function renderDashboard() {
+      const box = document.getElementById('dashResult');
+      box.innerHTML = '';
+
+      if (!dashboardData.length) {
+        document.getElementById('dashStats').classList.add('hidden');
+        box.innerHTML = '<div class="dashboard-card">KHÔNG CÓ DỮ LIỆU NỢ TOTE</div>';
+        return;
+      }
+
+      // STORE chỉ thấy đúng 1 dòng của chính họ (đã lọc từ server) nên bảng
+      // xếp hạng không có ý nghĩa với vai trò này - chỉ hiện cho ADMIN/WAREHOUSE.
+      if (session.role === 'STORE') {
+        document.getElementById('dashStats').classList.add('hidden');
+      } else {
+        renderDashStats(dashboardData);
+      }
+
+      const q = normalizeText(document.getElementById('dashSearch').value);
+      const filtered = q
+        ? dashboardData.filter(s => normalizeText(`${s.storeId} ${s.storeName || ''}`).includes(q))
+        : dashboardData;
+
+      if (!filtered.length) {
+        box.innerHTML = '<div class="dashboard-card">KHÔNG TÌM THẤY STORE PHÙ HỢP</div>';
+        return;
+      }
+
+      filtered.forEach(s => {
+        const div = document.createElement('div');
+        div.className = 'dashboard-card';
+
+        // Danh sách tote gói trong <details> - GẤP LẠI mặc định, bấm mới xổ
+        // ra xem chi tiết từng tote. STORE giờ cũng xem được (chỉ tote của
+        // chính họ - server đã lọc theo storeId).
+        const chips = (s.totes || []).map(t => `<span class="chip">${t.toteId}</span>`).join('') || '-';
+
+        div.innerHTML = `
+          <div class="dashboard-header">
+            <div class="dashboard-title">${s.storeId} - ${s.storeName || ''}</div>
+            <div class="qty">${s.qty}</div>
+          </div>
+          <details>
+            <summary>Xem chi tiết ${s.qty} tote đang nợ</summary>
+            <div style="margin-top:8px">${chips}</div>
+          </details>
+        `;
+
+        box.appendChild(div);
+      });
+    }
+
+    // Vẽ khối "Tổng tote đang ở STORE / Tổng tote đang ở KHO / Nợ nhiều
+    // nhất" - data truyền vào ĐÃ được server sort giảm dần theo qty
+    // (getDashboard), nên chỉ cần lấy 5 dòng đầu là top 5, không cần sort lại.
+    function renderDashStats(data) {
+      const totalStoreQty = data.reduce((sum, s) => sum + (s.qty || 0), 0);
+      const top = data.slice(0, 5);
+
+      const rankRows = top.map((s, i) => `
+        <div class="rank-row">
+          <div class="rank-badge${i === 0 ? ' top1' : ''}">${i + 1}</div>
+          <div class="rank-name">${s.storeId} - ${s.storeName || ''}</div>
+          <div class="rank-qty">${s.qty}</div>
+        </div>
+      `).join('');
+
+      const statsBox = document.getElementById('dashStats');
+      statsBox.classList.remove('hidden');
+      statsBox.innerHTML = `
+        <div class="kpi-row">
+          <div class="kpi">
+            <div class="num">${totalStoreQty}</div>
+            <div class="lbl">Tổng tote đang ở STORE</div>
+          </div>
+          <div class="kpi">
+            <div class="num">${dashboardWarehouseQty}</div>
+            <div class="lbl">Tổng tote đang ở KHO</div>
+          </div>
+        </div>
+        <div class="panel">
+          <h3 style="margin:0 0 4px;padding:0;background:none;color:var(--ink);text-transform:none;letter-spacing:0;font-size:12.5px;">Nợ tote nhiều nhất</h3>
+          ${rankRows}
+        </div>
+      `;
+    }
+
+    // =====================================================================
+    // NHÓM 12b: MÀN "VẬN CHUYỂN" (ADMIN/WAREHOUSE) - theo dõi tote đang ở 2
+    // trạng thái trung gian IN_TRANSIT_TO_STORE / IN_TRANSIT_TO_WAREHOUSE,
+    // sắp xếp theo tote nằm lâu nhất trước để dễ phát hiện tote bị quên quét.
+    // =====================================================================
+    function loadInTransitSummary() {
+      document.getElementById('transitToStoreResult').innerHTML = 'ĐANG TẢI...';
+      document.getElementById('transitToWarehouseResult').innerHTML = '';
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          if (!res || !res.success) {
+            document.getElementById('transitToStoreResult').innerHTML = 'LỖI: ' + ((res && res.message) || 'Không tải được dữ liệu');
+            document.getElementById('transitToWarehouseResult').innerHTML = '';
+            return;
+          }
+
+          document.getElementById('transitToStoreQty').innerText = res.totalToStore || 0;
+          document.getElementById('transitToWarehouseQty').innerText = res.totalToWarehouse || 0;
+
+          renderInTransitGroup('transitToStoreResult', res.toStore, 'đang giao');
+          renderInTransitGroup('transitToWarehouseResult', res.toWarehouse, 'đang về');
+        })
+        .withFailureHandler(function(err) {
+          if (handleSessionError(err)) return;
+          document.getElementById('transitToStoreResult').innerHTML = 'LỖI: ' + getErrorMessage(err);
+          document.getElementById('transitToWarehouseResult').innerHTML = '';
+        })
+        .getInTransitSummary({ token: session.token });
+    }
+
+    // Hiển thị thời gian đã ở trạng thái này thành chữ dễ đọc (phút/giờ),
+    // tô đỏ nếu quá 24h - có thể đây là tote bị quên quét, cần kiểm tra.
+    function formatTransitHours(hours) {
+      if (hours === null || hours === undefined) return '';
+      if (hours < 1) return Math.round(hours * 60) + ' phút';
+      return hours + ' giờ';
+    }
+
+    function renderInTransitGroup(boxId, groups, verb) {
+      const box = document.getElementById(boxId);
+      box.innerHTML = '';
+
+      if (!groups || !groups.length) {
+        box.innerHTML = '<div class="dashboard-card">KHÔNG CÓ TOTE NÀO</div>';
+        return;
+      }
+
+      groups.forEach(s => {
+        const div = document.createElement('div');
+        div.className = 'dashboard-card';
+
+        const chips = (s.totes || []).map(t => {
+          const stuck = (t.hours || 0) >= 24;
+          const timeText = formatTransitHours(t.hours);
+          return `<span class="chip"${stuck ? ' style="background:var(--red-soft);color:#E1364A"' : ''}>${t.toteId}${timeText ? ' · ' + timeText : ''}</span>`;
+        }).join('') || '-';
+
+        div.innerHTML = `
+          <div class="dashboard-header">
+            <div class="dashboard-title">${s.storeId} - ${s.storeName || ''}</div>
+            <div class="qty">${s.qty}</div>
+          </div>
+          <details>
+            <summary>Xem chi tiết ${s.qty} tote ${verb}</summary>
+            <div style="margin-top:8px">${chips}</div>
+          </details>
+        `;
+
+        box.appendChild(div);
+      });
+    }
+
+    // =====================================================================
+    // NHÓM 13: BÁO CÁO "XUẤT KHO TRONG NGÀY"
+    // Cho 1 ngày được chọn, hiển thị tổng hợp số thùng đã xuất theo từng
+    // cửa hàng (đối chiếu cuối ngày) - gọi getDailyOutSummary().
+    // =====================================================================
+    function initDailyOutDate() {
+      const input = document.getElementById('dailyOutDate');
+      if (!input) return;
+      if (!input.value) {
+        const d = new Date();
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        input.value = `${yyyy}-${mm}-${dd}`;
+      }
+    }
+
+    function handleDailyOutKey(e) {
+      if (e.key === 'Enter') loadDailyOutSummary();
+    }
+
+    function loadDailyOutSummary() {
+      initDailyOutDate();
+
+      const date = document.getElementById('dailyOutDate').value;
+      const query = document.getElementById('dailyOutSearch').value.trim();
+      const box = document.getElementById('dailyOutResult');
+
+      box.innerHTML = '<div class="dashboard-card">ĐANG TẢI TỔNG HỢP DAILY OUT...</div>';
+
+      google.script.run
+        .withSuccessHandler(renderDailyOutSummary)
+        .withFailureHandler(function(err) {
+          if (handleSessionError(err)) return;
+          box.innerHTML = '<div class="dashboard-card">LỖI DAILY OUT: ' + getErrorMessage(err) + '</div>';
+        })
+        .getDailyOutSummary({
+          token: session.token,
+          date,
+          query
+        });
+    }
+
+    function renderDailyOutSummary(res) {
+      const box = document.getElementById('dailyOutResult');
+      box.innerHTML = '';
+
+      if (!res || !res.success) {
+        box.innerHTML = '<div class="dashboard-card">' + (res ? res.message : 'Không có dữ liệu') + '</div>';
+        return;
+      }
+
+      box.innerHTML += `
+        <div class="summary-box">
+          <div class="summary-title">${res.date}</div>
+          <div>Tổng cửa hàng có xuất: <b>${res.totalStores}</b></div>
+          <div>Tổng tote OUT / OK unique: <b>${res.totalOk}</b></div>
+          <div>Dòng log OUT raw: <b>${res.totalRows || 0}</b></div>
+          <div>Scan trùng đã bỏ qua: <b>${res.totalDuplicateOk || 0}</b></div>
+          <div>OUT bất thường unique: <b>${res.totalAbnormal}</b></div>
+        </div>
+      `;
+
+      if (!res.rows || res.rows.length === 0) {
+        box.innerHTML += '<div class="dashboard-card">KHÔNG CÓ DỮ LIỆU XUẤT TOTE TRONG NGÀY NÀY</div>';
+        return;
+      }
+
+      res.rows.forEach(r => {
+        const div = document.createElement('div');
+        div.className = 'dashboard-card';
+        const users = (r.users || []).join(', ') || '-';
+        const abnormalLine = r.abnormalQty > 0
+          ? `<div style="color:#E1364A;font-weight:800">OUT bất thường unique: ${r.abnormalQty}</div>`
+          : '';
+        const duplicateLine = r.duplicateOkQty > 0
+          ? `<div style="color:#D97706;font-weight:800">Scan trùng đã bỏ qua: ${r.duplicateOkQty}</div>`
+          : '';
+
+        div.innerHTML = `
+          <div class="dashboard-header">
+            <div class="dashboard-title">${r.storeId} - ${r.storeName || ''}</div>
+            <div class="qty">${r.okQty}</div>
+          </div>
+          <div><b>Số tote xuất theo hệ thống:</b> ${r.okQty}</div>
+          <div>Dòng log OUT raw: <b>${r.rawOutRows || 0}</b></div>
+          ${duplicateLine}
+          ${abnormalLine}
+          <div>User thao tác: <b>${users}</b></div>
+          <details>
+            <summary>Xem mã tote OUT / OK unique</summary>
+            <div style="margin-top:8px">
+              ${(r.toteIds || []).map(id => `<span class="chip">${id}</span>`).join('') || '-'}
+            </div>
+          </details>
+          ${(r.duplicateOkToteIds && r.duplicateOkToteIds.length) ? `
+          <details>
+            <summary style="color:#D97706">Xem mã scan trùng đã bỏ qua</summary>
+            <div style="margin-top:8px">
+              ${r.duplicateOkToteIds.map(id => `<span class="chip">${id}</span>`).join('')}
+            </div>
+          </details>` : ''}
+        `;
+
+        box.appendChild(div);
+      });
+    }
+
+    // =====================================================================
+    // NHÓM 14: BÁO CÁO "BẤT THƯỜNG"
+    // Liệt kê các lượt quét bị đánh dấu bất thường (ví dụ: quét IN nhưng
+    // thùng chưa từng được ghi nhận xuất kho...) trong 1 ngày - gọi
+    // getAbnormalSummary(). Lưu ý: quét bất thường KHÔNG bị chặn, chỉ bị
+    // gắn cờ để nhân viên kiểm tra lại sau.
+    // =====================================================================
+    function initAbnormalDate() {
+      const input = document.getElementById('abnormalDate');
+      if (!input) return;
+      if (!input.value) {
+        const d = new Date();
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        input.value = `${yyyy}-${mm}-${dd}`;
+      }
+    }
+
+    function handleAbnormalKey(e) {
+      if (e.key === 'Enter') loadAbnormalSummary();
+    }
+
+    function loadAbnormalSummary() {
+      initAbnormalDate();
+
+      const date = document.getElementById('abnormalDate').value;
+      const action = document.getElementById('abnormalAction').value;
+      const query = document.getElementById('abnormalSearch').value.trim();
+      const box = document.getElementById('abnormalResult');
+
+      box.innerHTML = '<div class="dashboard-card">ĐANG TẢI ABNORMAL IN / OUT...</div>';
+
+      google.script.run
+        .withSuccessHandler(renderAbnormalSummary)
+        .withFailureHandler(function(err) {
+          if (handleSessionError(err)) return;
+          box.innerHTML = '<div class="dashboard-card">LỖI ABNORMAL: ' + getErrorMessage(err) + '</div>';
+        })
+        .getAbnormalSummary({
+          token: session.token,
+          date,
+          action,
+          query
+        });
+    }
+
+    function renderAbnormalSummary(res) {
+      const box = document.getElementById('abnormalResult');
+      box.innerHTML = '';
+
+      if (!res || !res.success) {
+        box.innerHTML = '<div class="dashboard-card">' + (res ? res.message : 'Không có dữ liệu') + '</div>';
+        return;
+      }
+
+      box.innerHTML += `
+        <div class="summary-box">
+          <div class="summary-title">${res.date}</div>
+          <div>Tổng abnormal: <b>${res.totalAbnormal}</b></div>
+          <div>${actionLabel('OUT')}: <b>${res.totalOut}</b></div>
+          <div>${actionLabel('IN')}: <b>${res.totalIn}</b></div>
+          <div>${actionLabel('STORE_RECEIVE')}: <b>${res.totalStoreReceive || 0}</b></div>
+          <div>${actionLabel('STORE_RETURN')}: <b>${res.totalStoreReturn || 0}</b></div>
+          <div>${actionLabel('CANCEL_OUT')}: <b>${res.totalCancelOut || 0}</b></div>
+          <div>Số store liên quan: <b>${res.totalStores}</b></div>
+        </div>
+      `;
+
+      if (!res.rows || res.rows.length === 0) {
+        box.innerHTML += '<div class="dashboard-card">KHÔNG CÓ ABNORMAL TRONG NGÀY NÀY</div>';
+        return;
+      }
+
+      if (res.summary && res.summary.length) {
+        res.summary.forEach(s => {
+          const div = document.createElement('div');
+          div.className = 'dashboard-card';
+          div.innerHTML = `
+            <div class="dashboard-header">
+              <div class="dashboard-title">${s.storeId} ${s.storeName ? '- ' + s.storeName : ''}</div>
+              <div class="qty">${s.totalQty}</div>
+            </div>
+            <div>${actionLabel('OUT')}: <b>${s.outQty}</b></div>
+            <div>${actionLabel('IN')}: <b>${s.inQty}</b></div>
+            <div>${actionLabel('STORE_RECEIVE')}: <b>${s.storeReceiveQty || 0}</b></div>
+            <div>${actionLabel('STORE_RETURN')}: <b>${s.storeReturnQty || 0}</b></div>
+            <div>${actionLabel('CANCEL_OUT')}: <b>${s.cancelOutQty || 0}</b></div>
+            <div>User liên quan: <b>${(s.users || []).join(', ') || '-'}</b></div>
+          `;
+          box.appendChild(div);
+        });
+      }
+
+      box.innerHTML += '<h3>Chi Tiết Abnormal</h3>';
+
+      res.rows.forEach(r => {
+        const div = document.createElement('div');
+        const isOut = (r.action === 'OUT' || r.action === 'STORE_RETURN');
+        div.className = 'history-row history-bad';
+        div.innerHTML = `
+          <div><b>${r.time}</b></div>
+          <div>Tote: <b>${r.toteId || '-'}</b></div>
+          <div>Nghiệp vụ: <b style="color:${isOut ? '#E1364A' : '#D97706'}">${actionLabel(r.action)}</b> | Kết quả: <b>${r.result}</b></div>
+          <div>Store: <b>${r.storeId || '-'}</b> ${r.storeName ? '- ' + r.storeName : ''}</div>
+          <div>Note: ${r.note || '-'}</div>
+          <div>User: ${r.user || '-'}</div>
+        `;
+        box.appendChild(div);
+      });
+    }
+
+    // =====================================================================
+    // NHÓM 15: "KIỂM KHO" TẠI CỬA HÀNG (STORE tự đối chiếu số thùng đang giữ)
+    // Nhân viên cửa hàng quét lần lượt các thùng đang có tại kho của mình,
+    // hệ thống gửi cả danh sách lên server (submitStoreAudit) để so sánh
+    // với số liệu trên hệ thống, rồi cho xem lại lịch sử các lần kiểm kho
+    // trước (getStoreAuditHistory).
+    // =====================================================================
+    function handleInvKey(e) {
+      if (e.key !== 'Enter') return;
+      e.preventDefault();
+
+      const input = document.getElementById('invScanInput');
+      const toteId = input.value.trim().toUpperCase();
+      input.value = '';
+
+      if (toteId) receiveInventoryCode(toteId);
+      focusInventoryScan();
+    }
+
+    function receiveInventoryCode(toteId) {
+      if (!toteId.startsWith('TOT')) {
+        invInvalid++;
+        updateInventoryCounter();
+        addInventoryRecent(toteId, 'Mã không hợp lệ - không ghi kiểm kê', false);
+        showInventoryResult('MÃ KHÔNG HỢP LỆ: ' + toteId, false);
+        beepInvalid();
+        if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+        return;
+      }
+
+      if (invMap[toteId]) {
+        invDup++;
+        updateInventoryCounter();
+        addInventoryRecent(toteId, 'Scan trùng - đã bỏ qua', false);
+        showInventoryResult('SCAN TRÙNG: ' + toteId, false);
+        beep(false);
+        return;
+      }
+
+      invMap[toteId] = true;
+      invItems.push({
+        toteId,
+        clientScanId: 'INV' + Date.now() + '_' + Math.floor(Math.random() * 100000)
+      });
+
+      updateInventoryCounter();
+      addInventoryRecent(toteId, 'Đã nhận kiểm kê', true);
+      showInventoryResult('ĐÃ SCAN KIỂM KÊ: ' + toteId, true);
+      beep(true);
+    }
+
+    function submitInventory() {
+      if (!invItems.length) {
+        showInventoryResult('CHƯA CÓ TOTE ĐỂ CHỐT KIỂM KÊ', false);
+        return;
+      }
+
+      showInventoryResult('ĐANG SO SÁNH DỮ LIỆU...', true);
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          renderInventoryResult(res);
+        })
+        .withFailureHandler(function(err) {
+          if (handleSessionError(err)) return;
+          showInventoryResult('LỖI KIỂM KÊ: ' + getErrorMessage(err), false);
+        })
+        .submitStoreAudit({
+          token: session.token,
+          items: invItems
+        });
+    }
+
+    function renderInventoryResult(res) {
+      const box = document.getElementById('invResult');
+
+      if (!res.success) {
+        showInventoryResult(res.message, false);
+        return;
+      }
+
+      const diffText = res.diff > 0 ? '+' + res.diff : String(res.diff);
+      const matched = res.status === 'MATCH';
+
+      box.className = 'result ' + (matched ? 'ok' : 'fail');
+      box.innerHTML = `
+        <div>${res.message}</div>
+        <div style="font-size:12.5px;line-height:19px;margin-top:8px;text-align:left;font-weight:700">
+          Mã kiểm kê: <b>${res.auditId || res.auditNo}</b><br>
+          Store: <b>${res.storeId}</b> ${res.storeName ? '- ' + res.storeName : ''}<br>
+          Dữ liệu kho theo dõi: <b>${res.expectedQty}</b><br>
+          Tồn thực tế cửa hàng scan: <b>${res.actualQty}</b><br>
+          Chênh lệch thực tế - hệ thống: <b>${diffText}</b><br>
+          Khớp: <b>${res.matchedQty}</b> | Thiếu: <b>${res.missingQty}</b> | Thừa: <b>${res.extraQty}</b> | Mã lỗi: <b>${res.invalidQty}</b> | Trùng: <b>${res.duplicateQty || 0}</b>
+        </div>
+        ${renderAuditToteDetails(res.missingTotes, res.extraTotes)}
+      `;
+
+      if (matched) beep(true);
+      else beep(false);
+
+      loadInventoryHistory();
+    }
+
+    function clearInventory() {
+      invItems = [];
+      invMap = {};
+      invInvalid = 0;
+      invDup = 0;
+      document.getElementById('invRecentList').innerHTML = '';
+      updateInventoryCounter();
+      showInventoryResult('ĐÃ XÓA DANH SÁCH KIỂM KÊ', true);
+      focusInventoryScan();
+    }
+
+    function loadInventoryHistory() {
+      const box = document.getElementById('invHistoryList');
+      if (!box || !session || session.role !== 'STORE') return;
+
+      box.innerHTML = '<div class="dashboard-card">ĐANG TẢI LỊCH SỬ KIỂM KÊ...</div>';
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          renderInventoryHistory(res);
+        })
+        .withFailureHandler(function(err) {
+          if (handleSessionError(err)) return;
+          box.innerHTML = '<div class="dashboard-card">LỖI LỊCH SỬ: ' + getErrorMessage(err) + '</div>';
+        })
+        .getStoreAuditHistory({
+          token: session.token,
+          limit: 10
+        });
+    }
+
+    function renderInventoryHistory(res) {
+      const box = document.getElementById('invHistoryList');
+      if (!box) return;
+
+      box.innerHTML = '<h3>Lịch Sử Kiểm Kê Gần Nhất</h3>';
+
+      if (!res || !res.success || !res.rows || res.rows.length === 0) {
+        box.innerHTML += '<div class="dashboard-card">CHƯA CÓ LỊCH SỬ KIỂM KÊ</div>';
+        return;
+      }
+
+      res.rows.forEach(r => {
+        const isOk = r.status === 'MATCH';
+        const diffText = r.diff > 0 ? '+' + r.diff : String(r.diff);
+
+        box.innerHTML += `
+          <div class="history-row ${isOk ? 'history-ok' : 'history-bad'}">
+            <div><b>${r.time}</b></div>
+            <div>Mã kiểm kê: <b>${r.auditId}</b></div>
+            <div>Hệ thống: <b>${r.expectedQty}</b> | Thực tế: <b>${r.actualQty}</b> | Chênh lệch: <b>${diffText}</b></div>
+            <div>Khớp: <b>${r.matchedQty}</b> | Thiếu: <b>${r.missingQty}</b> | Thừa: <b>${r.extraQty}</b> | Lỗi: <b>${r.invalidQty}</b> | Trùng: <b>${r.duplicateQty || 0}</b></div>
+            <div>Trạng thái: <b>${r.status}</b></div>
+            ${renderAuditToteDetails(r.missingTotes, r.extraTotes)}
+          </div>
+        `;
+      });
+    }
+
+    // Gói mã tote thiếu/thừa trong <details> - GẤP LẠI mặc định, chỉ hiện
+    // khi thật sự có mã (khớp hoàn toàn thì không có gì để xem thêm). Dùng
+    // chung cho cả kết quả vừa chốt kiểm kê và lịch sử kiểm kê cũ.
+    function renderAuditToteDetails(missingTotes, extraTotes) {
+      const missing = missingTotes || [];
+      const extra = extraTotes || [];
+
+      if (!missing.length && !extra.length) return '';
+
+      const missingBlock = missing.length ? `
+        <details>
+          <summary style="color:#E1364A">Xem ${missing.length} mã THIẾU (hệ thống có, không scan thấy)</summary>
+          <div style="margin-top:8px">${missing.map(id => `<span class="chip">${id}</span>`).join('')}</div>
+        </details>` : '';
+
+      const extraBlock = extra.length ? `
+        <details>
+          <summary style="color:#D97706">Xem ${extra.length} mã THỪA (scan thấy, hệ thống không ghi nhận ở đây)</summary>
+          <div style="margin-top:8px">${extra.map(id => `<span class="chip">${id}</span>`).join('')}</div>
+        </details>` : '';
+
+      return missingBlock + extraBlock;
+    }
+
+    function updateInventoryCounter() {
+      document.getElementById('invTotal').innerText = invItems.length + invInvalid + invDup;
+      document.getElementById('invValid').innerText = invItems.length;
+      document.getElementById('invInvalid').innerText = invInvalid;
+      document.getElementById('invDup').innerText = invDup;
+    }
+
+    function addInventoryRecent(toteId, msg, success) {
+      const box = document.getElementById('invRecentList');
+      const div = document.createElement('div');
+      div.className = 'recent-item';
+      div.innerHTML = `<b>${toteId}</b> - <span style="color:${success ? '#00A784' : '#E1364A'}">${msg}</span>`;
+      box.prepend(div);
+
+      while (box.children.length > 30) {
+        box.removeChild(box.lastChild);
+      }
+    }
+
+    function showInventoryResult(msg, success) {
+      const box = document.getElementById('invResult');
+      box.className = 'result ' + (success ? 'ok' : 'fail');
+      box.innerText = msg;
+    }
+
+    function focusInventoryScan() {
+      setTimeout(function() {
+        const input = document.getElementById('invScanInput');
+        if (!input) return;
+        if (!document.getElementById('screen-inv').classList.contains('active')) return;
+        input.removeAttribute('readonly');
+        input.setAttribute('inputmode', 'none');
+        input.classList.add('no-keyboard');
+        input.focus({ preventScroll: true });
+      }, 30);
+    }
+
+    // =====================================================================
+    // NHÓM 16: TRA CỨU LỊCH SỬ 1 MÃ THÙNG
+    // Nhập/quét 1 mã thùng bất kỳ để xem toàn bộ lịch sử ra/vào của riêng
+    // thùng đó - gọi getToteHistory().
+    // =====================================================================
+    function handleTrackKey(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        loadToteHistory();
+      }
+    }
+
+    function loadToteHistory() {
+      const toteId = document.getElementById('trackToteInput').value.trim().toUpperCase();
+
+      if (!toteId) {
+        document.getElementById('trackResult').innerHTML = '<div class="dashboard-card">NHẬP TOTE ID CẦN TRA</div>';
+        return;
+      }
+
+      if (!toteId.startsWith('TOT')) {
+        document.getElementById('trackResult').innerHTML =
+          '<div class="dashboard-card">MÃ KHÔNG HỢP LỆ, TOTE ID PHẢI BẮT ĐẦU BẰNG TOT</div>';
+        beepInvalid();
+        return;
+      }
+
+      document.getElementById('trackResult').innerHTML = 'ĐANG TẢI...';
+
+      google.script.run
+        .withSuccessHandler(renderToteHistory)
+        .withFailureHandler(function(err) {
+          if (handleSessionError(err)) return;
+          document.getElementById('trackResult').innerHTML = 'LỖI: ' + getErrorMessage(err);
+        })
+        .getToteHistory({
+          token: session.token,
+          toteId
+        });
+    }
+
+    function renderToteHistory(res) {
+      const box = document.getElementById('trackResult');
+      box.innerHTML = '';
+
+      if (!res.success) {
+        box.innerHTML = `<div class="dashboard-card">${res.message}</div>`;
+        return;
+      }
+
+      if (!res.current && (!res.history || res.history.length === 0)) {
+        box.innerHTML = '<div class="dashboard-card">KHÔNG TÌM THẤY DỮ LIỆU TOTE</div>';
+        return;
+      }
+
+      if (res.current) {
+        // IN_STORE = đang ở store (đỏ, giống ý nghĩa "công nợ" sẵn có).
+        // 2 trạng thái ĐANG VẬN CHUYỂN dùng màu vàng (pending) để phân biệt
+        // rõ với "đã tới nơi" - không phải kho, cũng chưa phải store.
+        const statusClass = res.current.status === 'IN_STORE'
+          ? 'status-store'
+          : (res.current.status === 'IN_TRANSIT_TO_STORE' || res.current.status === 'IN_TRANSIT_TO_WAREHOUSE')
+            ? 'status-transit'
+            : 'status-warehouse';
+
+        box.innerHTML += `
+          <div class="summary-box">
+            <div class="summary-title">${res.current.toteId}</div>
+            <div>Trạng thái: <span class="${statusClass}">${statusLabel(res.current.status)}</span></div>
+            <div>Vị trí: <b>${res.current.location}</b> ${res.current.storeName ? '- ' + res.current.storeName : ''}</div>
+            <div>Store gần nhất: <b>${res.current.lastStore || '-'}</b></div>
+            <div>Cập nhật cuối: <b>${res.current.lastUpdate || '-'}</b></div>
+            <div>Bất thường: <b>${res.current.abnormal || '-'}</b></div>
+          </div>
+        `;
+      }
+
+      box.innerHTML += '<h3>Lịch Sử In / Out</h3>';
+
+      if (!res.history || res.history.length === 0) {
+        box.innerHTML += '<div class="dashboard-card">CHƯA CÓ LOG IN/OUT</div>';
+        return;
+      }
+
+      res.history.forEach(h => {
+        const isOk = h.result === 'OK';
+
+        box.innerHTML += `
+          <div class="history-row ${isOk ? 'history-ok' : 'history-bad'}">
+            <div><b>${h.time}</b></div>
+            <div>Nghiệp vụ: <b>${actionLabel(h.action)}</b> | Kết quả: <b>${h.result}</b></div>
+            <div>Store: <b>${h.store || '-'}</b> ${h.storeName ? '- ' + h.storeName : ''}</div>
+            <div>Note: ${h.note || '-'}</div>
+            <div>User: ${h.user || '-'}</div>
+          </div>
+        `;
+      });
+    }
+
+    /* ================= HOME (landing dashboard) ================= */
+
+    // =====================================================================
+    // NHÓM 17 (MỚI): TRANG CHỦ - TỔNG QUAN NGÀY HÔM NAY
+    // Đây là màn hình đầu tiên hiện ra ngay sau khi đăng nhập. Nó gọi 1 hàm SERVER
+    // MỚI tên là getHomeSummary() để lấy: tổng số thùng đang ở các cửa
+    // hàng, số lượt xuất/nhập/bất thường trong hôm nay, biểu đồ 7 ngày gần
+    // nhất, và danh sách hoạt động gần đây nhất.
+    // LƯU Ý QUAN TRỌNG: hàm getHomeSummary() này PHẢI được thêm vào file
+    // Code.gs (xem đoạn code server được gửi kèm bên dưới) thì Trang chủ
+    // mới có dữ liệu để hiển thị.
+    // =====================================================================
+    function loadHomeSummary() {
+      document.getElementById('homeGreetName').innerText =
+        (getGreeting() + ', ' + session.loginId + ' 👋');
+      document.getElementById('homeGreetSub').innerText =
+        formatTodayLabel() + ' · ' + session.role + (session.storeId ? ' · ' + session.storeId : '');
+
+      google.script.run
+        .withSuccessHandler(renderHomeSummary)
+        .withFailureHandler(function(err) {
+          if (handleSessionError(err)) return;
+          document.getElementById('homeActivity').innerHTML =
+            '<div class="empty-note">Không tải được tổng quan: ' + getErrorMessage(err) + '</div>';
+        })
+        .getHomeSummary({ token: session.token });
+    }
+
+    function getGreeting() {
+      const h = new Date().getHours();
+      if (h < 11) return 'Chào buổi sáng';
+      if (h < 14) return 'Chào buổi trưa';
+      if (h < 18) return 'Chào buổi chiều';
+      return 'Chào buổi tối';
+    }
+
+    function formatTodayLabel() {
+      const days = ['Chủ nhật','Thứ 2','Thứ 3','Thứ 4','Thứ 5','Thứ 6','Thứ 7'];
+      const d = new Date();
+      return days[d.getDay()] + ', ' + String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0');
+    }
+
+    function renderHomeSummary(res) {
+      if (!res || !res.success) {
+        document.getElementById('homeActivity').innerHTML =
+          '<div class="empty-note">' + (res ? res.message : 'Không có dữ liệu') + '</div>';
+        return;
+      }
+
+      document.getElementById('kpiStoreQty').innerText = res.totalStoreQty;
+      document.getElementById('kpiOutToday').innerText = res.outToday;
+      document.getElementById('kpiInToday').innerText = res.inToday;
+      document.getElementById('kpiAbnormalToday').innerText = res.abnormalToday;
+      document.getElementById('kpiReservedQty').innerText = res.reservedQty || 0;
+
+      const chart = document.getElementById('homeTrendChart');
+      chart.innerHTML = '';
+      const maxQty = Math.max(1, ...((res.trend || []).map(t => t.qty)));
+      const dayLabels = ['CN','T2','T3','T4','T5','T6','T7'];
+
+      (res.trend || []).forEach(t => {
+        const d = new Date(t.date + 'T00:00:00');
+        const pct = Math.max(4, Math.round((t.qty / maxQty) * 100));
+        const bar = document.createElement('div');
+        bar.className = 'bar';
+        bar.style.height = pct + '%';
+        bar.title = t.date + ': ' + t.qty;
+        bar.innerHTML = `<span>${dayLabels[d.getDay()]}</span>`;
+        chart.appendChild(bar);
+      });
+
+      const activityBox = document.getElementById('homeActivity');
+      activityBox.innerHTML = '';
+
+      if (!res.recent || res.recent.length === 0) {
+        activityBox.innerHTML = '<div class="empty-note">Chưa có hoạt động nào gần đây</div>';
+        return;
+      }
+
+      // Màu theo từng loại nghiệp vụ để dễ quét mắt: xanh lá = hàng rời đi
+      // (OUT/STORE_RETURN), xanh dương = hàng về/tới nơi (IN/STORE_RECEIVE),
+      // xám = tự hủy, đỏ = bất thường (ưu tiên cao nhất).
+      const ACTION_COLOR = {
+        OUT: '#00A784', STORE_RETURN: '#00A784',
+        IN: '#1D4ED8', STORE_RECEIVE: '#1D4ED8',
+        CANCEL_OUT: '#667085', CANCEL_STORE_RECEIVE: '#667085', CANCEL_STORE_RETURN: '#667085'
+      };
+
+      res.recent.forEach(r => {
+        const color = r.result === 'ABNORMAL' ? '#E1364A' : (ACTION_COLOR[r.action] || '#667085');
+        const div = document.createElement('div');
+        div.className = 'activity-item';
+        const label = r.result === 'ABNORMAL'
+          ? `${r.toteId} — Bất thường (${actionLabel(r.action)})`
+          : `${r.toteId} — ${actionLabel(r.action)}${r.store ? ' · ' + r.store : ''}`;
+        div.innerHTML = `<div class="dot" style="background:${color}"></div><div>${label}<br><span style="color:var(--muted)">${r.time}</span></div>`;
+        activityBox.appendChild(div);
+      });
+    }
+
+    // =====================================================================
+    // NHÓM 18: HIỂN THỊ KẾT QUẢ QUÉT + ÂM THANH/RUNG PHẢN HỒI
+    // Sau mỗi lần quét (ở màn Quét OUT/IN), các hàm này lo việc: hiện dòng
+    // kết quả (thành công/thất bại), thêm vào danh sách "gần đây", cập nhật
+    // bộ đếm số lượng, và phát tiếng bíp + rung máy để nhân viên biết ngay
+    // kết quả mà không cần nhìn màn hình liên tục.
+    // =====================================================================
+    function showResult(msg, success) {
+      const box = document.getElementById('lastResult');
+      box.className = 'result ' + (success ? 'ok' : 'fail');
+      box.innerText = msg;
+    }
+
+    function addRecent(toteId, msg, success) {
+      const box = document.getElementById('recentList');
+      const div = document.createElement('div');
+
+      div.className = 'recent-item';
+      div.innerHTML = `<b>${toteId}</b> - <span style="color:${success ? '#00A784' : '#E1364A'}">${msg}</span>`;
+
+      box.prepend(div);
+
+      while (box.children.length > 20) {
+        box.removeChild(box.lastChild);
+      }
+    }
+
+    function updateCounter() {
+      document.getElementById('cTotal').innerText = total;
+      document.getElementById('cOk').innerText = ok;
+      document.getElementById('cFail').innerText = fail;
+      document.getElementById('cQueue').innerText = pendingQueue.length + (sending ? 1 : 0);
+    }
+
+    function beep(success) {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.frequency.value = success ? 900 : 220;
+        gain.gain.value = 0.08;
+
+        osc.start();
+
+        setTimeout(function() {
+          osc.stop();
+          ctx.close();
+        }, success ? 80 : 180);
+
+      } catch (e) {}
+    }
+
+    function beepInvalid() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.frequency.value = 120;
+        gain.gain.value = 0.18;
+
+        osc.start();
+
+        setTimeout(function() {
+          osc.frequency.value = 80;
+        }, 120);
+
+        setTimeout(function() {
+          osc.stop();
+          ctx.close();
+        }, 350);
+
+      } catch (e) {}
+    }
+
+    // =====================================================================
+    // NHÓM 19: GIỮ CON TRỎ LUÔN Ở TRONG Ô QUÉT
+    // Vì máy quét mã vạch chỉ "gõ" được ký tự vào đúng ô đang được focus,
+    // 2 hàm này đảm bảo ô nhập mã luôn được focus lại (kể cả khi người
+    // dùng vô tình chạm ra chỗ khác), để không bị mất mã quét được.
+    // =====================================================================
+    function focusScan() {
+      setTimeout(function() {
+        if (manualInputMode) return;
+        if (isTypingField()) return;
+
+        const input = document.getElementById('scanInput');
+
+        if (input && document.getElementById('screen-pda').classList.contains('active')) {
+          // Không readonly: để PDA scanner đổ mã vào được.
+          // inputmode none: hạn chế bật soft keyboard trên mobile/PDA.
+          input.removeAttribute('readonly');
+          input.setAttribute('inputmode', 'none');
+          input.classList.add('no-keyboard');
+          input.focus({ preventScroll: true });
+        }
+      }, 30);
+    }
+
+    function focusScanLoop() {
+      setInterval(function() {
+        if (!session) return;
+        if (manualInputMode) return;
+        if (!document.getElementById('screen-pda').classList.contains('active')) return;
+        if (isTypingField()) return;
+
+        const input = document.getElementById('scanInput');
+
+        if (input && document.activeElement !== input) {
+          input.removeAttribute('readonly');
+          input.setAttribute('inputmode', 'none');
+          input.classList.add('no-keyboard');
+          input.focus({ preventScroll: true });
+        }
+      }, 1000);
+    }
+
+    // =====================================================================
+    // NHÓM 20: CHUẨN HÓA CHỮ TIẾNG VIỆT (bỏ dấu) ĐỂ TÌM KIẾM
+    // Dùng khi tìm kiếm cửa hàng: cho phép gõ không dấu ("cau giay") vẫn
+    // tìm ra kết quả có dấu ("Cầu Giấy").
+    // =====================================================================
+    function normalizeText(text) {
+      return String(text || '')
+        .toUpperCase()
+        .normalize('NFD')
+        .replace(/[̀-ͯ]/g, '')
+        .replace(/Đ/g, 'D')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    // Dịch mã action/status trong TOTE_LOG/TOTE_MASTER (tiếng Anh, viết cho
+    // máy) sang nhãn tiếng Việt dễ đọc, dùng chung cho mọi màn hiển thị
+    // lịch sử (Track, Abnormal, Hoạt động gần đây) - tránh nhầm lẫn kiểu
+    // "OUT" của kho khác "OUT" ở đâu vì giờ có 5 loại nghiệp vụ chứ không
+    // còn chỉ 2 (OUT/IN) như trước.
+    const ACTION_LABELS = {
+      OUT: 'XUẤT KHO',
+      IN: 'NHẬP KHO',
+      CANCEL_OUT: 'HỦY XUẤT KHO',
+      STORE_RECEIVE: 'NHẬN TẠI CH',
+      STORE_RETURN: 'XUẤT TẠI CH (TRẢ VỎ)',
+      CANCEL_STORE_RECEIVE: 'HỦY NHẬN TẠI CH',
+      CANCEL_STORE_RETURN: 'HỦY XUẤT TẠI CH'
+    };
+
+    const STATUS_LABELS = {
+      IN_WAREHOUSE: 'TẠI KHO',
+      IN_TRANSIT_TO_STORE: 'ĐANG GIAO TỚI CH',
+      IN_STORE: 'TẠI CỬA HÀNG',
+      IN_TRANSIT_TO_WAREHOUSE: 'ĐANG VỀ KHO'
+    };
+
+    function actionLabel(action) {
+      return ACTION_LABELS[action] || action || '-';
+    }
+
+    function statusLabel(status) {
+      return STATUS_LABELS[status] || status || '-';
+    }
+
+    window.addEventListener('beforeunload', function() {
+      if (pendingQueue.length > 0) flushNow();
+    });
+
+    init();
+  </script>
+</body>
+</html>
