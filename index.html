@@ -778,6 +778,13 @@
               <div class="driver-camera-frame"></div>
             </div>
 
+            <!-- Nút "XÁC NHẬN - QUÉT TIẾP": sau khi quét được 1 mã, camera
+                 TỰ TẠM DỪNG giải mã (video vẫn hiện, chỉ ngừng đọc mã) - chỉ
+                 khi bấm nút này mới quét tiếp tote kế tiếp. Ngăn hẳn việc
+                 quét đi quét lại liên tục cùng 1 mã, và tạo khoảng ngắt rõ
+                 ràng giữa từng tote như yêu cầu. -->
+            <button id="driverScanConfirmBtn" class="btn hidden" onclick="confirmDriverScanContinue()">✓ XÁC NHẬN - QUÉT TIẾP</button>
+
             <!-- Nhập tay - dự phòng khi camera không quét được (mã bị
                  nhăn/rách, thiếu sáng...), giống hệt nút "NHẬP TAY" bên
                  màn PDA kho. -->
@@ -795,9 +802,12 @@
                  sự kiện Enter). -->
             <button id="driverManualSubmitBtn" class="btn hidden" onclick="submitDriverManualScan()">XÁC NHẬN</button>
 
-            <div id="driverCameraMsg" class="result pending">BẤM "CHỤP TOTE" ĐỂ QUÉT</div>
+            <div id="driverCameraMsg" class="result pending">ĐANG MỞ CAMERA...</div>
 
-            <button id="driverManualBtn" class="btn btn-gray" onclick="toggleDriverManualInput()">NHẬP TAY</button>
+            <div style="display:flex; gap:8px;">
+              <button id="driverCameraToggleBtn" class="btn btn-gray" style="margin-top:0" onclick="toggleDriverCameraOnOff()">TẮT CAMERA</button>
+              <button id="driverManualBtn" class="btn btn-gray" style="margin-top:0" onclick="toggleDriverManualInput()">NHẬP TAY</button>
+            </div>
 
             <div class="counter">
               <div>TỔNG<span id="driverCTotal">0</span></div>
@@ -1111,6 +1121,8 @@
     let driverStream = null;      // MediaStream của camera đang mở
     let driverCodeReader = null;  // instance ZXing đang chạy
     let driverManualInputMode = false; // đang ở chế độ nhập tay (camera tắt) hay không
+    let driverScanPaused = false; // đã quét được 1 mã, đang chờ bấm "Xác nhận - quét tiếp" mới quét mã kế
+    let driverCameraManuallyOff = false; // người dùng tự bấm TẮT CAMERA (khác với tắt do chuyển sang Nhập tay)
     let driverScanLog = []; // toàn bộ kết quả quét trong phiên hiện tại (xem scanLog bên kho)
 
     let pendingQueue = [];
@@ -2460,10 +2472,15 @@
       // Phiên mới luôn bắt đầu bằng camera - không giữ lại chế độ nhập tay
       // của phiên trước, để hành vi luôn dễ đoán.
       driverManualInputMode = false;
+      driverScanPaused = false;
+      driverCameraManuallyOff = false;
       document.getElementById('driverManualInput').classList.add('hidden');
       document.getElementById('driverCameraBox').classList.remove('hidden');
       document.getElementById('driverManualBtn').innerText = 'NHẬP TAY';
       document.getElementById('driverManualBtn').classList.remove('manual-on');
+      document.getElementById('driverScanConfirmBtn').classList.add('hidden');
+      document.getElementById('driverCameraToggleBtn').innerText = 'TẮT CAMERA';
+      document.getElementById('driverCameraToggleBtn').classList.remove('hidden');
 
       renderDriverSessionUI();
       startDriverCamera();
@@ -2472,6 +2489,8 @@
     function doResetDriverSession() {
       driverSessionActive = false;
       driverSessionTotesMap = {};
+      driverScanPaused = false;
+      document.getElementById('driverScanConfirmBtn').classList.add('hidden');
 
       // Role STORE bị khoá cứng đúng 1 store của chính họ - giữ nguyên
       // driverStoreId/Label qua các phiên, không reset về "chưa chọn" như
@@ -2640,7 +2659,7 @@
     }
 
     // ---------------- Nhận mã đã giải mã từ camera ----------------
-    function driverReceiveScanCode(toteId) {
+    function driverReceiveScanCode(toteId, fromCamera) {
       if (!toteId) return;
 
       if (!toteId.startsWith('TOT')) {
@@ -2679,10 +2698,28 @@
       addDriverRecent(toteId, 'Đã nhận scan - chờ ghi', true);
       showDriverMsg('NHẬN: ' + toteId, true);
       beep(true);
+      if (navigator.vibrate) navigator.vibrate(120);
       updateDriverCounter();
 
       if (driverPendingQueue.length >= batchSize) driverFlushNow();
       else driverScheduleFlush();
+
+      // Quét được 1 mã bằng camera thì TẠM DỪNG giải mã ngay - chờ người
+      // dùng bấm "Xác nhận - quét tiếp" mới mở lại, tạo khoảng ngắt rõ ràng
+      // giữa từng tote thay vì camera cứ quét liên tục không điểm dừng.
+      // Không áp dụng cho NHẬP TAY - gõ tay + bấm Xác nhận đã tự nhiên là
+      // 1 thao tác rõ ràng cho từng mã rồi, không cần thêm bước nữa.
+      if (fromCamera) {
+        driverScanPaused = true;
+        document.getElementById('driverScanConfirmBtn').classList.remove('hidden');
+      }
+    }
+
+    // Bấm "XÁC NHẬN - QUÉT TIẾP": mở lại việc giải mã camera cho tote kế tiếp.
+    function confirmDriverScanContinue() {
+      driverScanPaused = false;
+      document.getElementById('driverScanConfirmBtn').classList.add('hidden');
+      showDriverMsg('SẴN SÀNG QUÉT - ĐƯA MÃ VÀO KHUNG HÌNH', true);
     }
 
     function driverScheduleFlush() {
@@ -2789,14 +2826,19 @@
       driverManualInputMode = !driverManualInputMode;
 
       const cameraBox = document.getElementById('driverCameraBox');
+      const cameraToggleBtn = document.getElementById('driverCameraToggleBtn');
       const manualInput = document.getElementById('driverManualInput');
       const btn = document.getElementById('driverManualBtn');
 
       const submitBtn = document.getElementById('driverManualSubmitBtn');
 
+      driverScanPaused = false;
+      document.getElementById('driverScanConfirmBtn').classList.add('hidden');
+
       if (driverManualInputMode) {
         stopDriverCamera();
         cameraBox.classList.add('hidden');
+        cameraToggleBtn.classList.add('hidden');
         manualInput.classList.remove('hidden');
         submitBtn.classList.remove('hidden');
         btn.innerText = 'TẮT NHẬP TAY - DÙNG CAMERA';
@@ -2809,8 +2851,31 @@
         manualInput.classList.add('hidden');
         submitBtn.classList.add('hidden');
         cameraBox.classList.remove('hidden');
+        cameraToggleBtn.classList.remove('hidden');
         btn.innerText = 'NHẬP TAY';
         btn.classList.remove('manual-on');
+        driverCameraManuallyOff = false;
+        cameraToggleBtn.innerText = 'TẮT CAMERA';
+        startDriverCamera();
+      }
+    }
+
+    // Bật/tắt camera thủ công - độc lập với Nhập tay, dùng khi muốn tạm
+    // dừng hẳn (VD đang di chuyển, chưa cần quét) mà không cần chuyển qua
+    // chế độ gõ tay.
+    function toggleDriverCameraOnOff() {
+      driverCameraManuallyOff = !driverCameraManuallyOff;
+
+      const btn = document.getElementById('driverCameraToggleBtn');
+      driverScanPaused = false;
+      document.getElementById('driverScanConfirmBtn').classList.add('hidden');
+
+      if (driverCameraManuallyOff) {
+        stopDriverCamera();
+        btn.innerText = 'BẬT CAMERA';
+        showDriverMsg('CAMERA ĐÃ TẮT - BẤM "BẬT CAMERA" ĐỂ QUÉT TIẾP', false);
+      } else {
+        btn.innerText = 'TẮT CAMERA';
         startDriverCamera();
       }
     }
@@ -2862,9 +2927,10 @@
         { audio: false, video: { facingMode: { ideal: 'environment' } } },
         videoEl,
         function(result, err) {
+          if (driverScanPaused) return; // đang chờ bấm "Xác nhận - quét tiếp", bỏ qua mọi kết quả
           if (result) {
             const text = String(result.getText() || '').trim().toUpperCase();
-            if (text) driverReceiveScanCode(text);
+            if (text) driverReceiveScanCode(text, true);
           }
           // "err" bắn liên tục khi CHƯA thấy mã trong khung hình - đây là
           // hành vi bình thường của vòng quét liên tục, không phải lỗi.
