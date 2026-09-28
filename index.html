@@ -2662,6 +2662,23 @@
     function driverReceiveScanCode(toteId, fromCamera) {
       if (!toteId) return;
 
+      // Chặn lặp NGAY TỪ ĐẦU, áp dụng cho MỌI mã (kể cả mã KHÔNG hợp lệ) -
+      // camera quét SỐNG nên callback bắn liên tục (nhiều lần/giây) trong
+      // suốt lúc 1 mã còn nằm trong khung hình, kể cả khi camera lỡ rọi
+      // trúng 1 mã vạch khác trong cửa hàng (mã sản phẩm...) chứ không phải
+      // tote. LÀM MỚI lại mốc thời gian mỗi lần thấy, để cửa sổ chặn trùng
+      // luôn trượt tiếp theo mã thật sự còn ở đó - im lặng hoàn toàn (không
+      // bíp/không ghi log lặp lại) sau lần báo đầu tiên.
+      const now = Date.now();
+      const scanKey = driverMode + '|' + driverStoreId + '|' + toteId;
+
+      if (driverRecentScanMap[scanKey] && now - driverRecentScanMap[scanKey] < doubleScanMs) {
+        driverRecentScanMap[scanKey] = now;
+        return;
+      }
+
+      driverRecentScanMap[scanKey] = now;
+
       if (!toteId.startsWith('TOT')) {
         showDriverMsg('MÃ KHÔNG HỢP LỆ: ' + toteId, false);
         addDriverRecent(toteId, 'Không phải Tote ID - không ghi dữ liệu', false);
@@ -2670,24 +2687,6 @@
         return;
       }
 
-      const now = Date.now();
-      const scanKey = driverMode + '|' + driverStoreId + '|' + toteId;
-
-      if (driverRecentScanMap[scanKey] && now - driverRecentScanMap[scanKey] < doubleScanMs) {
-        // Camera quét SỐNG nên callback bắn liên tục (nhiều lần/giây) trong
-        // suốt lúc tote còn nằm trong khung hình - LÀM MỚI lại mốc thời gian
-        // mỗi lần thấy, để cửa sổ chặn trùng luôn trượt tiếp theo tote thật
-        // sự còn ở đó. Nếu không làm mới, mốc cũ hết hạn giữa chừng (đúng
-        // doubleScanMs sau lần đầu) trong khi tote vẫn chưa hề rời khung
-        // hình, khiến nó bị gửi lại như 1 lượt quét MỚI dù không có gì thay
-        // đổi ngoài đời thật. Im lặng hoàn toàn (không bíp/không ghi log) vì
-        // đây là chuyện xảy ra liên tục khi camera đang chạy, không phải lỗi
-        // cần báo cho người dùng mỗi lần.
-        driverRecentScanMap[scanKey] = now;
-        return;
-      }
-
-      driverRecentScanMap[scanKey] = now;
       driverTotal++;
 
       driverPendingQueue.push({
