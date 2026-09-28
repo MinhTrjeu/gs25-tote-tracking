@@ -2648,9 +2648,16 @@
       const scanKey = driverMode + '|' + driverStoreId + '|' + toteId;
 
       if (driverRecentScanMap[scanKey] && now - driverRecentScanMap[scanKey] < doubleScanMs) {
-        showDriverMsg('DOUBLE SCAN BỎ QUA: ' + toteId, false);
-        addDriverRecent(toteId, 'Double scan - không ghi', false);
-        beep(false);
+        // Camera quét SỐNG nên callback bắn liên tục (nhiều lần/giây) trong
+        // suốt lúc tote còn nằm trong khung hình - LÀM MỚI lại mốc thời gian
+        // mỗi lần thấy, để cửa sổ chặn trùng luôn trượt tiếp theo tote thật
+        // sự còn ở đó. Nếu không làm mới, mốc cũ hết hạn giữa chừng (đúng
+        // doubleScanMs sau lần đầu) trong khi tote vẫn chưa hề rời khung
+        // hình, khiến nó bị gửi lại như 1 lượt quét MỚI dù không có gì thay
+        // đổi ngoài đời thật. Im lặng hoàn toàn (không bíp/không ghi log) vì
+        // đây là chuyện xảy ra liên tục khi camera đang chạy, không phải lỗi
+        // cần báo cho người dùng mỗi lần.
+        driverRecentScanMap[scanKey] = now;
         return;
       }
 
