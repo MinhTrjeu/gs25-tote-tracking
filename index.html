@@ -112,6 +112,7 @@
     --border:#E4E9F0;
     --ink:#101828;
     --muted:#667085;
+    --heading:#0A1930;
     --amber:#D97706;
     --amber-soft:#FFF6E2;
     --red:#E1364A;
@@ -141,6 +142,7 @@
     --border:#233149;
     --ink:#E6ECF5;
     --muted:#93A2BE;
+    --heading:#E6ECF5;
     --amber:#F3B94D;
     --amber-soft:#2A2110;
     --red:#F26B7D;
@@ -208,7 +210,7 @@
   .btn-primary:active{ background:#081527; }
   .login-msg{
     margin-top:14px; padding:12px 14px; border-radius:var(--radius-sm); font-size:13px; font-weight:700;
-    text-align:center; display:none; background:var(--blue-soft); color:var(--navy);
+    text-align:center; display:none; background:var(--blue-soft); color:var(--heading);
   }
 
   /* ---------------- APP SHELL ---------------- */
@@ -288,7 +290,7 @@
   .empty-note{ color:var(--muted); font-size:12px; padding:6px 0; }
 
   /* ---------------- FORM ELEMENTS ---------------- */
-  label{ display:block; font-size:12px; font-weight:800; letter-spacing:.3px; text-transform:uppercase; color:var(--navy); margin:14px 0 7px; }
+  label{ display:block; font-size:12px; font-weight:800; letter-spacing:.3px; text-transform:uppercase; color:var(--heading); margin:14px 0 7px; }
   input, .select-input{
     width:100%; height:48px; font-size:16px; font-weight:600; padding:8px 14px; border:1.5px solid var(--border);
     border-radius:var(--radius-sm); background:var(--card); color:var(--ink); outline:none;
@@ -298,7 +300,7 @@
 
   .scan-input{
     height:80px; font-size:30px; font-weight:800; text-align:center; letter-spacing:.5px;
-    border:2px solid var(--amber); border-radius:var(--radius); background:var(--amber-soft); color:var(--navy);
+    border:2px solid var(--amber); border-radius:var(--radius); background:var(--amber-soft); color:var(--heading);
   }
   .scan-input::placeholder{ color:#a06a05; opacity:.7; font-size:20px; }
   .scan-input.no-keyboard{ caret-color:transparent; }
@@ -310,7 +312,7 @@
   }
   .btn:active{ background:#081527; }
   .btn:disabled{ background:#C7CEDA; color:#8592A8; box-shadow:none; }
-  .btn-gray{ background:var(--card); color:var(--navy); border:1.5px solid var(--border); box-shadow:none; }
+  .btn-gray{ background:var(--card); color:var(--heading); border:1.5px solid var(--border); box-shadow:none; }
   .btn-gray:active{ background:var(--bg); }
   .btn-link{
     background:none; border:none; padding:0; margin:0; width:auto; min-height:0;
@@ -333,13 +335,13 @@
     width:100%; max-width:340px; background:var(--card); border-radius:var(--radius);
     padding:18px; box-shadow:0 20px 40px rgba(10,25,48,.35);
   }
-  .session-confirm-box h3{ margin:0 0 12px; font-size:16px; color:var(--navy); }
+  .session-confirm-box h3{ margin:0 0 12px; font-size:16px; color:var(--heading); }
   .session-summary{ margin-bottom:14px; }
   .session-summary div{
     display:flex; align-items:center; justify-content:space-between; padding:8px 0;
     border-bottom:1px solid var(--row-border); font-size:13px; color:var(--muted);
   }
-  .session-summary div b{ font-size:15px; color:var(--navy); }
+  .session-summary div b{ font-size:15px; color:var(--heading); }
   .session-confirm-actions{ display:flex; gap:8px; }
   .session-confirm-actions .btn{ margin-top:0; }
   .btn-danger{ background:var(--red); }
@@ -383,7 +385,7 @@
     font-size:13.5px; line-height:20px; box-shadow:var(--shadow);
   }
   .summary-box{ border-left:4px solid var(--cyan-deep); }
-  .summary-title{ font-size:15px; font-weight:800; color:var(--navy); margin-bottom:6px; }
+  .summary-title{ font-size:15px; font-weight:800; color:var(--heading); margin-bottom:6px; }
   .status-store{ color:var(--red); font-weight:800; }
   .status-warehouse{ color:var(--cyan-deep); font-weight:800; }
   .status-transit{ color:var(--amber); font-weight:800; }
@@ -404,9 +406,9 @@
   .store-list.open{ display:block; }
   .store-item{ padding:12px 14px; border-bottom:1px solid var(--row-border); font-size:13.5px; line-height:19px; }
   .store-item:active{ background:var(--bg); }
-  .store-item b{ font-size:15px; color:var(--navy); }
+  .store-item b{ font-size:15px; color:var(--heading); }
   .selected-store{
-    margin-top:10px; padding:12px 14px; font-size:13.5px; font-weight:800; color:var(--navy);
+    margin-top:10px; padding:12px 14px; font-size:13.5px; font-weight:800; color:var(--heading);
     background:var(--green-soft); border-radius:var(--radius-sm); border:1.5px solid var(--cyan-deep);
   }
 
@@ -428,10 +430,10 @@
   .recent-item:last-child{ border-bottom:0; }
 
   .dashboard-header{ display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:10px; }
-  .dashboard-title{ font-size:14px; font-weight:800; line-height:19px; flex:1; color:var(--navy); }
+  .dashboard-title{ font-size:14px; font-weight:800; line-height:19px; flex:1; color:var(--heading); }
   .qty{ min-width:44px; padding:5px 9px; font-size:18px; font-weight:800; color:#fff; background:var(--red); text-align:center; border-radius:var(--radius-sm); }
 
-  .chip{ display:inline-block; border:1px solid var(--border); border-radius:999px; padding:5px 10px; margin:3px; font-size:11.5px; font-weight:800; background:var(--bg); color:var(--navy); }
+  .chip{ display:inline-block; border:1px solid var(--border); border-radius:999px; padding:5px 10px; margin:3px; font-size:11.5px; font-weight:800; background:var(--bg); color:var(--heading); }
 
   /* ---------------- Bảng xếp hạng "nợ tote nhiều nhất" (tab Tồn) ---------------- */
   .rank-row{ display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid var(--row-border); font-size:12.5px; }
@@ -442,12 +444,12 @@
   }
   .rank-badge.top1{ background:var(--red); }
   .rank-name{ flex:1; font-weight:700; color:var(--ink); }
-  .rank-qty{ font-weight:800; color:var(--navy); font-size:14px; }
+  .rank-qty{ font-weight:800; color:var(--heading); font-size:14px; }
 
-  h3{ margin:18px 0 10px; padding:0; font-size:13px; font-weight:800; color:var(--navy); text-transform:uppercase; letter-spacing:.5px; }
+  h3{ margin:18px 0 10px; padding:0; font-size:13px; font-weight:800; color:var(--heading); text-transform:uppercase; letter-spacing:.5px; }
 
   details{ border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px; margin-top:10px; background:var(--bg); }
-  summary{ font-size:12px; font-weight:800; color:var(--navy); }
+  summary{ font-size:12px; font-weight:800; color:var(--heading); }
 
   /* ---------------- INSTALL BANNER ---------------- */
   .install-banner{
