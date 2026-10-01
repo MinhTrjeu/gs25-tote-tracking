@@ -118,10 +118,37 @@
     --red-soft:#FCE9EB;
     --green-soft:#E9FBF5;
     --blue-soft:#EFF3FF;
+    --row-border:#F0F2F5;
     --radius:14px;
     --radius-sm:10px;
     --radius-lg:18px;
     --shadow: 0 1px 2px rgba(16,24,40,.04), 0 6px 16px rgba(16,24,40,.06);
+  }
+
+  /* ---------------- CHẾ ĐỘ TỐI (Dark mode) ----------------
+     Đổi lại y hệt các biến màu trên, vì mọi nơi trong file này đều tham
+     chiếu qua var(--xxx) nên chỉ cần định nghĩa lại ở đây là áp dụng được
+     cho toàn bộ giao diện. Bật bằng cách gắn [data-theme="dark"] lên thẻ
+     <html> (xem applyTheme() trong phần JS, màn Cài Đặt - NHÓM 23). */
+  :root[data-theme="dark"]{
+    --navy:#0A1930;
+    --navy-2:#132A4D;
+    --navy-3:#2C4E82;
+    --cyan:#00D2A0;
+    --cyan-deep:#2EE6B8;
+    --bg:#0B1220;
+    --card:#111A2E;
+    --border:#233149;
+    --ink:#E6ECF5;
+    --muted:#93A2BE;
+    --amber:#F3B94D;
+    --amber-soft:#2A2110;
+    --red:#F26B7D;
+    --red-soft:#2A131A;
+    --green-soft:#0E251F;
+    --blue-soft:#0F1B33;
+    --row-border:#1C2538;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 16px rgba(0,0,0,.35);
   }
 
   *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -255,7 +282,7 @@
   .chart-bars{ display:flex; align-items:flex-end; gap:7px; height:100px; }
   .chart-bars .bar{ flex:1; background:linear-gradient(180deg,#00D2A0,#00A784); border-radius:4px 4px 0 0; position:relative; min-height:2px; }
   .chart-bars .bar span{ position:absolute; bottom:-16px; left:0; right:0; text-align:center; font-size:8.5px; color:var(--muted); }
-  .activity-item{ display:flex; gap:9px; padding:9px 0; border-bottom:1px solid #F0F2F5; font-size:11px; }
+  .activity-item{ display:flex; gap:9px; padding:9px 0; border-bottom:1px solid var(--row-border); font-size:11px; }
   .activity-item:last-child{ border-bottom:0; }
   .dot{ width:7px; height:7px; border-radius:50%; margin-top:4px; flex-shrink:0; }
   .empty-note{ color:var(--muted); font-size:12px; padding:6px 0; }
@@ -310,7 +337,7 @@
   .session-summary{ margin-bottom:14px; }
   .session-summary div{
     display:flex; align-items:center; justify-content:space-between; padding:8px 0;
-    border-bottom:1px solid #F0F2F5; font-size:13px; color:var(--muted);
+    border-bottom:1px solid var(--row-border); font-size:13px; color:var(--muted);
   }
   .session-summary div b{ font-size:15px; color:var(--navy); }
   .session-confirm-actions{ display:flex; gap:8px; }
@@ -375,7 +402,7 @@
     z-index:30; display:none;
   }
   .store-list.open{ display:block; }
-  .store-item{ padding:12px 14px; border-bottom:1px solid #F0F2F5; font-size:13.5px; line-height:19px; }
+  .store-item{ padding:12px 14px; border-bottom:1px solid var(--row-border); font-size:13.5px; line-height:19px; }
   .store-item:active{ background:var(--bg); }
   .store-item b{ font-size:15px; color:var(--navy); }
   .selected-store{
@@ -397,7 +424,7 @@
 
   .recent{ margin-top:12px; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
   .recent:empty{ display:none; }
-  .recent-item{ padding:11px 13px; border-bottom:1px solid #F0F2F5; font-size:12.5px; line-height:18px; }
+  .recent-item{ padding:11px 13px; border-bottom:1px solid var(--row-border); font-size:12.5px; line-height:18px; }
   .recent-item:last-child{ border-bottom:0; }
 
   .dashboard-header{ display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:10px; }
@@ -407,7 +434,7 @@
   .chip{ display:inline-block; border:1px solid var(--border); border-radius:999px; padding:5px 10px; margin:3px; font-size:11.5px; font-weight:800; background:var(--bg); color:var(--navy); }
 
   /* ---------------- Bảng xếp hạng "nợ tote nhiều nhất" (tab Tồn) ---------------- */
-  .rank-row{ display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid #F0F2F5; font-size:12.5px; }
+  .rank-row{ display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid var(--row-border); font-size:12.5px; }
   .rank-row:last-child{ border-bottom:0; }
   .rank-badge{
     width:22px; height:22px; border-radius:50%; background:var(--navy); color:#fff; font-size:11px; font-weight:800;
@@ -447,7 +474,7 @@
     .content{ padding:20px; }
   }
   @media (min-width:640px){
-    body{ background:#DCE3EA; }
+    body{ background:var(--border); }
     .login-screen, .page{ max-width:520px; margin:0 auto; box-shadow:0 0 0 1px var(--border); }
   }
 </style>
@@ -458,11 +485,11 @@
   <div id="installBanner" class="install-banner">
     <div class="install-icon">CS</div>
     <div class="install-text">
-      <div class="install-title">Cài GS25 Bình Điền Warehouse ra màn hình chính</div>
-      <div id="installHelp" class="install-sub">Mở như app thật, nhanh hơn cho PDA/kho.</div>
+      <div class="install-title" data-i18n="installTitle">Cài GS25 Bình Điền Warehouse ra màn hình chính</div>
+      <div id="installHelp" class="install-sub" data-i18n="installSub">Mở như app thật, nhanh hơn cho PDA/kho.</div>
     </div>
     <div class="install-actions">
-      <button id="installBtn" class="install-btn" onclick="installAppShortcut()">CÀI</button>
+      <button id="installBtn" class="install-btn" data-i18n="installBtn" onclick="installAppShortcut()">CÀI</button>
       <button class="install-close" onclick="hideInstallBanner(true)">×</button>
     </div>
   </div>
@@ -518,11 +545,11 @@
     </div>
 
     <div class="login-panel">
-      <h2>Đăng nhập</h2>
-      <p class="sub">Nhập tài khoản kho vận của bạn</p>
-      <div class="field"><label>Login ID</label><input id="loginId" class="upper" placeholder="VD: WH001" autocomplete="off"></div>
-      <div class="field"><label>Password</label><input id="password" type="password" placeholder="••••••••" autocomplete="off" onkeydown="handleLoginKey(event)"></div>
-      <button class="btn-primary" onclick="doLogin()">ĐĂNG NHẬP</button>
+      <h2 data-i18n="loginTitle">Đăng nhập</h2>
+      <p class="sub" data-i18n="loginSub">Nhập tài khoản kho vận của bạn</p>
+      <div class="field"><label data-i18n="loginIdLabel">Login ID</label><input id="loginId" class="upper" placeholder="VD: WH001" autocomplete="off"></div>
+      <div class="field"><label data-i18n="loginPassLabel">Password</label><input id="password" type="password" placeholder="••••••••" autocomplete="off" onkeydown="handleLoginKey(event)"></div>
+      <button class="btn-primary" data-i18n="loginBtn" onclick="doLogin()">ĐĂNG NHẬP</button>
       <div id="loginMsg" class="login-msg"></div>
     </div>
   </div>
@@ -555,57 +582,57 @@
             <div class="kpi">
               <div class="top"><div class="icon" style="background:var(--blue-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" stroke-width="2"><rect x="3" y="9" width="18" height="11"/><path d="M3 9l9-5 9 5"/></svg></div></div>
               <div class="num" id="kpiStoreQty">--</div>
-              <div class="lbl">Tote tại Store</div>
+              <div class="lbl" data-i18n="kpiStoreQty">Tote tại Store</div>
             </div>
             <div class="kpi">
               <div class="top"><div class="icon" style="background:var(--green-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="#00A784" stroke-width="2"><path d="M12 3v12M6 9l6 6 6-6"/></svg></div></div>
               <div class="num" id="kpiOutToday">--</div>
-              <div class="lbl">OUT hôm nay</div>
+              <div class="lbl" data-i18n="kpiOutToday">OUT hôm nay</div>
             </div>
             <div class="kpi">
               <div class="top"><div class="icon" style="background:var(--amber-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2"><path d="M12 21V9M6 15l6-6 6 6"/></svg></div></div>
               <div class="num" id="kpiInToday">--</div>
-              <div class="lbl">IN hôm nay</div>
+              <div class="lbl" data-i18n="kpiInToday">IN hôm nay</div>
             </div>
             <div class="kpi">
               <div class="top"><div class="icon" style="background:var(--red-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="#E1364A" stroke-width="2"><path d="M12 3l9 16H3z"/><path d="M12 9v5M12 17h.01"/></svg></div></div>
               <div class="num" id="kpiAbnormalToday">--</div>
-              <div class="lbl">Bất thường hôm nay</div>
+              <div class="lbl" data-i18n="kpiAbnormalToday">Bất thường hôm nay</div>
             </div>
             <!-- Chỉ ADMIN/WAREHOUSE thấy - số mã đã "đặt trước" trong Kho Ảo
                  (sheet TOTE_RESERVE) nhưng chưa dán label thật + quét lần đầu. -->
             <div class="kpi hidden" id="kpiReservedBox">
               <div class="top"><div class="icon" style="background:var(--blue-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2" stroke-dasharray="3 3"/></svg></div></div>
               <div class="num" id="kpiReservedQty">--</div>
-              <div class="lbl">Kho ảo còn lại (chưa dán label)</div>
+              <div class="lbl" data-i18n="kpiReservedQty">Kho ảo còn lại (chưa dán label)</div>
             </div>
           </div>
 
           <div id="homeQuickRow" class="quick-row">
             <div class="quick out" onclick="goToScan('OUT')">
-              <div class="txt"><div>XUẤT KHO — OUT</div><div>Chọn store & bắt đầu scan</div></div>
+              <div class="txt"><div data-i18n="quickOutTitle">XUẤT KHO — OUT</div><div data-i18n="quickOutSub">Chọn store & bắt đầu scan</div></div>
               <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M12 20V4M6 10l6-6 6 6"/></svg>
             </div>
             <div class="quick in" onclick="goToScan('IN')">
-              <div class="txt"><div>NHẬP KHO — IN</div><div>Thu hồi tote về kho</div></div>
+              <div class="txt"><div data-i18n="quickInTitle">NHẬP KHO — IN</div><div data-i18n="quickInSub">Thu hồi tote về kho</div></div>
               <svg viewBox="0 0 24 24" fill="none" stroke="#0A1930" stroke-width="1.8"><path d="M12 4v16M6 14l6 6 6-6"/></svg>
             </div>
           </div>
 
           <div class="panel">
-            <h3 style="margin:0 0 12px;padding:0;background:none;color:var(--ink);text-transform:none;letter-spacing:0;font-size:12.5px;">Xu hướng xuất kho 7 ngày</h3>
+            <h3 data-i18n="homeTrendTitle" style="margin:0 0 12px;padding:0;background:none;color:var(--ink);text-transform:none;letter-spacing:0;font-size:12.5px;">Xu hướng xuất kho 7 ngày</h3>
             <div class="chart-bars" id="homeTrendChart"></div>
           </div>
 
           <div class="panel">
-            <h3 style="margin:0 0 4px;padding:0;background:none;color:var(--ink);text-transform:none;letter-spacing:0;font-size:12.5px;">Hoạt động gần đây</h3>
+            <h3 data-i18n="homeActivityTitle" style="margin:0 0 4px;padding:0;background:none;color:var(--ink);text-transform:none;letter-spacing:0;font-size:12.5px;">Hoạt động gần đây</h3>
             <div id="homeActivity"></div>
           </div>
         </div>
 
         <div id="screen-pda" class="screen">
           <div id="modeBanner" class="mode-banner out">
-            <span>Chế độ hiện tại</span>
+            <span data-i18n="modeCurrentLabel">Chế độ hiện tại</span>
             <span class="tag" id="modeTag">XUẤT KHO — OUT</span>
           </div>
 
@@ -616,13 +643,14 @@
                chế độ IN (chế độ IN không cần chọn store).
                ============================================================= -->
           <div id="sessionSetup" class="store-box">
-            <label>Chọn Store</label>
+            <label data-i18n="chooseStoreLabel">Chọn Store</label>
             <!-- store-combo: khung bọc riêng cho ô nhập + danh sách gợi ý,
                  để danh sách gợi ý (store-list) có thể "nổi" (dropdown) ngay
                  bên dưới ô nhập thay vì đẩy các phần tử khác xuống. -->
             <div class="store-combo">
               <input
                 id="storeSearch"
+                data-i18n-placeholder="storeSearchPlaceholder"
                 placeholder="GÕ ID / TÊN CỬA HÀNG ĐỂ TÌM..."
                 autocomplete="off"
                 oninput="onStoreSearch()"
@@ -631,10 +659,10 @@
               >
               <div id="storeList" class="store-list"></div>
             </div>
-            <div id="selectedStore" class="selected-store">CHƯA CHỌN STORE</div>
+            <div id="selectedStore" class="selected-store" data-i18n="storeNotSelected">CHƯA CHỌN STORE</div>
 
             <!-- Nút này CHỈ bấm được khi đã chọn store (xem enableStartSessionBtn()) -->
-            <button id="startSessionBtn" class="btn" disabled onclick="startScanSession()">
+            <button id="startSessionBtn" class="btn" data-i18n="startScanSessionBtn" disabled onclick="startScanSession()">
               BẮT ĐẦU PHIÊN QUÉT
             </button>
           </div>
@@ -646,10 +674,10 @@
                ràng - tránh số liệu của phiên IN mới bị lẫn với phiên trước.
                ============================================================= -->
           <div id="inSessionSetup" class="store-box hidden">
-            <div style="font-size:13px;color:var(--muted);line-height:19px;margin-bottom:12px;">
+            <div data-i18n="inSessionHint" style="font-size:13px;color:var(--muted);line-height:19px;margin-bottom:12px;">
               Quét tote để tự động thu hồi về đúng kho - không cần chọn store.
             </div>
-            <button class="btn" onclick="startInSession()">BẮT ĐẦU PHIÊN NHẬP</button>
+            <button class="btn" data-i18n="startInSessionBtn" onclick="startInSession()">BẮT ĐẦU PHIÊN NHẬP</button>
           </div>
 
           <!-- =============================================================
@@ -664,22 +692,23 @@
                  quét cho store nào + cho phép kết thúc phiên bất cứ lúc nào -->
             <div id="activeSessionBar" class="active-session-bar hidden">
               <span id="activeSessionLabel">
-                <span id="activeSessionOutLabel">Đang quét cho: <b id="activeSessionStore">-</b></span>
-                <span id="activeSessionInLabel" class="hidden">Đang thu hồi về kho (IN)</span>
+                <span id="activeSessionOutLabel"><span data-i18n="scanningForLabel">Đang quét cho:</span> <b id="activeSessionStore">-</b></span>
+                <span id="activeSessionInLabel" class="hidden" data-i18n="inRecoveryLabel">Đang thu hồi về kho (IN)</span>
               </span>
               <span class="session-bar-actions">
-                <button class="btn-link btn-link-danger" onclick="askCancelCurrentSession()">HỦY PHIÊN</button>
-                <button class="btn-link" onclick="askEndScanSession()">KẾT THÚC PHIÊN</button>
+                <button class="btn-link btn-link-danger" data-i18n="cancelSessionBtn" onclick="askCancelCurrentSession()">HỦY PHIÊN</button>
+                <button class="btn-link" data-i18n="endSessionBtn" onclick="askEndScanSession()">KẾT THÚC PHIÊN</button>
               </span>
             </div>
 
-            <label>Scan Tote</label>
+            <label data-i18n="scanToteLabel">Scan Tote</label>
             <input
               id="scanInput"
               class="scan-input no-keyboard"
               autocomplete="off"
               inputmode="none"
               enterkeyhint="done"
+              data-i18n-placeholder="scanTotePlaceholder"
               placeholder="SCAN TOTE..."
               onkeydown="handleScanKey(event)"
               onclick="focusScan()"
@@ -690,17 +719,17 @@
                  gõ xong: một số PDA/trình duyệt cũ không bắn sự kiện Enter
                  khi bấm nút "Done"/"Next" trên bàn phím ảo, nên không thể
                  chỉ dựa vào phím Enter để xác nhận mã đã gõ. -->
-            <button id="manualSubmitBtn" class="btn hidden" onclick="submitManualScan()">XÁC NHẬN</button>
+            <button id="manualSubmitBtn" class="btn hidden" data-i18n="confirmBtn" onclick="submitManualScan()">XÁC NHẬN</button>
 
-            <button id="manualBtn" class="btn btn-gray" onclick="toggleManualInput()">NHẬP TAY</button>
+            <button id="manualBtn" class="btn btn-gray" data-i18n="manualInputBtn" onclick="toggleManualInput()">NHẬP TAY</button>
 
-            <div id="lastResult" class="result pending">SẴN SÀNG SCAN</div>
+            <div id="lastResult" class="result pending" data-i18n="readySummary">SẴN SÀNG SCAN</div>
 
             <div class="counter">
-              <div>TỔNG<span id="cTotal">0</span></div>
-              <div>OK<span id="cOk">0</span></div>
-              <div>LỖI<span id="cFail">0</span></div>
-              <div>CHỜ<span id="cQueue">0</span></div>
+              <div><span data-i18n="counterTotal">TỔNG</span><span id="cTotal">0</span></div>
+              <div><span data-i18n="counterOk">OK</span><span id="cOk">0</span></div>
+              <div><span data-i18n="counterFail">LỖI</span><span id="cFail">0</span></div>
+              <div><span data-i18n="counterQueue">CHỜ</span><span id="cQueue">0</span></div>
             </div>
 
             <div class="recent" id="recentList"></div>
@@ -713,12 +742,12 @@
                ============================================================= -->
           <div id="sessionConfirmOverlay" class="session-overlay hidden">
             <div class="session-confirm-box">
-              <h3>Kết thúc phiên quét?</h3>
+              <h3 data-i18n="endSessionTitle">Kết thúc phiên quét?</h3>
               <div class="session-summary">
-                <div id="sumStoreRow">Store<b id="sumStore">-</b></div>
-                <div>Tổng đã quét<b id="sumTotal">0</b></div>
-                <div>OK<b id="sumOk">0</b></div>
-                <div>Lỗi<b id="sumFail">0</b></div>
+                <div id="sumStoreRow"><span data-i18n="storeLabel">Store</span><b id="sumStore">-</b></div>
+                <div><span data-i18n="totalScannedLabel">Tổng đã quét</span><b id="sumTotal">0</b></div>
+                <div><span data-i18n="counterOk">OK</span><b id="sumOk">0</b></div>
+                <div><span data-i18n="counterFail">Lỗi</span><b id="sumFail">0</b></div>
               </div>
 
               <!-- Xem lại chi tiết từng tote đã quét trong phiên - GẤP LẠI
@@ -727,8 +756,8 @@
               <div id="sessionScanLogDetails"></div>
 
               <div class="session-confirm-actions">
-                <button class="btn btn-gray" onclick="cancelEndScanSession()">TIẾP TỤC QUÉT</button>
-                <button class="btn" onclick="confirmEndScanSession()">XÁC NHẬN KẾT THÚC</button>
+                <button class="btn btn-gray" data-i18n="continueScanBtn" onclick="cancelEndScanSession()">TIẾP TỤC QUÉT</button>
+                <button class="btn" data-i18n="confirmEndBtn" onclick="confirmEndScanSession()">XÁC NHẬN KẾT THÚC</button>
               </div>
             </div>
           </div>
@@ -742,18 +771,18 @@
                ============================================================= -->
           <div id="cancelSessionOverlay" class="session-overlay hidden">
             <div class="session-confirm-box">
-              <h3>Hủy phiên quét?</h3>
+              <h3 data-i18n="cancelOutSessionTitle">Hủy phiên quét?</h3>
               <div class="session-summary">
-                <div>Store<b id="cancelSessionStoreLabel">-</b></div>
-                <div>Tote đã xuất trong phiên<b id="cancelSessionCount">0</b></div>
+                <div><span data-i18n="storeLabel">Store</span><b id="cancelSessionStoreLabel">-</b></div>
+                <div><span data-i18n="cancelOutScannedLabel">Tote đã xuất trong phiên</span><b id="cancelSessionCount">0</b></div>
               </div>
-              <div style="font-size:11.5px;color:var(--muted);line-height:16px;margin-bottom:14px;">
+              <div data-i18n="cancelOutHint" style="font-size:11.5px;color:var(--muted);line-height:16px;margin-bottom:14px;">
                 Hệ thống sẽ tự động quét IN hoàn tác các tote trên, trả về kho. Lịch sử vẫn được lưu đầy đủ (không xoá dữ liệu đã quét).
               </div>
               <div id="cancelSessionStatus" class="result pending hidden"></div>
               <div class="session-confirm-actions">
-                <button class="btn btn-gray" onclick="closeCancelSessionOverlay()">TIẾP TỤC QUÉT</button>
-                <button class="btn btn-danger" id="cancelSessionConfirmBtn" onclick="confirmCancelScanSession()">XÁC NHẬN HỦY</button>
+                <button class="btn btn-gray" data-i18n="continueScanBtn" onclick="closeCancelSessionOverlay()">TIẾP TỤC QUÉT</button>
+                <button class="btn btn-danger" id="cancelSessionConfirmBtn" data-i18n="confirmCancelBtn" onclick="confirmCancelScanSession()">XÁC NHẬN HỦY</button>
               </div>
             </div>
           </div>
@@ -763,16 +792,16 @@
                lịch sử hiển thị của phiên này trên máy. -->
           <div id="cancelInSessionOverlay" class="session-overlay hidden">
             <div class="session-confirm-box">
-              <h3>Hủy phiên nhập?</h3>
+              <h3 data-i18n="cancelInSessionTitle">Hủy phiên nhập?</h3>
               <div class="session-summary">
-                <div>Tote đã nhập trong phiên<b id="cancelInSessionCount">0</b></div>
+                <div><span data-i18n="cancelInScannedLabel">Tote đã nhập trong phiên</span><b id="cancelInSessionCount">0</b></div>
               </div>
-              <div style="font-size:11.5px;color:var(--muted);line-height:16px;margin-bottom:14px;">
+              <div data-i18n="cancelInHint" style="font-size:11.5px;color:var(--muted);line-height:16px;margin-bottom:14px;">
                 Các tote đã quét IN vẫn ở trong kho (không tự động xuất lại). Hủy phiên chỉ xoá bộ đếm/lịch sử hiển thị của phiên này trên máy quét.
               </div>
               <div class="session-confirm-actions">
-                <button class="btn btn-gray" onclick="closeCancelInSessionOverlay()">TIẾP TỤC QUÉT</button>
-                <button class="btn btn-danger" onclick="confirmCancelInSession()">XÁC NHẬN HỦY</button>
+                <button class="btn btn-gray" data-i18n="continueScanBtn" onclick="closeCancelInSessionOverlay()">TIẾP TỤC QUÉT</button>
+                <button class="btn btn-danger" data-i18n="confirmCancelBtn" onclick="confirmCancelInSession()">XÁC NHẬN HỦY</button>
               </div>
             </div>
           </div>
@@ -789,24 +818,25 @@
              ============================================================= -->
         <div id="screen-driver" class="screen">
           <div id="driverModeBanner" class="mode-banner out">
-            <span>Chế độ hiện tại</span>
+            <span data-i18n="modeCurrentLabel">Chế độ hiện tại</span>
             <span class="tag" id="driverModeTag">NHẬN RỔ TẠI CH</span>
           </div>
 
           <!-- Chọn loại phiên - CHỈ bấm được lúc chưa bắt đầu phiên nào,
                tránh đổi loại phiên giữa chừng làm lẫn số liệu. -->
           <div id="driverModeSwitch" class="driver-mode-switch">
-            <button id="driverModeReceiveBtn" class="btn driver-mode-btn active" onclick="setDriverMode('STORE_RECEIVE')">NHẬN RỔ</button>
-            <button id="driverModeReturnBtn" class="btn btn-gray driver-mode-btn" onclick="setDriverMode('STORE_RETURN')">XUẤT RỔ (LẤY VỎ)</button>
+            <button id="driverModeReceiveBtn" class="btn driver-mode-btn active" data-i18n="driverReceiveBtn" onclick="setDriverMode('STORE_RECEIVE')">NHẬN RỔ</button>
+            <button id="driverModeReturnBtn" class="btn btn-gray driver-mode-btn" data-i18n="driverReturnBtn" onclick="setDriverMode('STORE_RETURN')">XUẤT RỔ (LẤY VỎ)</button>
           </div>
 
           <div id="driverSessionSetup" class="store-box">
             <!-- Role DRIVER: đi nhiều store, phải tự chọn đang ở store nào. -->
             <div id="driverStorePickBox">
-              <label>Chọn Store</label>
+              <label data-i18n="chooseStoreLabel">Chọn Store</label>
               <div class="store-combo">
                 <input
                   id="driverStoreSearch"
+                  data-i18n-placeholder="storeSearchPlaceholder"
                   placeholder="GÕ ID / TÊN CỬA HÀNG ĐỂ TÌM..."
                   autocomplete="off"
                   oninput="onDriverStoreSearch()"
@@ -815,27 +845,27 @@
                 >
                 <div id="driverStoreList" class="store-list"></div>
               </div>
-              <div id="driverSelectedStore" class="selected-store">CHƯA CHỌN STORE</div>
+              <div id="driverSelectedStore" class="selected-store" data-i18n="storeNotSelected">CHƯA CHỌN STORE</div>
             </div>
 
             <!-- Role STORE: đã khoá cứng đúng 1 store của chính họ
                  (session.storeId) - khỏi cần chọn, chỉ hiện để xác nhận. -->
             <div id="driverStoreFixedBox" class="hidden">
-              <label>Cửa hàng của bạn</label>
+              <label data-i18n="driverStoreOwnLabel">Cửa hàng của bạn</label>
               <div id="driverStoreFixedLabel" class="selected-store">-</div>
             </div>
 
-            <button id="driverStartSessionBtn" class="btn" disabled onclick="startDriverSession()">
+            <button id="driverStartSessionBtn" class="btn" data-i18n="startSessionBtn" disabled onclick="startDriverSession()">
               BẮT ĐẦU PHIÊN
             </button>
           </div>
 
           <div id="driverScanArea" class="hidden">
             <div id="driverActiveSessionBar" class="active-session-bar">
-              <span>Đang thao tác tại: <b id="driverActiveStore">-</b></span>
+              <span><span data-i18n="workingAtLabel">Đang thao tác tại:</span> <b id="driverActiveStore">-</b></span>
               <span class="session-bar-actions">
-                <button class="btn-link btn-link-danger" onclick="askCancelDriverSession()">HỦY PHIÊN</button>
-                <button class="btn-link" onclick="askEndDriverSession()">KẾT THÚC PHIÊN</button>
+                <button class="btn-link btn-link-danger" data-i18n="cancelSessionBtn" onclick="askCancelDriverSession()">HỦY PHIÊN</button>
+                <button class="btn-link" data-i18n="endSessionBtn" onclick="askEndDriverSession()">KẾT THÚC PHIÊN</button>
               </span>
             </div>
 
@@ -856,7 +886,7 @@
                  khi bấm nút này mới quét tiếp tote kế tiếp. Ngăn hẳn việc
                  quét đi quét lại liên tục cùng 1 mã, và tạo khoảng ngắt rõ
                  ràng giữa từng tote như yêu cầu. -->
-            <button id="driverScanConfirmBtn" class="btn hidden" onclick="confirmDriverScanContinue()">✓ XÁC NHẬN - QUÉT TIẾP</button>
+            <button id="driverScanConfirmBtn" class="btn hidden" data-i18n="driverConfirmContinueBtn" onclick="confirmDriverScanContinue()">✓ XÁC NHẬN - QUÉT TIẾP</button>
 
             <!-- Nhập tay - dự phòng khi camera không quét được (mã bị
                  nhăn/rách, thiếu sáng...), giống hệt nút "NHẬP TAY" bên
@@ -866,6 +896,7 @@
               class="scan-input hidden"
               autocomplete="off"
               enterkeyhint="done"
+              data-i18n-placeholder="trackPlaceholder"
               placeholder="GÕ TOTE ID..."
               onkeydown="handleDriverManualKey(event)"
             >
@@ -873,20 +904,20 @@
             <!-- Nút "XÁC NHẬN" dự phòng - xem ghi chú ở nút manualSubmitBtn
                  bên màn PDA kho (không phải bàn phím ảo nào cũng bắn được
                  sự kiện Enter). -->
-            <button id="driverManualSubmitBtn" class="btn hidden" onclick="submitDriverManualScan()">XÁC NHẬN</button>
+            <button id="driverManualSubmitBtn" class="btn hidden" data-i18n="confirmBtn" onclick="submitDriverManualScan()">XÁC NHẬN</button>
 
             <div id="driverCameraMsg" class="result pending">ĐANG MỞ CAMERA...</div>
 
             <div style="display:flex; gap:8px;">
-              <button id="driverCameraToggleBtn" class="btn btn-gray" style="margin-top:0" onclick="toggleDriverCameraOnOff()">TẮT CAMERA</button>
-              <button id="driverManualBtn" class="btn btn-gray" style="margin-top:0" onclick="toggleDriverManualInput()">NHẬP TAY</button>
+              <button id="driverCameraToggleBtn" class="btn btn-gray" data-i18n="cameraOffBtn" style="margin-top:0" onclick="toggleDriverCameraOnOff()">TẮT CAMERA</button>
+              <button id="driverManualBtn" class="btn btn-gray" data-i18n="manualInputBtn" style="margin-top:0" onclick="toggleDriverManualInput()">NHẬP TAY</button>
             </div>
 
             <div class="counter">
-              <div>TỔNG<span id="driverCTotal">0</span></div>
-              <div>OK<span id="driverCOk">0</span></div>
-              <div>LỖI<span id="driverCFail">0</span></div>
-              <div>CHỜ<span id="driverCQueue">0</span></div>
+              <div><span data-i18n="counterTotal">TỔNG</span><span id="driverCTotal">0</span></div>
+              <div><span data-i18n="counterOk">OK</span><span id="driverCOk">0</span></div>
+              <div><span data-i18n="counterFail">LỖI</span><span id="driverCFail">0</span></div>
+              <div><span data-i18n="counterQueue">CHỜ</span><span id="driverCQueue">0</span></div>
             </div>
 
             <div class="recent" id="driverRecentList"></div>
@@ -894,47 +925,47 @@
 
           <div id="driverSessionConfirmOverlay" class="session-overlay hidden">
             <div class="session-confirm-box">
-              <h3>Kết thúc phiên?</h3>
+              <h3 data-i18n="driverEndSessionTitle">Kết thúc phiên?</h3>
               <div class="session-summary">
-                <div>Store<b id="driverSumStore">-</b></div>
-                <div>Tổng đã quét<b id="driverSumTotal">0</b></div>
-                <div>OK<b id="driverSumOk">0</b></div>
-                <div>Lỗi<b id="driverSumFail">0</b></div>
+                <div><span data-i18n="storeLabel">Store</span><b id="driverSumStore">-</b></div>
+                <div><span data-i18n="totalScannedLabel">Tổng đã quét</span><b id="driverSumTotal">0</b></div>
+                <div><span data-i18n="counterOk">OK</span><b id="driverSumOk">0</b></div>
+                <div><span data-i18n="counterFail">Lỗi</span><b id="driverSumFail">0</b></div>
               </div>
 
               <div id="driverScanLogDetails"></div>
 
               <div class="session-confirm-actions">
-                <button class="btn btn-gray" onclick="cancelEndDriverSession()">TIẾP TỤC QUÉT</button>
-                <button class="btn" onclick="confirmEndDriverSession()">XÁC NHẬN KẾT THÚC</button>
+                <button class="btn btn-gray" data-i18n="continueScanBtn" onclick="cancelEndDriverSession()">TIẾP TỤC QUÉT</button>
+                <button class="btn" data-i18n="confirmEndBtn" onclick="confirmEndDriverSession()">XÁC NHẬN KẾT THÚC</button>
               </div>
             </div>
           </div>
 
           <div id="driverCancelSessionOverlay" class="session-overlay hidden">
             <div class="session-confirm-box">
-              <h3>Hủy phiên?</h3>
+              <h3 data-i18n="driverCancelSessionTitle">Hủy phiên?</h3>
               <div class="session-summary">
-                <div>Tote đã quét trong phiên<b id="driverCancelCount">0</b></div>
+                <div><span data-i18n="driverCancelScannedLabel">Tote đã quét trong phiên</span><b id="driverCancelCount">0</b></div>
               </div>
-              <div style="font-size:11.5px;color:var(--muted);line-height:16px;margin-bottom:14px;">
+              <div data-i18n="driverCancelHint" style="font-size:11.5px;color:var(--muted);line-height:16px;margin-bottom:14px;">
                 Hệ thống sẽ tự động hoàn tác các tote đã quét thành công trong phiên này (trả về đúng trạng thái trước khi quét, tồn kho cửa hàng cũng được cập nhật lại). Lịch sử vẫn được lưu đầy đủ (không xoá dữ liệu đã quét).
               </div>
               <div id="driverCancelSessionStatus" class="result pending hidden"></div>
               <div class="session-confirm-actions">
-                <button class="btn btn-gray" onclick="closeDriverCancelOverlay()">TIẾP TỤC QUÉT</button>
-                <button class="btn btn-danger" id="driverCancelSessionConfirmBtn" onclick="confirmCancelDriverSession()">XÁC NHẬN HỦY</button>
+                <button class="btn btn-gray" data-i18n="continueScanBtn" onclick="closeDriverCancelOverlay()">TIẾP TỤC QUÉT</button>
+                <button class="btn btn-danger" id="driverCancelSessionConfirmBtn" data-i18n="confirmCancelBtn" onclick="confirmCancelDriverSession()">XÁC NHẬN HỦY</button>
               </div>
             </div>
           </div>
         </div>
 
         <div id="screen-store" class="screen">
-          <label>Store ID</label>
+          <label data-i18n="storeIdLabel">Store ID</label>
           <input id="newStoreId" class="upper" placeholder="VD: VN0123">
-          <label>Store Name</label>
+          <label data-i18n="storeNameLabel">Store Name</label>
           <input id="newStoreName" placeholder="TÊN CỬA HÀNG">
-          <button class="btn" onclick="addNewStore()">THÊM STORE</button>
+          <button class="btn" data-i18n="addStoreBtn" onclick="addNewStore()">THÊM STORE</button>
           <div id="storeMsg" class="result pending">---</div>
           <div id="allStores"></div>
         </div>
@@ -945,82 +976,82 @@
                liệu tổng và "nợ nhiều nhất" luôn đúng thực tế toàn hệ thống. -->
           <div id="dashStats" class="hidden"></div>
 
-          <label id="dashLabel">Tìm Store Đang Nợ Tote</label>
-          <input id="dashSearch" placeholder="STORE ID / NAME" onkeydown="handleDashKey(event)">
-          <button class="btn" onclick="loadDashboard()">TÌM KIẾM</button>
+          <label id="dashLabel" data-i18n="dashFindLabel">Tìm Store Đang Nợ Tote</label>
+          <input id="dashSearch" data-i18n-placeholder="dashSearchPlaceholder" placeholder="STORE ID / NAME" onkeydown="handleDashKey(event)">
+          <button class="btn" data-i18n="searchBtn" onclick="loadDashboard()">TÌM KIẾM</button>
           <div id="dashResult"></div>
         </div>
 
         <div id="screen-transit" class="screen">
           <div class="summary-box">
-            <div class="summary-title">Tote Đang Trên Đường</div>
-            <div>Theo dõi tote đang ở 2 trạng thái vận chuyển - <b>đang giao tới cửa hàng</b> (kho đã xuất, chưa ai quét nhận) và <b>đang về kho</b> (cửa hàng đã trả vỏ, kho chưa quét nhận lại).</div>
-            <div>Sắp xếp theo tote nằm lâu nhất trước - dùng để phát hiện tote bị quên quét/thất lạc.</div>
+            <div class="summary-title" data-i18n="transitTitle">Tote Đang Trên Đường</div>
+            <div><span data-i18n="transitDesc1">Theo dõi tote đang ở 2 trạng thái vận chuyển -</span> <b data-i18n="transitDesc1b">đang giao tới cửa hàng</b> <span data-i18n="transitDesc1c">(kho đã xuất, chưa ai quét nhận) và</span> <b data-i18n="transitDesc1d">đang về kho</b> <span data-i18n="transitDesc1e">(cửa hàng đã trả vỏ, kho chưa quét nhận lại).</span></div>
+            <div data-i18n="transitDesc2">Sắp xếp theo tote nằm lâu nhất trước - dùng để phát hiện tote bị quên quét/thất lạc.</div>
           </div>
 
           <div id="transitStats" class="kpi-row" style="margin-bottom:14px">
             <div class="kpi">
               <div class="num" id="transitToStoreQty">0</div>
-              <div class="lbl">Đang giao tới cửa hàng</div>
+              <div class="lbl" data-i18n="transitToStoreLabel">Đang giao tới cửa hàng</div>
             </div>
             <div class="kpi">
               <div class="num" id="transitToWarehouseQty">0</div>
-              <div class="lbl">Đang về kho</div>
+              <div class="lbl" data-i18n="transitToWarehouseLabel">Đang về kho</div>
             </div>
           </div>
 
-          <button class="btn btn-gray" onclick="loadInTransitSummary()">LÀM MỚI</button>
+          <button class="btn btn-gray" data-i18n="refreshBtn" onclick="loadInTransitSummary()">LÀM MỚI</button>
 
-          <h3 style="margin-top:18px">Đang Giao Tới Cửa Hàng</h3>
+          <h3 data-i18n="transitToStoreHeading" style="margin-top:18px">Đang Giao Tới Cửa Hàng</h3>
           <div id="transitToStoreResult"></div>
 
-          <h3 style="margin-top:18px">Đang Về Kho</h3>
+          <h3 data-i18n="transitToWarehouseHeading" style="margin-top:18px">Đang Về Kho</h3>
           <div id="transitToWarehouseResult"></div>
         </div>
 
         <div id="screen-dailyOut" class="screen">
           <div class="summary-box">
-            <div class="summary-title">Tổng Hợp Tote Xuất Theo Ngày</div>
-            <div>Dùng để đối chiếu số tote xuất thực tế với chứng từ viết tay.</div>
-            <div>Hệ thống lấy dữ liệu từ log <b>OUT / OK</b> trong ngày đã chọn.</div>
+            <div class="summary-title" data-i18n="dailyOutTitle">Tổng Hợp Tote Xuất Theo Ngày</div>
+            <div data-i18n="dailyOutDesc1">Dùng để đối chiếu số tote xuất thực tế với chứng từ viết tay.</div>
+            <div><span data-i18n="dailyOutDesc2a">Hệ thống lấy dữ liệu từ log</span> <b>OUT / OK</b> <span data-i18n="dailyOutDesc2b">trong ngày đã chọn.</span></div>
           </div>
 
-          <label>Ngày Xuất</label>
+          <label data-i18n="dateOutLabel">Ngày Xuất</label>
           <input id="dailyOutDate" type="date">
 
-          <label id="dailyOutSearchLabel">Tìm Store</label>
-          <input id="dailyOutSearch" placeholder="STORE ID / NAME" onkeydown="handleDailyOutKey(event)">
+          <label id="dailyOutSearchLabel" data-i18n="findStoreLabel">Tìm Store</label>
+          <input id="dailyOutSearch" data-i18n-placeholder="dashSearchPlaceholder" placeholder="STORE ID / NAME" onkeydown="handleDailyOutKey(event)">
 
-          <button class="btn" onclick="loadDailyOutSummary()">XEM TỔNG HỢP</button>
+          <button class="btn" data-i18n="viewSummaryBtn" onclick="loadDailyOutSummary()">XEM TỔNG HỢP</button>
           <div id="dailyOutResult"></div>
         </div>
 
         <div id="screen-abnormal" class="screen">
           <div class="summary-box">
-            <div class="summary-title">Abnormal In / Out</div>
-            <div>Theo dõi các lần scan bất thường để kho xử lý ngay trong ngày.</div>
-            <div>Dữ liệu lấy từ log có <b>RESULT = ABNORMAL</b>.</div>
+            <div class="summary-title" data-i18n="abnormalTitle">Abnormal In / Out</div>
+            <div data-i18n="abnormalDesc1">Theo dõi các lần scan bất thường để kho xử lý ngay trong ngày.</div>
+            <div><span data-i18n="abnormalDesc2">Dữ liệu lấy từ log có</span> <b>RESULT = ABNORMAL</b>.</div>
           </div>
 
-          <label>Ngày</label>
+          <label data-i18n="dateLabel">Ngày</label>
           <input id="abnormalDate" type="date">
 
-          <label>Loại Bất Thường</label>
+          <label data-i18n="abnormalTypeLabel">Loại Bất Thường</label>
           <select id="abnormalAction" class="select-input" onchange="loadAbnormalSummary()">
-            <option value="ALL">TẤT CẢ NGHIỆP VỤ</option>
-            <option value="OUT">XUẤT KHO</option>
-            <option value="IN">NHẬP KHO</option>
-            <option value="STORE_RECEIVE">NHẬN TẠI CH</option>
-            <option value="STORE_RETURN">XUẤT TẠI CH (TRẢ VỎ)</option>
-            <option value="CANCEL_OUT">HỦY XUẤT KHO</option>
-            <option value="CANCEL_STORE_RECEIVE">HỦY NHẬN TẠI CH</option>
-            <option value="CANCEL_STORE_RETURN">HỦY XUẤT TẠI CH</option>
+            <option value="ALL" data-i18n="optAll">TẤT CẢ NGHIỆP VỤ</option>
+            <option value="OUT" data-i18n="actionOut">XUẤT KHO</option>
+            <option value="IN" data-i18n="actionIn">NHẬP KHO</option>
+            <option value="STORE_RECEIVE" data-i18n="actionStoreReceive">NHẬN TẠI CH</option>
+            <option value="STORE_RETURN" data-i18n="actionStoreReturn">XUẤT TẠI CH (TRẢ VỎ)</option>
+            <option value="CANCEL_OUT" data-i18n="actionCancelOut">HỦY XUẤT KHO</option>
+            <option value="CANCEL_STORE_RECEIVE" data-i18n="actionCancelStoreReceive">HỦY NHẬN TẠI CH</option>
+            <option value="CANCEL_STORE_RETURN" data-i18n="actionCancelStoreReturn">HỦY XUẤT TẠI CH</option>
           </select>
 
-          <label id="abnormalSearchLabel">Tìm Store / Tote / User</label>
+          <label id="abnormalSearchLabel" data-i18n="findStoreToteUserLabel">Tìm Store / Tote / User</label>
           <input id="abnormalSearch" placeholder="STORE ID / TOTE ID / USER" onkeydown="handleAbnormalKey(event)">
 
-          <button class="btn" onclick="loadAbnormalSummary()">XEM ABNORMAL</button>
+          <button class="btn" data-i18n="viewAbnormalBtn" onclick="loadAbnormalSummary()">XEM ABNORMAL</button>
           <div id="abnormalResult"></div>
         </div>
 
@@ -1067,10 +1098,36 @@
         -->
 
         <div id="screen-track" class="screen">
-          <label>Tra Lịch Sử Tote</label>
-          <input id="trackToteInput" placeholder="SCAN / NHẬP TOTE ID" onkeydown="handleTrackKey(event)">
-          <button class="btn" onclick="loadToteHistory()">TRA CỨU</button>
+          <label data-i18n="trackLabel">Tra Lịch Sử Tote</label>
+          <input id="trackToteInput" data-i18n-placeholder="trackPlaceholder" placeholder="SCAN / NHẬP TOTE ID" onkeydown="handleTrackKey(event)">
+          <button class="btn" data-i18n="trackBtn" onclick="loadToteHistory()">TRA CỨU</button>
           <div id="trackResult"></div>
+        </div>
+
+        <!-- =====================================================================
+             MÀN "CÀI ĐẶT" (Settings) - chế độ Sáng/Tối + ngôn ngữ VI/EN.
+             Lưu lựa chọn vào localStorage (chỉ trên máy này, không đồng bộ
+             server) - xem NHÓM 23 phần JS. -->
+        <div id="screen-settings" class="screen">
+          <h3 data-i18n="settingsThemeTitle" style="margin-top:0">Giao Diện</h3>
+          <div class="driver-mode-switch">
+            <button id="themeLightBtn" class="btn driver-mode-btn" onclick="setTheme('light')">
+              <span data-i18n="settingsThemeLight">☀️ Sáng</span>
+            </button>
+            <button id="themeDarkBtn" class="btn btn-gray driver-mode-btn" onclick="setTheme('dark')">
+              <span data-i18n="settingsThemeDark">🌙 Tối</span>
+            </button>
+          </div>
+
+          <h3 data-i18n="settingsLangTitle">Ngôn Ngữ</h3>
+          <div class="driver-mode-switch">
+            <button id="langViBtn" class="btn driver-mode-btn" onclick="setLang('vi')">Tiếng Việt</button>
+            <button id="langEnBtn" class="btn btn-gray driver-mode-btn" onclick="setLang('en')">English</button>
+          </div>
+
+          <div class="empty-note" data-i18n="settingsNote" style="margin-top:14px">
+            Lựa chọn chỉ áp dụng cho giao diện trên máy này. Các thông báo trả về từ hệ thống (kết quả quét, lỗi...) vẫn hiển thị bằng tiếng Việt.
+          </div>
         </div>
 
       </div>
@@ -1081,42 +1138,42 @@
 
       <div id="tabHome" class="rail-item active" onclick="showScreen('home')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7"/><path d="M5 10v9h14v-9"/></svg>
-        <span>Home</span>
+        <span data-i18n="navHome">Home</span>
       </div>
 
       <div id="railOut" class="rail-item" onclick="goToScan('OUT')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V4M6 10l6-6 6 6"/></svg>
-        <span>OUT</span>
+        <span data-i18n="navOut">OUT</span>
       </div>
       <div id="railIn" class="rail-item" onclick="goToScan('IN')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v16M6 14l6 6 6-6"/></svg>
-        <span>IN</span>
+        <span data-i18n="navIn">IN</span>
       </div>
 
       <div id="tabDriver" class="rail-item" onclick="showScreen('driver')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="13" height="10" rx="1"/><path d="M16 10h3l2 3v4h-5"/><circle cx="7.5" cy="18" r="1.6"/><circle cx="17.5" cy="18" r="1.6"/></svg>
-        <span>Giao Nhận</span>
+        <span data-i18n="navDriver">Giao Nhận</span>
       </div>
 
       <div id="tabStore" class="rail-item" onclick="showScreen('store')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l1-5h16l1 5M4 9v11h16V9M9 20v-6h6v6"/></svg>
-        <span>Store</span>
+        <span data-i18n="navStore">Store</span>
       </div>
       <div id="tabDash" class="rail-item" onclick="showScreen('dash')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M4 20V10M11 20V4M18 20v-7"/></svg>
-        <span>Tồn</span>
+        <span data-i18n="navDash">Tồn</span>
       </div>
       <div id="tabTransit" class="rail-item" onclick="showScreen('transit')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="6" width="15" height="10" rx="1"/><path d="M16 9h4l3 3v4h-7"/><circle cx="6" cy="18" r="1.8"/><circle cx="18" cy="18" r="1.8"/><path d="M4 3l3 3-3 3"/></svg>
-        <span>Vận Chuyển</span>
+        <span data-i18n="navTransit">Vận Chuyển</span>
       </div>
       <div id="tabDailyOut" class="rail-item" onclick="showScreen('dailyOut')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16"/><path d="M3 9h18M8 3v4M16 3v4M8 14l2.5 2.5L16 12"/></svg>
-        <span>Daily</span>
+        <span data-i18n="navDaily">Daily</span>
       </div>
       <div id="tabAbnormal" class="rail-item" onclick="showScreen('abnormal')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l10 18H2z"/><path d="M12 9v6M12 18h.01"/></svg>
-        <span>Lỗi</span>
+        <span data-i18n="navAbnormal">Lỗi</span>
       </div>
       <!-- Tab "K.Kê" (kiểm kê tại cửa hàng) - TẠM TẮT, xem ghi chú ở
            #screen-inv phía trên trong <div class="content">.
@@ -1127,13 +1184,17 @@
       -->
       <div id="tabTrack" class="rail-item" onclick="showScreen('track')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="10" r="6"/><path d="M15 15l6 6"/></svg>
-        <span>Track</span>
+        <span data-i18n="navTrack">Track</span>
+      </div>
+      <div id="tabSettings" class="rail-item" onclick="showScreen('settings')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        <span data-i18n="navSettings">Cài Đặt</span>
       </div>
 
       <div class="rail-spacer"></div>
       <div class="rail-logout" onclick="doLogout()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
-        <span>Thoát</span>
+        <span data-i18n="navLogout">Thoát</span>
       </div>
     </div>
   </div>
@@ -1221,6 +1282,403 @@
     let deferredInstallPrompt = null;
 
     // =====================================================================
+    // NHÓM 23: CÀI ĐẶT - CHẾ ĐỘ SÁNG/TỐI + NGÔN NGỮ VI/EN
+    // Cả 2 lựa chọn chỉ lưu trên MÁY NÀY (localStorage), không đồng bộ lên
+    // server/database - đây thuần là sở thích hiển thị của từng người dùng,
+    // không phải dữ liệu nghiệp vụ. Chỉ dịch CHỮ TĨNH viết sẵn trong giao
+    // diện (nút, nhãn, tiêu đề...) - các thông báo ĐỘNG trả về từ backend
+    // (kết quả quét, lỗi, ghi chú bất thường...) vẫn luôn là tiếng Việt, vì
+    // backend chỉ có 1 bộ thông báo dùng chung cho mọi giao diện.
+    // =====================================================================
+    let currentTheme = localStorage.getItem('TOTE_THEME') || 'light';
+    let currentLang = localStorage.getItem('TOTE_LANG') || 'vi';
+
+    const I18N = {
+      vi: {
+        navHome: 'Home', navOut: 'OUT', navIn: 'IN', navDriver: 'Giao Nhận',
+        navStore: 'Store', navDash: 'Tồn', navTransit: 'Vận Chuyển',
+        navDaily: 'Daily', navAbnormal: 'Lỗi', navTrack: 'Track', navSettings: 'Cài Đặt',
+        navLogout: 'Thoát',
+
+        loginTitle: 'Đăng nhập', loginSub: 'Nhập tài khoản kho vận của bạn',
+        loginIdLabel: 'Login ID', loginPassLabel: 'Password', loginBtn: 'ĐĂNG NHẬP',
+
+        settingsThemeTitle: 'Giao Diện', settingsThemeLight: '☀️ Sáng', settingsThemeDark: '🌙 Tối',
+        settingsLangTitle: 'Ngôn Ngữ',
+        settingsNote: 'Lựa chọn chỉ áp dụng cho giao diện trên máy này. Các thông báo trả về từ hệ thống (kết quả quét, lỗi...) vẫn hiển thị bằng tiếng Việt.',
+
+        homeSub: 'Tổng quan hoạt động hôm nay',
+        kpiStoreQty: 'Tote tại Store', kpiOutToday: 'OUT hôm nay', kpiInToday: 'IN hôm nay',
+        kpiAbnormalToday: 'Bất thường hôm nay', kpiReservedQty: 'Kho ảo còn lại (chưa dán label)',
+        quickOutTitle: 'XUẤT KHO — OUT', quickOutSub: 'Chọn store & bắt đầu scan',
+        quickInTitle: 'NHẬP KHO — IN', quickInSub: 'Thu hồi tote về kho',
+        homeTrendTitle: 'Xu hướng xuất kho 7 ngày', homeActivityTitle: 'Hoạt động gần đây',
+
+        modeOut: 'XUẤT KHO — OUT', modeIn: 'NHẬP KHO — IN', modeCurrentLabel: 'Chế độ hiện tại',
+        chooseStoreLabel: 'Chọn Store', storeSearchPlaceholder: 'GÕ ID / TÊN CỬA HÀNG ĐỂ TÌM...',
+        storeNotSelected: 'CHƯA CHỌN STORE', startScanSessionBtn: 'BẮT ĐẦU PHIÊN QUÉT',
+        inSessionHint: 'Quét tote để tự động thu hồi về đúng kho - không cần chọn store.',
+        startInSessionBtn: 'BẮT ĐẦU PHIÊN NHẬP',
+        scanningForLabel: 'Đang quét cho:', inRecoveryLabel: 'Đang thu hồi về kho (IN)',
+        cancelSessionBtn: 'HỦY PHIÊN', endSessionBtn: 'KẾT THÚC PHIÊN',
+        scanToteLabel: 'Scan Tote', scanTotePlaceholder: 'SCAN TOTE...',
+        confirmBtn: 'XÁC NHẬN', manualInputBtn: 'NHẬP TAY',
+        readySummary: 'SẴN SÀNG SCAN',
+        counterTotal: 'TỔNG', counterOk: 'OK', counterFail: 'LỖI', counterQueue: 'CHỜ',
+
+        endSessionTitle: 'Kết thúc phiên quét?', storeLabel: 'Store', totalScannedLabel: 'Tổng đã quét',
+        continueScanBtn: 'TIẾP TỤC QUÉT', confirmEndBtn: 'XÁC NHẬN KẾT THÚC',
+
+        cancelOutSessionTitle: 'Hủy phiên quét?', cancelOutScannedLabel: 'Tote đã xuất trong phiên',
+        cancelOutHint: 'Hệ thống sẽ tự động quét IN hoàn tác các tote trên, trả về kho. Lịch sử vẫn được lưu đầy đủ (không xoá dữ liệu đã quét).',
+        confirmCancelBtn: 'XÁC NHẬN HỦY',
+
+        cancelInSessionTitle: 'Hủy phiên nhập?', cancelInScannedLabel: 'Tote đã nhập trong phiên',
+        cancelInHint: 'Các tote đã quét IN vẫn ở trong kho (không tự động xuất lại). Hủy phiên chỉ xoá bộ đếm/lịch sử hiển thị của phiên này trên máy quét.',
+
+        driverModeReceive: 'NHẬN RỔ TẠI CH', driverModeReturn: 'XUẤT RỔ TẠI CH (LẤY VỎ)',
+        driverReceiveBtn: 'NHẬN RỔ', driverReturnBtn: 'XUẤT RỔ (LẤY VỎ)',
+        driverStoreOwnLabel: 'Cửa hàng của bạn', startSessionBtn: 'BẮT ĐẦU PHIÊN',
+        workingAtLabel: 'Đang thao tác tại:',
+        driverConfirmContinueBtn: '✓ XÁC NHẬN - QUÉT TIẾP',
+        cameraOffBtn: 'TẮT CAMERA', cameraOnBtn: 'BẬT CAMERA',
+
+        driverEndSessionTitle: 'Kết thúc phiên?',
+        driverCancelSessionTitle: 'Hủy phiên?', driverCancelScannedLabel: 'Tote đã quét trong phiên',
+        driverCancelHint: 'Hệ thống sẽ tự động hoàn tác các tote đã quét thành công trong phiên này (trả về đúng trạng thái trước khi quét, tồn kho cửa hàng cũng được cập nhật lại). Lịch sử vẫn được lưu đầy đủ (không xoá dữ liệu đã quét).',
+
+        storeIdLabel: 'Store ID', storeNameLabel: 'Store Name', addStoreBtn: 'THÊM STORE',
+
+        dashFindLabel: 'Tìm Store Đang Nợ Tote', dashSearchPlaceholder: 'STORE ID / NAME', searchBtn: 'TÌM KIẾM',
+
+        transitTitle: 'Tote Đang Trên Đường',
+        transitDesc1: 'Theo dõi tote đang ở 2 trạng thái vận chuyển -', transitDesc1b: 'đang giao tới cửa hàng',
+        transitDesc1c: '(kho đã xuất, chưa ai quét nhận) và', transitDesc1d: 'đang về kho', transitDesc1e: '(cửa hàng đã trả vỏ, kho chưa quét nhận lại).',
+        transitDesc2: 'Sắp xếp theo tote nằm lâu nhất trước - dùng để phát hiện tote bị quên quét/thất lạc.',
+        transitToStoreLabel: 'Đang giao tới cửa hàng', transitToWarehouseLabel: 'Đang về kho',
+        refreshBtn: 'LÀM MỚI', transitToStoreHeading: 'Đang Giao Tới Cửa Hàng', transitToWarehouseHeading: 'Đang Về Kho',
+
+        dailyOutTitle: 'Tổng Hợp Tote Xuất Theo Ngày',
+        dailyOutDesc1: 'Dùng để đối chiếu số tote xuất thực tế với chứng từ viết tay.',
+        dailyOutDesc2: 'Hệ thống lấy dữ liệu từ log OUT / OK trong ngày đã chọn.',
+        dateOutLabel: 'Ngày Xuất', findStoreLabel: 'Tìm Store', viewSummaryBtn: 'XEM TỔNG HỢP',
+        dailyOutDesc2a: 'Hệ thống lấy dữ liệu từ log', dailyOutDesc2b: 'trong ngày đã chọn.',
+
+        abnormalTitle: 'Abnormal In / Out',
+        abnormalDesc1: 'Theo dõi các lần scan bất thường để kho xử lý ngay trong ngày.',
+        abnormalDesc2: 'Dữ liệu lấy từ log có',
+        dateLabel: 'Ngày', abnormalTypeLabel: 'Loại Bất Thường',
+        findStoreToteUserLabel: 'Tìm Store / Tote / User', viewAbnormalBtn: 'XEM ABNORMAL',
+
+        trackLabel: 'Tra Lịch Sử Tote', trackPlaceholder: 'SCAN / NHẬP TOTE ID', trackBtn: 'TRA CỨU',
+
+        actionOut: 'XUẤT KHO', actionIn: 'NHẬP KHO', actionCancelOut: 'HỦY XUẤT KHO',
+        actionStoreReceive: 'NHẬN TẠI CH', actionStoreReturn: 'XUẤT TẠI CH (TRẢ VỎ)',
+        actionCancelStoreReceive: 'HỦY NHẬN TẠI CH', actionCancelStoreReturn: 'HỦY XUẤT TẠI CH',
+        statusWarehouse: 'TẠI KHO', statusTransitToStore: 'ĐANG GIAO TỚI CH',
+        statusStore: 'TẠI CỬA HÀNG', statusTransitToWarehouse: 'ĐANG VỀ KHO',
+
+        optAll: 'TẤT CẢ NGHIỆP VỤ',
+
+        installTitle: 'Cài GS25 Bình Điền Warehouse ra màn hình chính',
+        installSub: 'Mở như app thật, nhanh hơn cho PDA/kho.', installBtn: 'CÀI',
+
+        dashFindLabelStore: 'Công Nợ Tote Cửa Hàng Của Bạn',
+        dailyOutFindLabelStore: 'Tote Đã Xuất Cho Cửa Hàng Của Bạn',
+        abnormalFindLabelStore: 'Abnormal Cửa Hàng Của Bạn',
+
+        manualOffBtnLabel: 'TẮT NHẬP TAY', manualOnMsg: 'ĐANG BẬT NHẬP TAY',
+        manualOffMsg: 'ĐÃ TẮT BÀN PHÍM - SẴN SÀNG SCAN',
+        cancellingWaitMsg: 'ĐANG HỦY PHIÊN, VUI LÒNG ĐỢI...',
+        invalidCodePrefix: 'MÃ KHÔNG HỢP LỆ: ', notSelectedStoreMsg: 'CHƯA CHỌN STORE',
+        notStartedInSessionMsg: 'CHƯA BẮT ĐẦU PHIÊN NHẬP', receivedPrefix: 'NHẬN: ',
+        storeErrPrefix: 'LỖI STORE: ',
+        endedInSessionMsg: 'ĐÃ KẾT THÚC PHIÊN NHẬP',
+        noToteCancelledMsg: 'ĐÃ HỦY PHIÊN (CHƯA QUÉT TOTE NÀO)', confirmCancelBtnLabel: 'XÁC NHẬN HỦY',
+        sendingRemainingMsg: 'ĐANG GỬI NỐT DỮ LIỆU CÒN LẠI...', cancelledSessionMsg: 'ĐÃ HỦY PHIÊN',
+        undoingOutMsg: 'ĐANG HOÀN TÁC {n} TOTE (HỦY XUẤT, TRẢ VỀ KHO)...',
+        undoErrPrefix: 'LỖI HOÀN TÁC: ', cancelledUndoneMsg: 'ĐÃ HỦY PHIÊN - HOÀN TÁC XONG',
+        remainUndoMsg: 'CÒN {n} TOTE CHƯA HOÀN TÁC ĐƯỢC - BẤM XÁC NHẬN HỦY ĐỂ THỬ LẠI',
+        retryBtnLabel: 'THỬ LẠI ({n})',
+        cancelledInSessionMsg: 'ĐÃ HỦY PHIÊN NHẬP',
+        cancelledInSessionDoneMsg: 'ĐÃ HỦY PHIÊN NHẬP - TOTE VẪN Ở TRONG KHO',
+        undoingDriverMsg: 'ĐANG HOÀN TÁC {n} TOTE...',
+        driverManualOffBtnLabel: 'TẮT NHẬP TAY - DÙNG CAMERA', driverManualOnMsg: 'ĐANG NHẬP TAY',
+        driverCameraOffMsg: 'CAMERA ĐÃ TẮT - BẤM "BẬT CAMERA" ĐỂ QUÉT TIẾP',
+        openingCameraMsg: 'ĐANG MỞ CAMERA...', readyScanFrameMsg: 'SẴN SÀNG QUÉT - ĐƯA MÃ VÀO KHUNG HÌNH',
+        cameraOpenErrPrefix: 'KHÔNG MỞ ĐƯỢC CAMERA: ', cameraPermissionHint: ' (kiểm tra đã cho phép quyền Camera chưa)',
+
+        noDebtData: 'KHÔNG CÓ DỮ LIỆU NỢ TOTE', noStoreMatch: 'KHÔNG TÌM THẤY STORE PHÙ HỢP',
+        viewDebtTotesMsg: 'Xem chi tiết {n} tote đang nợ',
+        totalStoreQtyLabel: 'Tổng tote đang ở STORE', totalWarehouseQtyLabel: 'Tổng tote đang ở KHO',
+        topDebtTitle: 'Nợ tote nhiều nhất',
+        noTotesFound: 'KHÔNG CÓ TOTE NÀO', viewTransitTotesMsg: 'Xem chi tiết {n} tote {verb}',
+        minutesSuffix: ' phút', hoursSuffix: ' giờ',
+
+        loadingDailyOutMsg: 'ĐANG TẢI TỔNG HỢP DAILY OUT...', dailyOutErrPrefix: 'LỖI DAILY OUT: ',
+        totalStoresOutLabel: 'Tổng cửa hàng có xuất:', totalOutOkLabel: 'Tổng tote OUT / OK unique:',
+        rawOutRowsLabel: 'Dòng log OUT raw:', duplicateSkippedLabel: 'Scan trùng đã bỏ qua:',
+        totalOutAbnormalLabel: 'OUT bất thường unique:', noOutDataMsg: 'KHÔNG CÓ DỮ LIỆU XUẤT TOTE TRONG NGÀY NÀY',
+        systemOutQtyLabel: 'Số tote xuất theo hệ thống:', userActionLabel: 'User thao tác:',
+        viewOutToteIdsMsg: 'Xem mã tote OUT / OK unique', viewDuplicateSkippedMsg: 'Xem mã scan trùng đã bỏ qua',
+
+        loadingAbnormalMsg: 'ĐANG TẢI ABNORMAL IN / OUT...', abnormalErrPrefix: 'LỖI ABNORMAL: ',
+        totalAbnormalLabel: 'Tổng abnormal:', totalStoresInvolvedLabel: 'Số store liên quan:',
+        usersInvolvedLabel: 'User liên quan:', noAbnormalMsg: 'KHÔNG CÓ ABNORMAL TRONG NGÀY NÀY',
+        abnormalDetailTitle: 'Chi Tiết Abnormal', resultLabel: 'Kết quả:',
+        storeColonLabel: 'Store:', noteColonLabel: 'Note:', userColonLabel: 'User:', toteColonLabel: 'Tote:',
+
+        greetMorning: 'Chào buổi sáng', greetNoon: 'Chào buổi trưa', greetAfternoon: 'Chào buổi chiều', greetEvening: 'Chào buổi tối',
+        daySun: 'Chủ nhật', dayMon: 'Thứ 2', dayTue: 'Thứ 3', dayWed: 'Thứ 4', dayThu: 'Thứ 5', dayFri: 'Thứ 6', daySat: 'Thứ 7',
+        noRecentActivity: 'Chưa có hoạt động nào gần đây', summaryLoadErrPrefix: 'Không tải được tổng quan: ',
+        noActivityYet: 'Chưa có hoạt động nào gần đây',
+
+        enterToteIdMsg: 'NHẬP TOTE ID CẦN TRA', invalidToteIdMsg: 'MÃ KHÔNG HỢP LỆ, TOTE ID PHẢI BẮT ĐẦU BẰNG TOT',
+        toteNotFoundMsg: 'KHÔNG TÌM THẤY DỮ LIỆU TOTE', statusColonLabel: 'Trạng thái:',
+        locationColonLabel: 'Vị trí:', lastStoreColonLabel: 'Store gần nhất:', lastUpdateColonLabel: 'Cập nhật cuối:',
+        abnormalColonLabel: 'Bất thường:', historyTitle: 'Lịch Sử In / Out', noInOutLogMsg: 'CHƯA CÓ LOG IN/OUT',
+        actionColonLabel: 'Nghiệp vụ:',
+
+        viewOkTotesMsg: 'Xem {n} tote OK', viewErrTotesMsg: 'Xem {n} tote LỖI/BẤT THƯỜNG',
+
+        notToteIdMsg: 'Không phải Tote ID - không ghi dữ liệu',
+        doubleScanSkipPrefix: 'DOUBLE SCAN BỎ QUA: ', doubleScanSkipNote: 'Double scan - không ghi',
+        receivedPendingNote: 'Đã nhận scan - chờ ghi', driverEndedMsg: 'ĐÃ KẾT THÚC PHIÊN',
+        missingLibMsg: 'Thiếu thư viện quét mã - kiểm tra kết nối mạng rồi tải lại trang',
+        scannerInitErrPrefix: 'Không khởi tạo được bộ quét mã: ',
+        loadingMsg: 'ĐANG TẢI...', genericErrPrefix: 'LỖI: ',
+        couldNotLoadData: 'Không tải được dữ liệu',
+        transitVerbToStore: 'đang giao', transitVerbToWarehouse: 'đang về',
+        noDataGeneric: 'Không có dữ liệu', abnormalWordLabel: 'Bất thường'
+      },
+      en: {
+        navHome: 'Home', navOut: 'OUT', navIn: 'IN', navDriver: 'Delivery',
+        navStore: 'Store', navDash: 'Stock', navTransit: 'In Transit',
+        navDaily: 'Daily', navAbnormal: 'Issues', navTrack: 'Track', navSettings: 'Settings',
+        navLogout: 'Log out',
+
+        loginTitle: 'Sign in', loginSub: 'Enter your warehouse account',
+        loginIdLabel: 'Login ID', loginPassLabel: 'Password', loginBtn: 'SIGN IN',
+
+        settingsThemeTitle: 'Appearance', settingsThemeLight: '☀️ Light', settingsThemeDark: '🌙 Dark',
+        settingsLangTitle: 'Language',
+        settingsNote: 'This choice only affects the display on this device. Messages returned by the system (scan results, errors...) always show in Vietnamese.',
+
+        homeSub: "Today's activity overview",
+        kpiStoreQty: 'Totes at stores', kpiOutToday: 'OUT today', kpiInToday: 'IN today',
+        kpiAbnormalToday: 'Issues today', kpiReservedQty: 'Virtual stock remaining (unlabeled)',
+        quickOutTitle: 'WAREHOUSE OUT', quickOutSub: 'Pick a store & start scanning',
+        quickInTitle: 'WAREHOUSE IN', quickInSub: 'Recover totes back to warehouse',
+        homeTrendTitle: '7-day OUT trend', homeActivityTitle: 'Recent activity',
+
+        modeOut: 'WAREHOUSE OUT', modeIn: 'WAREHOUSE IN', modeCurrentLabel: 'Current mode',
+        chooseStoreLabel: 'Select Store', storeSearchPlaceholder: 'TYPE ID / STORE NAME TO SEARCH...',
+        storeNotSelected: 'NO STORE SELECTED', startScanSessionBtn: 'START SCAN SESSION',
+        inSessionHint: 'Scan totes to auto-return them to the correct warehouse - no store selection needed.',
+        startInSessionBtn: 'START IN SESSION',
+        scanningForLabel: 'Scanning for:', inRecoveryLabel: 'Returning to warehouse (IN)',
+        cancelSessionBtn: 'CANCEL SESSION', endSessionBtn: 'END SESSION',
+        scanToteLabel: 'Scan Tote', scanTotePlaceholder: 'SCAN TOTE...',
+        confirmBtn: 'CONFIRM', manualInputBtn: 'MANUAL ENTRY',
+        readySummary: 'READY TO SCAN',
+        counterTotal: 'TOTAL', counterOk: 'OK', counterFail: 'FAIL', counterQueue: 'QUEUE',
+
+        endSessionTitle: 'End scan session?', storeLabel: 'Store', totalScannedLabel: 'Total scanned',
+        continueScanBtn: 'KEEP SCANNING', confirmEndBtn: 'CONFIRM END',
+
+        cancelOutSessionTitle: 'Cancel scan session?', cancelOutScannedLabel: 'Totes shipped this session',
+        cancelOutHint: 'The system will auto-scan IN to undo these totes, returning them to the warehouse. Full history is kept (no data is deleted).',
+        confirmCancelBtn: 'CONFIRM CANCEL',
+
+        cancelInSessionTitle: 'Cancel IN session?', cancelInScannedLabel: 'Totes received this session',
+        cancelInHint: 'Totes already scanned IN remain in the warehouse (not auto-reversed). Cancelling only clears this session\'s counter/log on this device.',
+
+        driverModeReceive: 'RECEIVE AT STORE', driverModeReturn: 'RETURN AT STORE (EMPTY TOTES)',
+        driverReceiveBtn: 'RECEIVE', driverReturnBtn: 'RETURN (EMPTY TOTES)',
+        driverStoreOwnLabel: 'Your store', startSessionBtn: 'START SESSION',
+        workingAtLabel: 'Working at:',
+        driverConfirmContinueBtn: '✓ CONFIRM - KEEP SCANNING',
+        cameraOffBtn: 'TURN OFF CAMERA', cameraOnBtn: 'TURN ON CAMERA',
+
+        driverEndSessionTitle: 'End session?',
+        driverCancelSessionTitle: 'Cancel session?', driverCancelScannedLabel: 'Totes scanned this session',
+        driverCancelHint: 'The system will automatically undo the totes successfully scanned this session (restoring their prior state, with store stock adjusted accordingly). Full history is kept (no data is deleted).',
+
+        storeIdLabel: 'Store ID', storeNameLabel: 'Store Name', addStoreBtn: 'ADD STORE',
+
+        dashFindLabel: 'Find Store With Outstanding Totes', dashSearchPlaceholder: 'STORE ID / NAME', searchBtn: 'SEARCH',
+
+        transitTitle: 'Totes In Transit',
+        transitDesc1: 'Tracks totes in 2 transit states -', transitDesc1b: 'heading to a store',
+        transitDesc1c: '(shipped by warehouse, not yet received) and', transitDesc1d: 'returning to warehouse', transitDesc1e: '(returned by store, not yet received by warehouse).',
+        transitDesc2: 'Sorted by longest time in transit first - helps spot totes that were forgotten or lost.',
+        transitToStoreLabel: 'Heading to store', transitToWarehouseLabel: 'Returning to warehouse',
+        refreshBtn: 'REFRESH', transitToStoreHeading: 'Heading To Store', transitToWarehouseHeading: 'Returning To Warehouse',
+
+        dailyOutTitle: 'Daily Outbound Tote Summary',
+        dailyOutDesc1: 'Used to reconcile actual outbound totes against paper records.',
+        dailyOutDesc2: 'Data is based on OUT / OK log entries for the selected day.',
+        dateOutLabel: 'Outbound Date', findStoreLabel: 'Find Store', viewSummaryBtn: 'VIEW SUMMARY',
+        dailyOutDesc2a: 'Data is based on', dailyOutDesc2b: 'log entries for the selected day.',
+
+        abnormalTitle: 'Abnormal In / Out',
+        abnormalDesc1: 'Tracks abnormal scans so the warehouse can handle them the same day.',
+        abnormalDesc2: 'Data is based on log entries with',
+        dateLabel: 'Date', abnormalTypeLabel: 'Issue Type',
+        findStoreToteUserLabel: 'Find Store / Tote / User', viewAbnormalBtn: 'VIEW ISSUES',
+
+        trackLabel: 'Look Up Tote History', trackPlaceholder: 'SCAN / ENTER TOTE ID', trackBtn: 'LOOK UP',
+
+        actionOut: 'WAREHOUSE OUT', actionIn: 'WAREHOUSE IN', actionCancelOut: 'CANCEL OUT',
+        actionStoreReceive: 'STORE RECEIVE', actionStoreReturn: 'STORE RETURN (EMPTY)',
+        actionCancelStoreReceive: 'CANCEL STORE RECEIVE', actionCancelStoreReturn: 'CANCEL STORE RETURN',
+        statusWarehouse: 'AT WAREHOUSE', statusTransitToStore: 'HEADING TO STORE',
+        statusStore: 'AT STORE', statusTransitToWarehouse: 'RETURNING TO WAREHOUSE',
+
+        optAll: 'ALL OPERATIONS',
+
+        installTitle: 'Install GS25 Binh Dien Warehouse to your home screen',
+        installSub: 'Opens like a real app, faster for PDA/warehouse use.', installBtn: 'INSTALL',
+
+        dashFindLabelStore: 'Your Store\'s Outstanding Totes',
+        dailyOutFindLabelStore: 'Totes Shipped To Your Store',
+        abnormalFindLabelStore: 'Your Store\'s Abnormal Issues',
+
+        manualOffBtnLabel: 'TURN OFF MANUAL ENTRY', manualOnMsg: 'MANUAL ENTRY ON',
+        manualOffMsg: 'KEYBOARD OFF - READY TO SCAN',
+        cancellingWaitMsg: 'CANCELLING, PLEASE WAIT...',
+        invalidCodePrefix: 'INVALID CODE: ', notSelectedStoreMsg: 'NO STORE SELECTED',
+        notStartedInSessionMsg: 'IN SESSION NOT STARTED', receivedPrefix: 'RECEIVED: ',
+        storeErrPrefix: 'STORE ERROR: ',
+        endedInSessionMsg: 'IN SESSION ENDED',
+        noToteCancelledMsg: 'SESSION CANCELLED (NO TOTES SCANNED)', confirmCancelBtnLabel: 'CONFIRM CANCEL',
+        sendingRemainingMsg: 'SENDING REMAINING DATA...', cancelledSessionMsg: 'SESSION CANCELLED',
+        undoingOutMsg: 'UNDOING {n} TOTES (CANCEL OUT, RETURN TO WAREHOUSE)...',
+        undoErrPrefix: 'UNDO ERROR: ', cancelledUndoneMsg: 'SESSION CANCELLED - UNDO COMPLETE',
+        remainUndoMsg: '{n} TOTES STILL NOT UNDONE - TAP CONFIRM CANCEL TO RETRY',
+        retryBtnLabel: 'RETRY ({n})',
+        cancelledInSessionMsg: 'IN SESSION CANCELLED',
+        cancelledInSessionDoneMsg: 'IN SESSION CANCELLED - TOTES STILL IN WAREHOUSE',
+        undoingDriverMsg: 'UNDOING {n} TOTES...',
+        driverManualOffBtnLabel: 'TURN OFF MANUAL - USE CAMERA', driverManualOnMsg: 'MANUAL ENTRY ON',
+        driverCameraOffMsg: 'CAMERA OFF - TAP "TURN ON CAMERA" TO KEEP SCANNING',
+        openingCameraMsg: 'OPENING CAMERA...', readyScanFrameMsg: 'READY TO SCAN - PLACE CODE IN FRAME',
+        cameraOpenErrPrefix: 'COULD NOT OPEN CAMERA: ', cameraPermissionHint: ' (check if Camera permission was granted)',
+
+        noDebtData: 'NO OUTSTANDING TOTE DATA', noStoreMatch: 'NO MATCHING STORE FOUND',
+        viewDebtTotesMsg: 'View {n} outstanding totes',
+        totalStoreQtyLabel: 'Total totes at STORES', totalWarehouseQtyLabel: 'Total totes at WAREHOUSE',
+        topDebtTitle: 'Highest outstanding totes',
+        noTotesFound: 'NO TOTES FOUND', viewTransitTotesMsg: 'View {n} totes {verb}',
+        minutesSuffix: ' min', hoursSuffix: ' hr',
+
+        loadingDailyOutMsg: 'LOADING DAILY OUT SUMMARY...', dailyOutErrPrefix: 'DAILY OUT ERROR: ',
+        totalStoresOutLabel: 'Total stores with outbound:', totalOutOkLabel: 'Total unique OUT / OK totes:',
+        rawOutRowsLabel: 'Raw OUT log rows:', duplicateSkippedLabel: 'Duplicate scans skipped:',
+        totalOutAbnormalLabel: 'Unique abnormal OUT:', noOutDataMsg: 'NO OUTBOUND TOTE DATA FOR THIS DAY',
+        systemOutQtyLabel: 'Outbound totes per system:', userActionLabel: 'User(s):',
+        viewOutToteIdsMsg: 'View unique OUT / OK tote IDs', viewDuplicateSkippedMsg: 'View skipped duplicate scans',
+
+        loadingAbnormalMsg: 'LOADING ABNORMAL IN / OUT...', abnormalErrPrefix: 'ABNORMAL ERROR: ',
+        totalAbnormalLabel: 'Total abnormal:', totalStoresInvolvedLabel: 'Stores involved:',
+        usersInvolvedLabel: 'User(s) involved:', noAbnormalMsg: 'NO ABNORMAL ENTRIES FOR THIS DAY',
+        abnormalDetailTitle: 'Abnormal Details', resultLabel: 'Result:',
+        storeColonLabel: 'Store:', noteColonLabel: 'Note:', userColonLabel: 'User:', toteColonLabel: 'Tote:',
+
+        greetMorning: 'Good morning', greetNoon: 'Good noon', greetAfternoon: 'Good afternoon', greetEvening: 'Good evening',
+        daySun: 'Sun', dayMon: 'Mon', dayTue: 'Tue', dayWed: 'Wed', dayThu: 'Thu', dayFri: 'Fri', daySat: 'Sat',
+        noRecentActivity: 'No recent activity', summaryLoadErrPrefix: 'Could not load summary: ',
+        noActivityYet: 'No recent activity',
+
+        enterToteIdMsg: 'ENTER TOTE ID TO LOOK UP', invalidToteIdMsg: 'INVALID CODE, TOTE ID MUST START WITH TOT',
+        toteNotFoundMsg: 'NO TOTE DATA FOUND', statusColonLabel: 'Status:',
+        locationColonLabel: 'Location:', lastStoreColonLabel: 'Last store:', lastUpdateColonLabel: 'Last update:',
+        abnormalColonLabel: 'Abnormal:', historyTitle: 'In / Out History', noInOutLogMsg: 'NO IN/OUT LOG YET',
+        actionColonLabel: 'Operation:',
+
+        viewOkTotesMsg: 'View {n} OK totes', viewErrTotesMsg: 'View {n} FAILED/ABNORMAL totes',
+
+        notToteIdMsg: 'Not a Tote ID - not recorded',
+        doubleScanSkipPrefix: 'DOUBLE SCAN SKIPPED: ', doubleScanSkipNote: 'Double scan - not recorded',
+        receivedPendingNote: 'Scan received - pending', driverEndedMsg: 'SESSION ENDED',
+        missingLibMsg: 'Missing barcode scanner library - check your connection and reload the page',
+        scannerInitErrPrefix: 'Could not initialize the scanner: ',
+        loadingMsg: 'LOADING...', genericErrPrefix: 'ERROR: ',
+        couldNotLoadData: 'Could not load data',
+        transitVerbToStore: 'heading to store', transitVerbToWarehouse: 'returning to warehouse',
+        noDataGeneric: 'No data', abnormalWordLabel: 'Abnormal'
+      }
+    };
+
+    function t(key) {
+      return (I18N[currentLang] && I18N[currentLang][key]) || (I18N.vi[key]) || key;
+    }
+
+    // Giống t(key) nhưng thay các chỗ giữ chỗ kiểu {n}/{verb} bằng giá trị
+    // thật - dùng cho các câu có số đếm/chèn biến (VD "Xem {n} tote OK").
+    function tf(key, params) {
+      let text = t(key);
+      Object.keys(params || {}).forEach(function (k) {
+        text = text.split('{' + k + '}').join(params[k]);
+      });
+      return text;
+    }
+
+    // Quét toàn trang, áp dụng chữ đúng ngôn ngữ cho mọi phần tử có gắn
+    // data-i18n (nội dung chữ) hoặc data-i18n-placeholder (placeholder ô
+    // nhập) - gọi lại mỗi khi đổi ngôn ngữ, và 1 lần lúc khởi động.
+    function applyI18n() {
+      document.documentElement.lang = currentLang;
+
+      document.querySelectorAll('[data-i18n]').forEach(function (el) {
+        el.textContent = t(el.getAttribute('data-i18n'));
+      });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(function (el) {
+        el.placeholder = t(el.getAttribute('data-i18n-placeholder'));
+      });
+    }
+
+    function setTheme(theme) {
+      currentTheme = theme;
+      localStorage.setItem('TOTE_THEME', theme);
+      document.documentElement.setAttribute('data-theme', theme);
+      renderSettingsUI();
+    }
+
+    function setLang(lang) {
+      currentLang = lang;
+      localStorage.setItem('TOTE_LANG', lang);
+      applyI18n();
+      applyRoleLabels();
+      renderSettingsUI();
+    }
+
+    function renderSettingsUI() {
+      const lightBtn = document.getElementById('themeLightBtn');
+      const darkBtn = document.getElementById('themeDarkBtn');
+      const viBtn = document.getElementById('langViBtn');
+      const enBtn = document.getElementById('langEnBtn');
+      if (!lightBtn) return;
+
+      lightBtn.classList.toggle('active', currentTheme === 'light');
+      lightBtn.classList.toggle('btn-gray', currentTheme !== 'light');
+      darkBtn.classList.toggle('active', currentTheme === 'dark');
+      darkBtn.classList.toggle('btn-gray', currentTheme !== 'dark');
+
+      viBtn.classList.toggle('active', currentLang === 'vi');
+      viBtn.classList.toggle('btn-gray', currentLang !== 'vi');
+      enBtn.classList.toggle('active', currentLang === 'en');
+      enBtn.classList.toggle('btn-gray', currentLang !== 'en');
+    }
+
+    // Gọi 1 LẦN DUY NHẤT lúc khởi động app (từ init()) - áp dụng lại đúng
+    // theme/ngôn ngữ đã lưu từ lần trước, trước khi người dùng kịp thấy gì.
+    function initSettings() {
+      document.documentElement.setAttribute('data-theme', currentTheme);
+      applyI18n();
+    }
+
+    // =====================================================================
     // NHÓM 1: "CÀI APP RA MÀN HÌNH" (PWA install prompt)
     // Mấy hàm dưới đây chỉ lo việc hiện cái banner "CÀI" ở trên cùng để
     // người dùng thêm web app này ra màn hình chính điện thoại/PDA như 1 app
@@ -1304,6 +1762,7 @@
     // cho vào thẳng app; nếu không/hết hạn thì bắt đăng nhập lại.
     // =====================================================================
     function init() {
+      initSettings();
       setupInstallPrompt();
       document.addEventListener('keydown', globalScannerKeyHandler, true);
 
@@ -1498,17 +1957,25 @@
 
       if (role === 'STORE') {
         document.getElementById('dashSearch').classList.add('hidden');
-        document.getElementById('dashLabel').innerText = 'Công Nợ Tote Cửa Hàng Của Bạn';
         document.getElementById('dailyOutSearch').classList.add('hidden');
-        document.getElementById('dailyOutSearchLabel').innerText = 'Tote Đã Xuất Cho Cửa Hàng Của Bạn';
-        document.getElementById('abnormalSearchLabel').innerText = 'Abnormal Cửa Hàng Của Bạn';
       } else {
         document.getElementById('dashSearch').classList.remove('hidden');
-        document.getElementById('dashLabel').innerText = 'Tìm Store Đang Nợ Tote';
         document.getElementById('dailyOutSearch').classList.remove('hidden');
-        document.getElementById('dailyOutSearchLabel').innerText = 'Tìm Store';
-        document.getElementById('abnormalSearchLabel').innerText = 'Tìm Store / Tote / User';
       }
+
+      applyRoleLabels();
+    }
+
+    // Nhãn tìm kiếm đổi theo vai trò (STORE thấy bản rút gọn chỉ của họ) -
+    // tách riêng khỏi setupRoleUI() để gọi lại được khi đổi ngôn ngữ
+    // (setLang()), không chỉ lúc đăng nhập.
+    function applyRoleLabels() {
+      if (!session) return;
+      const isStore = session.role === 'STORE';
+
+      document.getElementById('dashLabel').innerText = isStore ? t('dashFindLabelStore') : t('dashFindLabel');
+      document.getElementById('dailyOutSearchLabel').innerText = isStore ? t('dailyOutFindLabelStore') : t('findStoreLabel');
+      document.getElementById('abnormalSearchLabel').innerText = isStore ? t('abnormalFindLabelStore') : t('findStoreToteUserLabel');
     }
 
     // =====================================================================
@@ -1560,6 +2027,7 @@
       // Tab K.Kê (kiểm kê) TẠM TẮT - bỏ comment dòng dưới để bật lại:
       // if (name === 'inv') document.getElementById('tabInv').classList.add('active');
       if (name === 'track') document.getElementById('tabTrack').classList.add('active');
+      if (name === 'settings') document.getElementById('tabSettings').classList.add('active');
 
       // Rời khỏi màn Tài xế thì phải tắt camera ngay - không để camera bật
       // ngầm tốn pin/lộ hình ảnh khi tài xế đang xem màn khác.
@@ -1575,6 +2043,7 @@
       // Tab K.Kê (kiểm kê) TẠM TẮT - bỏ comment dòng dưới để bật lại:
       // if (name === 'inv') { focusInventoryScan(); loadInventoryHistory(); }
       if (name === 'track') setTimeout(() => document.getElementById('trackToteInput').focus(), 50);
+      if (name === 'settings') renderSettingsUI();
     }
 
     function goToScan(value) {
@@ -1619,7 +2088,7 @@
       const tag = document.getElementById('modeTag');
       banner.classList.toggle('out', mode === 'OUT');
       banner.classList.toggle('in', mode === 'IN');
-      tag.innerText = mode === 'OUT' ? 'XUẤT KHO — OUT' : 'NHẬP KHO — IN';
+      tag.innerText = mode === 'OUT' ? t('modeOut') : t('modeIn');
 
       // Quyết định hiện "bắt đầu phiên" hay hiện luôn khu vực quét - xem
       // renderPdaSessionUI() ở NHÓM 11b.
@@ -1644,25 +2113,25 @@
         input.removeAttribute('readonly');
         input.setAttribute('inputmode', 'text');
         input.classList.remove('no-keyboard');
-        btn.innerText = 'TẮT NHẬP TAY';
+        btn.innerText = t('manualOffBtnLabel');
         btn.classList.add('manual-on');
         submitBtn.classList.remove('hidden');
         input.value = '';
         input.focus();
-        showResult('ĐANG BẬT NHẬP TAY', true);
+        showResult(t('manualOnMsg'), true);
       } else {
         // QUAN TRỌNG: không dùng readonly nữa.
         // Một số PDA/Zebra chỉ đổ mã scan vào input editable; readonly sẽ làm scan không vào textbox.
         input.removeAttribute('readonly');
         input.setAttribute('inputmode', 'none');
         input.classList.add('no-keyboard');
-        btn.innerText = 'NHẬP TAY';
+        btn.innerText = t('manualInputBtn');
         btn.classList.remove('manual-on');
         submitBtn.classList.add('hidden');
         input.value = '';
         scanBuffer = '';
         focusScan();
-        showResult('ĐÃ TẮT BÀN PHÍM - SẴN SÀNG SCAN', true);
+        showResult(t('manualOffMsg'), true);
       }
     }
 
@@ -1768,7 +2237,7 @@
       // vẫn có thể bắn phím vào trang dù popup đang che màn hình, nên phải
       // chặn ở đây chứ không chỉ dựa vào overlay che UI.
       if (cancellingSession) {
-        showResult('ĐANG HỦY PHIÊN, VUI LÒNG ĐỢI...', false);
+        showResult(t('cancellingWaitMsg'), false);
         beep(false);
         return;
       }
@@ -1776,8 +2245,8 @@
       if (!toteId) return;
 
       if (!toteId.startsWith('TOT')) {
-        showResult('MÃ KHÔNG HỢP LỆ: ' + toteId, false);
-        addRecent(toteId, 'Không phải Tote ID - không ghi dữ liệu', false);
+        showResult(t('invalidCodePrefix') + toteId, false);
+        addRecent(toteId, t('notToteIdMsg'), false);
         beepInvalid();
 
         if (navigator.vibrate) {
@@ -1791,13 +2260,13 @@
       // SAU KHI đã bấm "Bắt đầu phiên" (OUT bắt buộc chọn store trước đó) -
       // nhưng vẫn giữ lại điều kiện chặn này cho chắc chắn, không để lọt.
       if (mode === 'OUT' && (!sessionActive || !selectedStoreId)) {
-        showResult('CHƯA CHỌN STORE', false);
+        showResult(t('notSelectedStoreMsg'), false);
         beep(false);
         return;
       }
 
       if (mode === 'IN' && !inSessionActive) {
-        showResult('CHƯA BẮT ĐẦU PHIÊN NHẬP', false);
+        showResult(t('notStartedInSessionMsg'), false);
         beep(false);
         return;
       }
@@ -1806,8 +2275,8 @@
       const scanKey = mode + '|' + selectedStoreId + '|' + toteId;
 
       if (recentScanMap[scanKey] && now - recentScanMap[scanKey] < doubleScanMs) {
-        showResult('DOUBLE SCAN BỎ QUA: ' + toteId, false);
-        addRecent(toteId, 'Double scan - không ghi', false);
+        showResult(t('doubleScanSkipPrefix') + toteId, false);
+        addRecent(toteId, t('doubleScanSkipNote'), false);
         beep(false);
         return;
       }
@@ -1820,8 +2289,8 @@
         clientScanId: 'S' + now + '_' + Math.floor(Math.random() * 100000)
       });
 
-      addRecent(toteId, 'Đã nhận scan - chờ ghi', true);
-      showResult('NHẬN: ' + toteId, true);
+      addRecent(toteId, t('receivedPendingNote'), true);
+      showResult(t('receivedPrefix') + toteId, true);
       beep(true);
       updateCounter();
 
@@ -1940,7 +2409,7 @@
         })
         .withFailureHandler(function(err) {
           if (handleSessionError(err)) return;
-          showResult('LỖI STORE: ' + getErrorMessage(err), false);
+          showResult(t('storeErrPrefix') + getErrorMessage(err), false);
         })
         .getStores(session.token);
     }
@@ -2038,7 +2507,7 @@
     function clearStoreSearch() {
       selectedStoreId = '';
       document.getElementById('storeSearch').value = '';
-      document.getElementById('selectedStore').innerText = 'CHƯA CHỌN STORE';
+      document.getElementById('selectedStore').innerText = t('storeNotSelected');
       renderStoreList();
       refreshStartSessionBtn();
       document.getElementById('storeSearch').focus();
@@ -2147,7 +2616,7 @@
 
       renderPdaSessionUI();
 
-      showResult('SẴN SÀNG SCAN', true);
+      showResult(t('readySummary'), true);
       focusScan();
     }
 
@@ -2168,7 +2637,7 @@
 
       renderPdaSessionUI();
 
-      showResult('SẴN SÀNG SCAN', true);
+      showResult(t('readySummary'), true);
       focusScan();
     }
 
@@ -2184,13 +2653,13 @@
 
       const okBlock = okItems.length ? `
         <details>
-          <summary>Xem ${okItems.length} tote OK</summary>
+          <summary>${tf('viewOkTotesMsg', { n: okItems.length })}</summary>
           <div style="margin-top:8px">${okItems.map(x => `<span class="chip">${x.toteId}</span>`).join('')}</div>
         </details>` : '';
 
       const failBlock = failItems.length ? `
         <details>
-          <summary style="color:#E1364A">Xem ${failItems.length} tote LỖI/BẤT THƯỜNG</summary>
+          <summary style="color:#E1364A">${tf('viewErrTotesMsg', { n: failItems.length })}</summary>
           <div style="margin-top:8px">
             ${failItems.map(x => `<div class="recent-item"><b>${x.toteId}</b> - <span style="color:#E1364A">${x.message}</span></div>`).join('')}
           </div>
@@ -2233,7 +2702,7 @@
         doResetOutSession();
       } else {
         doResetInSession();
-        showResult('ĐÃ KẾT THÚC PHIÊN NHẬP', true);
+        showResult(t('endedInSessionMsg'), true);
       }
     }
 
@@ -2244,7 +2713,7 @@
       sessionStoreLabel = '';
       selectedStoreId = '';
       sessionOutTotesMap = {};
-      document.getElementById('selectedStore').innerText = 'CHƯA CHỌN STORE';
+      document.getElementById('selectedStore').innerText = t('storeNotSelected');
       document.getElementById('storeSearch').value = '';
       refreshStartSessionBtn();
       renderPdaSessionUI();
@@ -2287,7 +2756,7 @@
       // ngay, không cần hỏi lại - không có gì để hoàn tác cả.
       if (outCount === 0 && pendingQueue.length === 0 && !sending) {
         doResetOutSession();
-        showResult('ĐÃ HỦY PHIÊN (CHƯA QUÉT TOTE NÀO)', true);
+        showResult(t('noToteCancelledMsg'), true);
         return;
       }
 
@@ -2300,7 +2769,7 @@
 
       const btn = document.getElementById('cancelSessionConfirmBtn');
       btn.disabled = false;
-      btn.innerText = 'XÁC NHẬN HỦY';
+      btn.innerText = t('confirmCancelBtnLabel');
 
       document.getElementById('cancelSessionOverlay').classList.remove('hidden');
     }
@@ -2320,7 +2789,7 @@
       if (pendingQueue.length > 0 || sending) {
         statusBox.classList.remove('hidden');
         statusBox.className = 'result pending';
-        statusBox.innerText = 'ĐANG GỬI NỐT DỮ LIỆU CÒN LẠI...';
+        statusBox.innerText = t('sendingRemainingMsg');
         if (pendingQueue.length > 0 && !sending) flushNow();
         setTimeout(confirmCancelScanSession, 400);
         return;
@@ -2331,7 +2800,7 @@
       if (toteIds.length === 0) {
         document.getElementById('cancelSessionOverlay').classList.add('hidden');
         doResetOutSession();
-        showResult('ĐÃ HỦY PHIÊN', true);
+        showResult(t('cancelledSessionMsg'), true);
         return;
       }
 
@@ -2342,7 +2811,7 @@
 
       statusBox.classList.remove('hidden');
       statusBox.className = 'result pending';
-      statusBox.innerText = 'ĐANG HOÀN TÁC ' + toteIds.length + ' TOTE (HỦY XUẤT, TRẢ VỀ KHO)...';
+      statusBox.innerText = tf('undoingOutMsg', { n: toteIds.length });
 
       google.script.run
         .withSuccessHandler(function(res) {
@@ -2351,7 +2820,7 @@
 
           if (!res.success) {
             statusBox.className = 'result fail';
-            statusBox.innerText = 'LỖI HOÀN TÁC: ' + res.message;
+            statusBox.innerText = t('undoErrPrefix') + res.message;
             return;
           }
 
@@ -2364,11 +2833,11 @@
           if (remain === 0) {
             document.getElementById('cancelSessionOverlay').classList.add('hidden');
             doResetOutSession();
-            showResult('ĐÃ HỦY PHIÊN - HOÀN TÁC XONG', true);
+            showResult(t('cancelledUndoneMsg'), true);
           } else {
             statusBox.className = 'result fail';
-            statusBox.innerText = 'CÒN ' + remain + ' TOTE CHƯA HOÀN TÁC ĐƯỢC - BẤM XÁC NHẬN HỦY ĐỂ THỬ LẠI';
-            btn.innerText = 'THỬ LẠI (' + remain + ')';
+            statusBox.innerText = tf('remainUndoMsg', { n: remain });
+            btn.innerText = tf('retryBtnLabel', { n: remain });
           }
         })
         .withFailureHandler(function(err) {
@@ -2378,7 +2847,7 @@
           if (handleSessionError(err)) return;
 
           statusBox.className = 'result fail';
-          statusBox.innerText = 'LỖI HOÀN TÁC: ' + getErrorMessage(err);
+          statusBox.innerText = t('undoErrPrefix') + getErrorMessage(err);
         })
         .scanBatch({
           token: session.token,
@@ -2393,7 +2862,7 @@
 
       if (inCount === 0 && pendingQueue.length === 0 && !sending) {
         doResetInSession();
-        showResult('ĐÃ HỦY PHIÊN NHẬP', true);
+        showResult(t('cancelledInSessionMsg'), true);
         return;
       }
 
@@ -2409,7 +2878,7 @@
     function confirmCancelInSession() {
       document.getElementById('cancelInSessionOverlay').classList.add('hidden');
       doResetInSession();
-      showResult('ĐÃ HỦY PHIÊN NHẬP - TOTE VẪN Ở TRONG KHO', true);
+      showResult(t('cancelledInSessionDoneMsg'), true);
     }
 
     // =====================================================================
@@ -2442,7 +2911,7 @@
       banner.classList.toggle('out', value === 'STORE_RECEIVE');
       banner.classList.toggle('in', value === 'STORE_RETURN');
       document.getElementById('driverModeTag').innerText =
-        value === 'STORE_RECEIVE' ? 'NHẬN RỔ TẠI CH' : 'XUẤT RỔ TẠI CH (LẤY VỎ)';
+        value === 'STORE_RECEIVE' ? t('driverModeReceive') : t('driverModeReturn');
     }
 
     function renderDriverSessionUI() {
@@ -2549,10 +3018,10 @@
       driverCameraManuallyOff = false;
       document.getElementById('driverManualInput').classList.add('hidden');
       document.getElementById('driverCameraBox').classList.remove('hidden');
-      document.getElementById('driverManualBtn').innerText = 'NHẬP TAY';
+      document.getElementById('driverManualBtn').innerText = t('manualInputBtn');
       document.getElementById('driverManualBtn').classList.remove('manual-on');
       document.getElementById('driverScanConfirmBtn').classList.add('hidden');
-      document.getElementById('driverCameraToggleBtn').innerText = 'TẮT CAMERA';
+      document.getElementById('driverCameraToggleBtn').innerText = t('cameraOffBtn');
       document.getElementById('driverCameraToggleBtn').classList.remove('hidden');
 
       renderDriverSessionUI();
@@ -2571,7 +3040,7 @@
       if (session.role !== 'STORE') {
         driverStoreId = '';
         driverStoreLabel = '';
-        document.getElementById('driverSelectedStore').innerText = 'CHƯA CHỌN STORE';
+        document.getElementById('driverSelectedStore').innerText = t('storeNotSelected');
         document.getElementById('driverStoreSearch').value = '';
       }
 
@@ -2618,7 +3087,7 @@
     function confirmEndDriverSession() {
       document.getElementById('driverSessionConfirmOverlay').classList.add('hidden');
       doResetDriverSession();
-      showDriverMsg('ĐÃ KẾT THÚC PHIÊN', true);
+      showDriverMsg(t('driverEndedMsg'), true);
     }
 
     // ---------------- Hủy phiên (tự động hoàn tác các tote đã quét thành
@@ -2630,7 +3099,7 @@
 
       if (doneCount === 0 && driverPendingQueue.length === 0 && !driverSending) {
         doResetDriverSession();
-        showDriverMsg('ĐÃ HỦY PHIÊN', true);
+        showDriverMsg(t('cancelledSessionMsg'), true);
         return;
       }
 
@@ -2642,7 +3111,7 @@
 
       const btn = document.getElementById('driverCancelSessionConfirmBtn');
       btn.disabled = false;
-      btn.innerText = 'XÁC NHẬN HỦY';
+      btn.innerText = t('confirmCancelBtnLabel');
 
       document.getElementById('driverCancelSessionOverlay').classList.remove('hidden');
     }
@@ -2661,7 +3130,7 @@
       if (driverPendingQueue.length > 0 || driverSending) {
         statusBox.classList.remove('hidden');
         statusBox.className = 'result pending';
-        statusBox.innerText = 'ĐANG GỬI NỐT DỮ LIỆU CÒN LẠI...';
+        statusBox.innerText = t('sendingRemainingMsg');
         if (driverPendingQueue.length > 0 && !driverSending) driverFlushNow();
         setTimeout(confirmCancelDriverSession, 400);
         return;
@@ -2672,7 +3141,7 @@
       if (toteIds.length === 0) {
         document.getElementById('driverCancelSessionOverlay').classList.add('hidden');
         doResetDriverSession();
-        showDriverMsg('ĐÃ HỦY PHIÊN', true);
+        showDriverMsg(t('cancelledSessionMsg'), true);
         return;
       }
 
@@ -2683,7 +3152,7 @@
 
       statusBox.classList.remove('hidden');
       statusBox.className = 'result pending';
-      statusBox.innerText = 'ĐANG HOÀN TÁC ' + toteIds.length + ' TOTE...';
+      statusBox.innerText = tf('undoingDriverMsg', { n: toteIds.length });
 
       const cancelAction = driverMode === 'STORE_RECEIVE' ? 'CANCEL_STORE_RECEIVE' : 'CANCEL_STORE_RETURN';
 
@@ -2694,7 +3163,7 @@
 
           if (!res.success) {
             statusBox.className = 'result fail';
-            statusBox.innerText = 'LỖI HOÀN TÁC: ' + res.message;
+            statusBox.innerText = t('undoErrPrefix') + res.message;
             return;
           }
 
@@ -2707,11 +3176,11 @@
           if (remain === 0) {
             document.getElementById('driverCancelSessionOverlay').classList.add('hidden');
             doResetDriverSession();
-            showDriverMsg('ĐÃ HỦY PHIÊN - HOÀN TÁC XONG', true);
+            showDriverMsg(t('cancelledUndoneMsg'), true);
           } else {
             statusBox.className = 'result fail';
-            statusBox.innerText = 'CÒN ' + remain + ' TOTE CHƯA HOÀN TÁC ĐƯỢC - BẤM XÁC NHẬN HỦY ĐỂ THỬ LẠI';
-            btn.innerText = 'THỬ LẠI (' + remain + ')';
+            statusBox.innerText = tf('remainUndoMsg', { n: remain });
+            btn.innerText = tf('retryBtnLabel', { n: remain });
           }
         })
         .withFailureHandler(function(err) {
@@ -2721,7 +3190,7 @@
           if (handleSessionError(err)) return;
 
           statusBox.className = 'result fail';
-          statusBox.innerText = 'LỖI HOÀN TÁC: ' + getErrorMessage(err);
+          statusBox.innerText = t('undoErrPrefix') + getErrorMessage(err);
         })
         .scanBatch({
           token: session.token,
@@ -2753,8 +3222,8 @@
       driverRecentScanMap[scanKey] = now;
 
       if (!toteId.startsWith('TOT')) {
-        showDriverMsg('MÃ KHÔNG HỢP LỆ: ' + toteId, false);
-        addDriverRecent(toteId, 'Không phải Tote ID - không ghi dữ liệu', false);
+        showDriverMsg(t('invalidCodePrefix') + toteId, false);
+        addDriverRecent(toteId, t('notToteIdMsg'), false);
         beepInvalid();
         if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
         return;
@@ -2767,8 +3236,8 @@
         clientScanId: 'D' + now + '_' + Math.floor(Math.random() * 100000)
       });
 
-      addDriverRecent(toteId, 'Đã nhận scan - chờ ghi', true);
-      showDriverMsg('NHẬN: ' + toteId, true);
+      addDriverRecent(toteId, t('receivedPendingNote'), true);
+      showDriverMsg(t('receivedPrefix') + toteId, true);
       beep(true);
       if (navigator.vibrate) navigator.vibrate(120);
       updateDriverCounter();
@@ -2791,7 +3260,7 @@
     function confirmDriverScanContinue() {
       driverScanPaused = false;
       document.getElementById('driverScanConfirmBtn').classList.add('hidden');
-      showDriverMsg('SẴN SÀNG QUÉT - ĐƯA MÃ VÀO KHUNG HÌNH', true);
+      showDriverMsg(t('readyScanFrameMsg'), true);
     }
 
     function driverScheduleFlush() {
@@ -2913,21 +3382,21 @@
         cameraToggleBtn.classList.add('hidden');
         manualInput.classList.remove('hidden');
         submitBtn.classList.remove('hidden');
-        btn.innerText = 'TẮT NHẬP TAY - DÙNG CAMERA';
+        btn.innerText = t('driverManualOffBtnLabel');
         btn.classList.add('manual-on');
         manualInput.value = '';
         manualInput.focus();
-        showDriverMsg('ĐANG NHẬP TAY', true);
+        showDriverMsg(t('driverManualOnMsg'), true);
       } else {
         manualInput.value = '';
         manualInput.classList.add('hidden');
         submitBtn.classList.add('hidden');
         cameraBox.classList.remove('hidden');
         cameraToggleBtn.classList.remove('hidden');
-        btn.innerText = 'NHẬP TAY';
+        btn.innerText = t('manualInputBtn');
         btn.classList.remove('manual-on');
         driverCameraManuallyOff = false;
-        cameraToggleBtn.innerText = 'TẮT CAMERA';
+        cameraToggleBtn.innerText = t('cameraOffBtn');
         startDriverCamera();
       }
     }
@@ -2944,10 +3413,10 @@
 
       if (driverCameraManuallyOff) {
         stopDriverCamera();
-        btn.innerText = 'BẬT CAMERA';
-        showDriverMsg('CAMERA ĐÃ TẮT - BẤM "BẬT CAMERA" ĐỂ QUÉT TIẾP', false);
+        btn.innerText = t('cameraOnBtn');
+        showDriverMsg(t('driverCameraOffMsg'), false);
       } else {
-        btn.innerText = 'TẮT CAMERA';
+        btn.innerText = t('cameraOffBtn');
         startDriverCamera();
       }
     }
@@ -2979,19 +3448,19 @@
     // luôn bị chặn (đã xác nhận qua DevTools).
     function startDriverCamera() {
       if (typeof ZXingBrowser === 'undefined' && typeof ZXing === 'undefined') {
-        showDriverMsg('Thiếu thư viện quét mã - kiểm tra kết nối mạng rồi tải lại trang', false);
+        showDriverMsg(t('missingLibMsg'), false);
         return;
       }
 
       const ZX = window.ZXingBrowser || window.ZXing;
       const videoEl = document.getElementById('driverVideo');
 
-      showDriverMsg('ĐANG MỞ CAMERA...', true);
+      showDriverMsg(t('openingCameraMsg'), true);
 
       try {
         driverCodeReader = new ZX.BrowserMultiFormatReader();
       } catch (e) {
-        showDriverMsg('Không khởi tạo được bộ quét mã: ' + e.message, false);
+        showDriverMsg(t('scannerInitErrPrefix') + e.message, false);
         return;
       }
 
@@ -3009,13 +3478,13 @@
         }
       ).then(function(controls) {
         driverStream = videoEl.srcObject;
-        if (driverSessionActive) showDriverMsg('SẴN SÀNG QUÉT - ĐƯA MÃ VÀO KHUNG HÌNH', true);
+        if (driverSessionActive) showDriverMsg(t('readyScanFrameMsg'), true);
       }).catch(function(err) {
         // In thêm err.name (VD NotAllowedError, NotFoundError,
         // OverconstrainedError, SecurityError...) để biết chính xác loại
         // lỗi ngay trên màn hình PDA, khỏi cần máy tính mở DevTools mới xem được.
         const errName = (err && err.name) ? err.name + ' - ' : '';
-        showDriverMsg('KHÔNG MỞ ĐƯỢC CAMERA: ' + errName + getErrorMessage(err) + ' (kiểm tra đã cho phép quyền Camera chưa)', false);
+        showDriverMsg(t('cameraOpenErrPrefix') + errName + getErrorMessage(err) + t('cameraPermissionHint'), false);
       });
     }
 
@@ -3054,7 +3523,7 @@
     }
 
     function loadDashboard() {
-      document.getElementById('dashResult').innerHTML = 'ĐANG TẢI...';
+      document.getElementById('dashResult').innerHTML = t('loadingMsg');
 
       google.script.run
         .withSuccessHandler(function(res) {
@@ -3065,7 +3534,7 @@
         .withFailureHandler(function(err) {
           if (handleSessionError(err)) return;
           document.getElementById('dashStats').classList.add('hidden');
-          document.getElementById('dashResult').innerHTML = 'LỖI: ' + getErrorMessage(err);
+          document.getElementById('dashResult').innerHTML = t('genericErrPrefix') + getErrorMessage(err);
         })
         .getDashboard({
           token: session.token,
@@ -3079,7 +3548,7 @@
 
       if (!dashboardData.length) {
         document.getElementById('dashStats').classList.add('hidden');
-        box.innerHTML = '<div class="dashboard-card">KHÔNG CÓ DỮ LIỆU NỢ TOTE</div>';
+        box.innerHTML = '<div class="dashboard-card">' + t('noDebtData') + '</div>';
         return;
       }
 
@@ -3097,7 +3566,7 @@
         : dashboardData;
 
       if (!filtered.length) {
-        box.innerHTML = '<div class="dashboard-card">KHÔNG TÌM THẤY STORE PHÙ HỢP</div>';
+        box.innerHTML = '<div class="dashboard-card">' + t('noStoreMatch') + '</div>';
         return;
       }
 
@@ -3116,7 +3585,7 @@
             <div class="qty">${s.qty}</div>
           </div>
           <details>
-            <summary>Xem chi tiết ${s.qty} tote đang nợ</summary>
+            <summary>${tf('viewDebtTotesMsg', { n: s.qty })}</summary>
             <div style="margin-top:8px">${chips}</div>
           </details>
         `;
@@ -3146,15 +3615,15 @@
         <div class="kpi-row">
           <div class="kpi">
             <div class="num">${totalStoreQty}</div>
-            <div class="lbl">Tổng tote đang ở STORE</div>
+            <div class="lbl">${t('totalStoreQtyLabel')}</div>
           </div>
           <div class="kpi">
             <div class="num">${dashboardWarehouseQty}</div>
-            <div class="lbl">Tổng tote đang ở KHO</div>
+            <div class="lbl">${t('totalWarehouseQtyLabel')}</div>
           </div>
         </div>
         <div class="panel">
-          <h3 style="margin:0 0 4px;padding:0;background:none;color:var(--ink);text-transform:none;letter-spacing:0;font-size:12.5px;">Nợ tote nhiều nhất</h3>
+          <h3 style="margin:0 0 4px;padding:0;background:none;color:var(--ink);text-transform:none;letter-spacing:0;font-size:12.5px;">${t('topDebtTitle')}</h3>
           ${rankRows}
         </div>
       `;
@@ -3166,13 +3635,13 @@
     // sắp xếp theo tote nằm lâu nhất trước để dễ phát hiện tote bị quên quét.
     // =====================================================================
     function loadInTransitSummary() {
-      document.getElementById('transitToStoreResult').innerHTML = 'ĐANG TẢI...';
+      document.getElementById('transitToStoreResult').innerHTML = t('loadingMsg');
       document.getElementById('transitToWarehouseResult').innerHTML = '';
 
       google.script.run
         .withSuccessHandler(function(res) {
           if (!res || !res.success) {
-            document.getElementById('transitToStoreResult').innerHTML = 'LỖI: ' + ((res && res.message) || 'Không tải được dữ liệu');
+            document.getElementById('transitToStoreResult').innerHTML = t('genericErrPrefix') + ((res && res.message) || t('couldNotLoadData'));
             document.getElementById('transitToWarehouseResult').innerHTML = '';
             return;
           }
@@ -3180,12 +3649,12 @@
           document.getElementById('transitToStoreQty').innerText = res.totalToStore || 0;
           document.getElementById('transitToWarehouseQty').innerText = res.totalToWarehouse || 0;
 
-          renderInTransitGroup('transitToStoreResult', res.toStore, 'đang giao');
-          renderInTransitGroup('transitToWarehouseResult', res.toWarehouse, 'đang về');
+          renderInTransitGroup('transitToStoreResult', res.toStore, 'transitVerbToStore');
+          renderInTransitGroup('transitToWarehouseResult', res.toWarehouse, 'transitVerbToWarehouse');
         })
         .withFailureHandler(function(err) {
           if (handleSessionError(err)) return;
-          document.getElementById('transitToStoreResult').innerHTML = 'LỖI: ' + getErrorMessage(err);
+          document.getElementById('transitToStoreResult').innerHTML = t('genericErrPrefix') + getErrorMessage(err);
           document.getElementById('transitToWarehouseResult').innerHTML = '';
         })
         .getInTransitSummary({ token: session.token });
@@ -3195,16 +3664,16 @@
     // tô đỏ nếu quá 24h - có thể đây là tote bị quên quét, cần kiểm tra.
     function formatTransitHours(hours) {
       if (hours === null || hours === undefined) return '';
-      if (hours < 1) return Math.round(hours * 60) + ' phút';
-      return hours + ' giờ';
+      if (hours < 1) return Math.round(hours * 60) + t('minutesSuffix');
+      return hours + t('hoursSuffix');
     }
 
-    function renderInTransitGroup(boxId, groups, verb) {
+    function renderInTransitGroup(boxId, groups, verbKey) {
       const box = document.getElementById(boxId);
       box.innerHTML = '';
 
       if (!groups || !groups.length) {
-        box.innerHTML = '<div class="dashboard-card">KHÔNG CÓ TOTE NÀO</div>';
+        box.innerHTML = '<div class="dashboard-card">' + t('noTotesFound') + '</div>';
         return;
       }
 
@@ -3212,10 +3681,10 @@
         const div = document.createElement('div');
         div.className = 'dashboard-card';
 
-        const chips = (s.totes || []).map(t => {
-          const stuck = (t.hours || 0) >= 24;
-          const timeText = formatTransitHours(t.hours);
-          return `<span class="chip"${stuck ? ' style="background:var(--red-soft);color:#E1364A"' : ''}>${t.toteId}${timeText ? ' · ' + timeText : ''}</span>`;
+        const chips = (s.totes || []).map(tote => {
+          const stuck = (tote.hours || 0) >= 24;
+          const timeText = formatTransitHours(tote.hours);
+          return `<span class="chip"${stuck ? ' style="background:var(--red-soft);color:#E1364A"' : ''}>${tote.toteId}${timeText ? ' · ' + timeText : ''}</span>`;
         }).join('') || '-';
 
         div.innerHTML = `
@@ -3224,7 +3693,7 @@
             <div class="qty">${s.qty}</div>
           </div>
           <details>
-            <summary>Xem chi tiết ${s.qty} tote ${verb}</summary>
+            <summary>${tf('viewTransitTotesMsg', { n: s.qty, verb: t(verbKey) })}</summary>
             <div style="margin-top:8px">${chips}</div>
           </details>
         `;
@@ -3261,13 +3730,13 @@
       const query = document.getElementById('dailyOutSearch').value.trim();
       const box = document.getElementById('dailyOutResult');
 
-      box.innerHTML = '<div class="dashboard-card">ĐANG TẢI TỔNG HỢP DAILY OUT...</div>';
+      box.innerHTML = '<div class="dashboard-card">' + t('loadingDailyOutMsg') + '</div>';
 
       google.script.run
         .withSuccessHandler(renderDailyOutSummary)
         .withFailureHandler(function(err) {
           if (handleSessionError(err)) return;
-          box.innerHTML = '<div class="dashboard-card">LỖI DAILY OUT: ' + getErrorMessage(err) + '</div>';
+          box.innerHTML = '<div class="dashboard-card">' + t('dailyOutErrPrefix') + getErrorMessage(err) + '</div>';
         })
         .getDailyOutSummary({
           token: session.token,
@@ -3281,23 +3750,23 @@
       box.innerHTML = '';
 
       if (!res || !res.success) {
-        box.innerHTML = '<div class="dashboard-card">' + (res ? res.message : 'Không có dữ liệu') + '</div>';
+        box.innerHTML = '<div class="dashboard-card">' + (res ? res.message : t('noDataGeneric')) + '</div>';
         return;
       }
 
       box.innerHTML += `
         <div class="summary-box">
           <div class="summary-title">${res.date}</div>
-          <div>Tổng cửa hàng có xuất: <b>${res.totalStores}</b></div>
-          <div>Tổng tote OUT / OK unique: <b>${res.totalOk}</b></div>
-          <div>Dòng log OUT raw: <b>${res.totalRows || 0}</b></div>
-          <div>Scan trùng đã bỏ qua: <b>${res.totalDuplicateOk || 0}</b></div>
-          <div>OUT bất thường unique: <b>${res.totalAbnormal}</b></div>
+          <div>${t('totalStoresOutLabel')} <b>${res.totalStores}</b></div>
+          <div>${t('totalOutOkLabel')} <b>${res.totalOk}</b></div>
+          <div>${t('rawOutRowsLabel')} <b>${res.totalRows || 0}</b></div>
+          <div>${t('duplicateSkippedLabel')} <b>${res.totalDuplicateOk || 0}</b></div>
+          <div>${t('totalOutAbnormalLabel')} <b>${res.totalAbnormal}</b></div>
         </div>
       `;
 
       if (!res.rows || res.rows.length === 0) {
-        box.innerHTML += '<div class="dashboard-card">KHÔNG CÓ DỮ LIỆU XUẤT TOTE TRONG NGÀY NÀY</div>';
+        box.innerHTML += '<div class="dashboard-card">' + t('noOutDataMsg') + '</div>';
         return;
       }
 
@@ -3306,10 +3775,10 @@
         div.className = 'dashboard-card';
         const users = (r.users || []).join(', ') || '-';
         const abnormalLine = r.abnormalQty > 0
-          ? `<div style="color:#E1364A;font-weight:800">OUT bất thường unique: ${r.abnormalQty}</div>`
+          ? `<div style="color:#E1364A;font-weight:800">${t('totalOutAbnormalLabel')} ${r.abnormalQty}</div>`
           : '';
         const duplicateLine = r.duplicateOkQty > 0
-          ? `<div style="color:#D97706;font-weight:800">Scan trùng đã bỏ qua: ${r.duplicateOkQty}</div>`
+          ? `<div style="color:#D97706;font-weight:800">${t('duplicateSkippedLabel')} ${r.duplicateOkQty}</div>`
           : '';
 
         div.innerHTML = `
@@ -3317,20 +3786,20 @@
             <div class="dashboard-title">${r.storeId} - ${r.storeName || ''}</div>
             <div class="qty">${r.okQty}</div>
           </div>
-          <div><b>Số tote xuất theo hệ thống:</b> ${r.okQty}</div>
-          <div>Dòng log OUT raw: <b>${r.rawOutRows || 0}</b></div>
+          <div><b>${t('systemOutQtyLabel')}</b> ${r.okQty}</div>
+          <div>${t('rawOutRowsLabel')} <b>${r.rawOutRows || 0}</b></div>
           ${duplicateLine}
           ${abnormalLine}
-          <div>User thao tác: <b>${users}</b></div>
+          <div>${t('userActionLabel')} <b>${users}</b></div>
           <details>
-            <summary>Xem mã tote OUT / OK unique</summary>
+            <summary>${t('viewOutToteIdsMsg')}</summary>
             <div style="margin-top:8px">
               ${(r.toteIds || []).map(id => `<span class="chip">${id}</span>`).join('') || '-'}
             </div>
           </details>
           ${(r.duplicateOkToteIds && r.duplicateOkToteIds.length) ? `
           <details>
-            <summary style="color:#D97706">Xem mã scan trùng đã bỏ qua</summary>
+            <summary style="color:#D97706">${t('viewDuplicateSkippedMsg')}</summary>
             <div style="margin-top:8px">
               ${r.duplicateOkToteIds.map(id => `<span class="chip">${id}</span>`).join('')}
             </div>
@@ -3372,13 +3841,13 @@
       const query = document.getElementById('abnormalSearch').value.trim();
       const box = document.getElementById('abnormalResult');
 
-      box.innerHTML = '<div class="dashboard-card">ĐANG TẢI ABNORMAL IN / OUT...</div>';
+      box.innerHTML = '<div class="dashboard-card">' + t('loadingAbnormalMsg') + '</div>';
 
       google.script.run
         .withSuccessHandler(renderAbnormalSummary)
         .withFailureHandler(function(err) {
           if (handleSessionError(err)) return;
-          box.innerHTML = '<div class="dashboard-card">LỖI ABNORMAL: ' + getErrorMessage(err) + '</div>';
+          box.innerHTML = '<div class="dashboard-card">' + t('abnormalErrPrefix') + getErrorMessage(err) + '</div>';
         })
         .getAbnormalSummary({
           token: session.token,
@@ -3393,25 +3862,25 @@
       box.innerHTML = '';
 
       if (!res || !res.success) {
-        box.innerHTML = '<div class="dashboard-card">' + (res ? res.message : 'Không có dữ liệu') + '</div>';
+        box.innerHTML = '<div class="dashboard-card">' + (res ? res.message : t('noDataGeneric')) + '</div>';
         return;
       }
 
       box.innerHTML += `
         <div class="summary-box">
           <div class="summary-title">${res.date}</div>
-          <div>Tổng abnormal: <b>${res.totalAbnormal}</b></div>
+          <div>${t('totalAbnormalLabel')} <b>${res.totalAbnormal}</b></div>
           <div>${actionLabel('OUT')}: <b>${res.totalOut}</b></div>
           <div>${actionLabel('IN')}: <b>${res.totalIn}</b></div>
           <div>${actionLabel('STORE_RECEIVE')}: <b>${res.totalStoreReceive || 0}</b></div>
           <div>${actionLabel('STORE_RETURN')}: <b>${res.totalStoreReturn || 0}</b></div>
           <div>${actionLabel('CANCEL_OUT')}: <b>${res.totalCancelOut || 0}</b></div>
-          <div>Số store liên quan: <b>${res.totalStores}</b></div>
+          <div>${t('totalStoresInvolvedLabel')} <b>${res.totalStores}</b></div>
         </div>
       `;
 
       if (!res.rows || res.rows.length === 0) {
-        box.innerHTML += '<div class="dashboard-card">KHÔNG CÓ ABNORMAL TRONG NGÀY NÀY</div>';
+        box.innerHTML += '<div class="dashboard-card">' + t('noAbnormalMsg') + '</div>';
         return;
       }
 
@@ -3429,13 +3898,13 @@
             <div>${actionLabel('STORE_RECEIVE')}: <b>${s.storeReceiveQty || 0}</b></div>
             <div>${actionLabel('STORE_RETURN')}: <b>${s.storeReturnQty || 0}</b></div>
             <div>${actionLabel('CANCEL_OUT')}: <b>${s.cancelOutQty || 0}</b></div>
-            <div>User liên quan: <b>${(s.users || []).join(', ') || '-'}</b></div>
+            <div>${t('usersInvolvedLabel')} <b>${(s.users || []).join(', ') || '-'}</b></div>
           `;
           box.appendChild(div);
         });
       }
 
-      box.innerHTML += '<h3>Chi Tiết Abnormal</h3>';
+      box.innerHTML += '<h3>' + t('abnormalDetailTitle') + '</h3>';
 
       res.rows.forEach(r => {
         const div = document.createElement('div');
@@ -3443,11 +3912,11 @@
         div.className = 'history-row history-bad';
         div.innerHTML = `
           <div><b>${r.time}</b></div>
-          <div>Tote: <b>${r.toteId || '-'}</b></div>
-          <div>Nghiệp vụ: <b style="color:${isOut ? '#E1364A' : '#D97706'}">${actionLabel(r.action)}</b> | Kết quả: <b>${r.result}</b></div>
-          <div>Store: <b>${r.storeId || '-'}</b> ${r.storeName ? '- ' + r.storeName : ''}</div>
-          <div>Note: ${r.note || '-'}</div>
-          <div>User: ${r.user || '-'}</div>
+          <div>${t('toteColonLabel')} <b>${r.toteId || '-'}</b></div>
+          <div>${t('actionColonLabel')} <b style="color:${isOut ? '#E1364A' : '#D97706'}">${actionLabel(r.action)}</b> | ${t('resultLabel')} <b>${r.result}</b></div>
+          <div>${t('storeColonLabel')} <b>${r.storeId || '-'}</b> ${r.storeName ? '- ' + r.storeName : ''}</div>
+          <div>${t('noteColonLabel')} ${r.note || '-'}</div>
+          <div>${t('userColonLabel')} ${r.user || '-'}</div>
         `;
         box.appendChild(div);
       });
@@ -3693,24 +4162,24 @@
       const toteId = document.getElementById('trackToteInput').value.trim().toUpperCase();
 
       if (!toteId) {
-        document.getElementById('trackResult').innerHTML = '<div class="dashboard-card">NHẬP TOTE ID CẦN TRA</div>';
+        document.getElementById('trackResult').innerHTML = '<div class="dashboard-card">' + t('enterToteIdMsg') + '</div>';
         return;
       }
 
       if (!toteId.startsWith('TOT')) {
         document.getElementById('trackResult').innerHTML =
-          '<div class="dashboard-card">MÃ KHÔNG HỢP LỆ, TOTE ID PHẢI BẮT ĐẦU BẰNG TOT</div>';
+          '<div class="dashboard-card">' + t('invalidToteIdMsg') + '</div>';
         beepInvalid();
         return;
       }
 
-      document.getElementById('trackResult').innerHTML = 'ĐANG TẢI...';
+      document.getElementById('trackResult').innerHTML = t('loadingMsg');
 
       google.script.run
         .withSuccessHandler(renderToteHistory)
         .withFailureHandler(function(err) {
           if (handleSessionError(err)) return;
-          document.getElementById('trackResult').innerHTML = 'LỖI: ' + getErrorMessage(err);
+          document.getElementById('trackResult').innerHTML = t('genericErrPrefix') + getErrorMessage(err);
         })
         .getToteHistory({
           token: session.token,
@@ -3728,7 +4197,7 @@
       }
 
       if (!res.current && (!res.history || res.history.length === 0)) {
-        box.innerHTML = '<div class="dashboard-card">KHÔNG TÌM THẤY DỮ LIỆU TOTE</div>';
+        box.innerHTML = '<div class="dashboard-card">' + t('toteNotFoundMsg') + '</div>';
         return;
       }
 
@@ -3745,19 +4214,19 @@
         box.innerHTML += `
           <div class="summary-box">
             <div class="summary-title">${res.current.toteId}</div>
-            <div>Trạng thái: <span class="${statusClass}">${statusLabel(res.current.status)}</span></div>
-            <div>Vị trí: <b>${res.current.location}</b> ${res.current.storeName ? '- ' + res.current.storeName : ''}</div>
-            <div>Store gần nhất: <b>${res.current.lastStore || '-'}</b></div>
-            <div>Cập nhật cuối: <b>${res.current.lastUpdate || '-'}</b></div>
-            <div>Bất thường: <b>${res.current.abnormal || '-'}</b></div>
+            <div>${t('statusColonLabel')} <span class="${statusClass}">${statusLabel(res.current.status)}</span></div>
+            <div>${t('locationColonLabel')} <b>${res.current.location}</b> ${res.current.storeName ? '- ' + res.current.storeName : ''}</div>
+            <div>${t('lastStoreColonLabel')} <b>${res.current.lastStore || '-'}</b></div>
+            <div>${t('lastUpdateColonLabel')} <b>${res.current.lastUpdate || '-'}</b></div>
+            <div>${t('abnormalColonLabel')} <b>${res.current.abnormal || '-'}</b></div>
           </div>
         `;
       }
 
-      box.innerHTML += '<h3>Lịch Sử In / Out</h3>';
+      box.innerHTML += '<h3>' + t('historyTitle') + '</h3>';
 
       if (!res.history || res.history.length === 0) {
-        box.innerHTML += '<div class="dashboard-card">CHƯA CÓ LOG IN/OUT</div>';
+        box.innerHTML += '<div class="dashboard-card">' + t('noInOutLogMsg') + '</div>';
         return;
       }
 
@@ -3767,10 +4236,10 @@
         box.innerHTML += `
           <div class="history-row ${isOk ? 'history-ok' : 'history-bad'}">
             <div><b>${h.time}</b></div>
-            <div>Nghiệp vụ: <b>${actionLabel(h.action)}</b> | Kết quả: <b>${h.result}</b></div>
-            <div>Store: <b>${h.store || '-'}</b> ${h.storeName ? '- ' + h.storeName : ''}</div>
-            <div>Note: ${h.note || '-'}</div>
-            <div>User: ${h.user || '-'}</div>
+            <div>${t('actionColonLabel')} <b>${actionLabel(h.action)}</b> | ${t('resultLabel')} <b>${h.result}</b></div>
+            <div>${t('storeColonLabel')} <b>${h.store || '-'}</b> ${h.storeName ? '- ' + h.storeName : ''}</div>
+            <div>${t('noteColonLabel')} ${h.note || '-'}</div>
+            <div>${t('userColonLabel')} ${h.user || '-'}</div>
           </div>
         `;
       });
@@ -3799,21 +4268,21 @@
         .withFailureHandler(function(err) {
           if (handleSessionError(err)) return;
           document.getElementById('homeActivity').innerHTML =
-            '<div class="empty-note">Không tải được tổng quan: ' + getErrorMessage(err) + '</div>';
+            '<div class="empty-note">' + t('summaryLoadErrPrefix') + getErrorMessage(err) + '</div>';
         })
         .getHomeSummary({ token: session.token });
     }
 
     function getGreeting() {
       const h = new Date().getHours();
-      if (h < 11) return 'Chào buổi sáng';
-      if (h < 14) return 'Chào buổi trưa';
-      if (h < 18) return 'Chào buổi chiều';
-      return 'Chào buổi tối';
+      if (h < 11) return t('greetMorning');
+      if (h < 14) return t('greetNoon');
+      if (h < 18) return t('greetAfternoon');
+      return t('greetEvening');
     }
 
     function formatTodayLabel() {
-      const days = ['Chủ nhật','Thứ 2','Thứ 3','Thứ 4','Thứ 5','Thứ 6','Thứ 7'];
+      const days = [t('daySun'), t('dayMon'), t('dayTue'), t('dayWed'), t('dayThu'), t('dayFri'), t('daySat')];
       const d = new Date();
       return days[d.getDay()] + ', ' + String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0');
     }
@@ -3821,7 +4290,7 @@
     function renderHomeSummary(res) {
       if (!res || !res.success) {
         document.getElementById('homeActivity').innerHTML =
-          '<div class="empty-note">' + (res ? res.message : 'Không có dữ liệu') + '</div>';
+          '<div class="empty-note">' + (res ? res.message : t('noDataGeneric')) + '</div>';
         return;
       }
 
@@ -3833,16 +4302,18 @@
 
       const chart = document.getElementById('homeTrendChart');
       chart.innerHTML = '';
-      const maxQty = Math.max(1, ...((res.trend || []).map(t => t.qty)));
-      const dayLabels = ['CN','T2','T3','T4','T5','T6','T7'];
+      const maxQty = Math.max(1, ...((res.trend || []).map(pt => pt.qty)));
+      const dayLabels = currentLang === 'en'
+        ? ['Su','Mo','Tu','We','Th','Fr','Sa']
+        : ['CN','T2','T3','T4','T5','T6','T7'];
 
-      (res.trend || []).forEach(t => {
-        const d = new Date(t.date + 'T00:00:00');
-        const pct = Math.max(4, Math.round((t.qty / maxQty) * 100));
+      (res.trend || []).forEach(pt => {
+        const d = new Date(pt.date + 'T00:00:00');
+        const pct = Math.max(4, Math.round((pt.qty / maxQty) * 100));
         const bar = document.createElement('div');
         bar.className = 'bar';
         bar.style.height = pct + '%';
-        bar.title = t.date + ': ' + t.qty;
+        bar.title = pt.date + ': ' + pt.qty;
         bar.innerHTML = `<span>${dayLabels[d.getDay()]}</span>`;
         chart.appendChild(bar);
       });
@@ -3851,7 +4322,7 @@
       activityBox.innerHTML = '';
 
       if (!res.recent || res.recent.length === 0) {
-        activityBox.innerHTML = '<div class="empty-note">Chưa có hoạt động nào gần đây</div>';
+        activityBox.innerHTML = '<div class="empty-note">' + t('noRecentActivity') + '</div>';
         return;
       }
 
@@ -3869,7 +4340,7 @@
         const div = document.createElement('div');
         div.className = 'activity-item';
         const label = r.result === 'ABNORMAL'
-          ? `${r.toteId} — Bất thường (${actionLabel(r.action)})`
+          ? `${r.toteId} — ${t('abnormalWordLabel')} (${actionLabel(r.action)})`
           : `${r.toteId} — ${actionLabel(r.action)}${r.store ? ' · ' + r.store : ''}`;
         div.innerHTML = `<div class="dot" style="background:${color}"></div><div>${label}<br><span style="color:var(--muted)">${r.time}</span></div>`;
         activityBox.appendChild(div);
@@ -4019,29 +4490,27 @@
     // lịch sử (Track, Abnormal, Hoạt động gần đây) - tránh nhầm lẫn kiểu
     // "OUT" của kho khác "OUT" ở đâu vì giờ có 5 loại nghiệp vụ chứ không
     // còn chỉ 2 (OUT/IN) như trước.
-    const ACTION_LABELS = {
-      OUT: 'XUẤT KHO',
-      IN: 'NHẬP KHO',
-      CANCEL_OUT: 'HỦY XUẤT KHO',
-      STORE_RECEIVE: 'NHẬN TẠI CH',
-      STORE_RETURN: 'XUẤT TẠI CH (TRẢ VỎ)',
-      CANCEL_STORE_RECEIVE: 'HỦY NHẬN TẠI CH',
-      CANCEL_STORE_RETURN: 'HỦY XUẤT TẠI CH'
+    // Dịch theo ngôn ngữ đang chọn (xem I18N ở NHÓM 23) - map mã nghiệp
+    // vụ/trạng thái sang đúng key trong I18N.
+    const ACTION_KEYS = {
+      OUT: 'actionOut', IN: 'actionIn', CANCEL_OUT: 'actionCancelOut',
+      STORE_RECEIVE: 'actionStoreReceive', STORE_RETURN: 'actionStoreReturn',
+      CANCEL_STORE_RECEIVE: 'actionCancelStoreReceive', CANCEL_STORE_RETURN: 'actionCancelStoreReturn'
     };
 
-    const STATUS_LABELS = {
-      IN_WAREHOUSE: 'TẠI KHO',
-      IN_TRANSIT_TO_STORE: 'ĐANG GIAO TỚI CH',
-      IN_STORE: 'TẠI CỬA HÀNG',
-      IN_TRANSIT_TO_WAREHOUSE: 'ĐANG VỀ KHO'
+    const STATUS_KEYS = {
+      IN_WAREHOUSE: 'statusWarehouse', IN_TRANSIT_TO_STORE: 'statusTransitToStore',
+      IN_STORE: 'statusStore', IN_TRANSIT_TO_WAREHOUSE: 'statusTransitToWarehouse'
     };
 
     function actionLabel(action) {
-      return ACTION_LABELS[action] || action || '-';
+      const key = ACTION_KEYS[action];
+      return key ? t(key) : (action || '-');
     }
 
     function statusLabel(status) {
-      return STATUS_LABELS[status] || status || '-';
+      const key = STATUS_KEYS[status];
+      return key ? t(key) : (status || '-');
     }
 
     window.addEventListener('beforeunload', function() {
