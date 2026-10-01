@@ -93,8 +93,8 @@
 <meta name="theme-color" content="#0A1930">
 <title>GS25 Binh Dien · Tote Tracking</title>
 
-<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNiIgZmlsbD0iIzBBMTkzMCIgc3Ryb2tlPSIjMDBEMkEwIiBzdHJva2Utd2lkdGg9IjgiLz48L3N2Zz4K">
-<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNiIgZmlsbD0iIzBBMTkzMCIgc3Ryb2tlPSIjMDBEMkEwIiBzdHJva2Utd2lkdGg9IjgiLz48L3N2Zz4K">
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNiIgZmlsbD0iIzBBMTkzMCIgc3Ryb2tlPSIjMDBEMkEwIiBzdHJva2Utd2lkdGg9IjgiLz48cGF0aCBkPSJNNTAgMjQgNzQgMzggNTAgNTIgMjYgMzhaIiBmaWxsPSIjMDBEMkEwIi8+PHBhdGggZD0iTTI2IDM4IDUwIDUyIDUwIDgyIDI2IDY4WiIgZmlsbD0iIzAwQTc4NCIvPjxwYXRoIGQ9Ik01MCA1MiA3NCAzOCA3NCA2OCA1MCA4MloiIGZpbGw9IiMxNzNBNkIiLz48L3N2Zz4=">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNiIgZmlsbD0iIzBBMTkzMCIgc3Ryb2tlPSIjMDBEMkEwIiBzdHJva2Utd2lkdGg9IjgiLz48cGF0aCBkPSJNNTAgMjQgNzQgMzggNTAgNTIgMjYgMzhaIiBmaWxsPSIjMDBEMkEwIi8+PHBhdGggZD0iTTI2IDM4IDUwIDUyIDUwIDgyIDI2IDY4WiIgZmlsbD0iIzAwQTc4NCIvPjxwYXRoIGQ9Ik01MCA1MiA3NCAzOCA3NCA2OCA1MCA4MloiIGZpbGw9IiMxNzNBNkIiLz48L3N2Zz4=">
 
 <style>
   /* ===================================================================
@@ -158,11 +158,22 @@
     width:100%; height:100%; margin:0; padding:0;
     font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
     background:var(--bg); color:var(--ink); overflow:hidden;
+    transition:background-color .2s ease, color .2s ease;
   }
   button, input, select{ font-family:inherit; color:inherit; }
   button{ cursor:pointer; touch-action:manipulation; border:0; background:none; }
   .hidden{ display:none !important; }
   b{ font-weight:800; }
+
+  /* Khi đổi theme/ngôn ngữ (NHÓM 23), toàn bộ khối màu (card/viền/overlay...)
+     chuyển mượt thay vì "giật" đổi màu ngay - rẻ về hiệu năng (chỉ animate
+     color/background/border/shadow, không động layout) nên vẫn êm trên PDA. */
+  .kpi, .panel, .quick, .store-box, .dashboard-card, .summary-box, .history-row,
+  .counter div, .chip, .topbar, .rail, .login-panel, .field input, input, .select-input,
+  .active-session-bar, .mode-banner, .session-confirm-box, .store-list, .store-item,
+  .recent, .recent-item, details{
+    transition:background-color .2s ease, border-color .2s ease, box-shadow .2s ease, color .2s ease;
+  }
 
   /* ---------------- LOGIN ---------------- */
   /* width/height 100% (KHÔNG dùng 100vw/100vh) - Apps Script luôn nhúng app
@@ -206,8 +217,9 @@
   .btn-primary{
     width:100%; height:50px; border-radius:var(--radius-sm); background:var(--navy); color:#fff;
     font-size:15px; font-weight:800; margin-top:6px; box-shadow:var(--shadow); letter-spacing:.4px;
+    transition:transform .08s ease, background-color .15s ease, box-shadow .15s ease;
   }
-  .btn-primary:active{ background:#081527; }
+  .btn-primary:active{ background:#081527; transform:scale(.97); box-shadow:none; }
   .login-msg{
     margin-top:14px; padding:12px 14px; border-radius:var(--radius-sm); font-size:13px; font-weight:700;
     text-align:center; display:none; background:var(--blue-soft); color:var(--heading);
@@ -226,12 +238,18 @@
   .topbar-left{ display:flex; align-items:center; gap:8px; min-width:0; }
   .topbar-logo{ width:20px; height:20px; object-fit:contain; flex-shrink:0; }
   .topbar-left b{ font-size:12px; letter-spacing:.3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .avatar{ width:32px; height:32px; border-radius:50%; background:var(--navy); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:12px; flex-shrink:0; }
+  .avatar{
+    width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,var(--navy-3),var(--navy));
+    color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:12px;
+    flex-shrink:0; box-shadow:0 0 0 2px var(--cyan-deep) inset, 0 2px 5px rgba(10,25,48,.25);
+  }
 
   .content{ flex:1; overflow-y:auto; padding:16px; -webkit-overflow-scrolling:touch; }
+  .content::-webkit-scrollbar, .store-list::-webkit-scrollbar{ width:4px; }
+  .content::-webkit-scrollbar-thumb, .store-list::-webkit-scrollbar-thumb{ background:var(--border); border-radius:4px; }
   .screen{ display:none; }
-  .screen.active{ display:block; animation:appear .12s ease-out; }
-  @keyframes appear{ from{ opacity:.4; } to{ opacity:1; } }
+  .screen.active{ display:block; animation:appear .18s ease-out; }
+  @keyframes appear{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:translateY(0); } }
 
   /* ---------------- LEFT NAV RAIL (thanh điều hướng bên trái) ---------------- */
   .rail{
@@ -241,18 +259,21 @@
   .rail::-webkit-scrollbar{ display:none; }
   .rail-logo{ width:26px; height:26px; margin-bottom:8px; flex-shrink:0; object-fit:contain; }
   .rail-item{
-    width:54px; padding:8px 2px; border-radius:10px; display:flex; flex-direction:column; align-items:center; gap:3px;
-    color:#9FB3D1; flex-shrink:0;
+    position:relative; width:54px; padding:8px 2px; border-radius:10px; display:flex; flex-direction:column;
+    align-items:center; gap:3px; color:#9FB3D1; flex-shrink:0;
+    transition:background-color .15s ease, color .15s ease, transform .08s ease;
   }
-  .rail-item svg{ width:16px; height:16px; }
+  .rail-item svg{ width:16px; height:16px; transition:color .15s ease; }
   .rail-item span{ font-size:8px; font-weight:800; letter-spacing:.1px; }
   /* Mọi mục trong thanh điều hướng (Home, OUT, IN, Store, Tồn, ...) dùng
      CHUNG một kiểu "đang chọn" (active) - không còn màu riêng cho OUT/IN
-     nữa, để cả thanh nhìn đồng nhất 1 màu. */
-  .rail-item.active{ background:rgba(0,210,160,.16); color:#fff; }
+     nữa, để cả thanh nhìn đồng nhất 1 màu. Thêm 1 vạch cyan nhỏ bên trái để
+     dễ nhận ra đang ở tab nào dù lướt mắt nhanh trên PDA. */
+  .rail-item.active{ background:rgba(0,210,160,.16); color:#fff; box-shadow:inset 0 0 0 1px rgba(0,210,160,.3); }
   .rail-item.active svg{ color:var(--cyan); }
+  .rail-item:active, .rail-logout:active{ transform:scale(.93); }
   .rail-spacer{ flex:1; min-height:6px; }
-  .rail-logout{ width:54px; padding:8px 2px; border-radius:10px; display:flex; flex-direction:column; align-items:center; gap:3px; color:#7C8CA8; flex-shrink:0; }
+  .rail-logout{ width:54px; padding:8px 2px; border-radius:10px; display:flex; flex-direction:column; align-items:center; gap:3px; color:#7C8CA8; flex-shrink:0; transition:transform .08s ease; }
   .rail-logout svg{ width:15px; height:15px; }
   .rail-logout span{ font-size:8px; font-weight:800; }
 
@@ -271,8 +292,9 @@
   .quick-row{ display:flex; flex-direction:column; gap:10px; margin-bottom:14px; }
   .quick{
     border-radius:var(--radius); padding:16px; color:#fff; display:flex; align-items:center; justify-content:space-between;
-    box-shadow:var(--shadow);
+    box-shadow:var(--shadow); cursor:pointer; transition:transform .08s ease, box-shadow .15s ease;
   }
+  .quick:active{ transform:scale(.98); box-shadow:none; }
   .quick.out{ background:linear-gradient(135deg,#0A1930,#173A6B); }
   .quick.in{ background:linear-gradient(135deg,#00A784,#00D2A0); }
   .quick .txt div:first-child{ font-size:14.5px; font-weight:800; margin-bottom:2px; }
@@ -281,13 +303,62 @@
 
   .panel{ background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:15px; box-shadow:var(--shadow); margin-bottom:14px; }
   .panel h3{ margin:0 0 12px; font-size:12.5px; font-weight:800; }
-  .chart-bars{ display:flex; align-items:flex-end; gap:7px; height:100px; }
-  .chart-bars .bar{ flex:1; background:linear-gradient(180deg,#00D2A0,#00A784); border-radius:4px 4px 0 0; position:relative; min-height:2px; }
-  .chart-bars .bar span{ position:absolute; bottom:-16px; left:0; right:0; text-align:center; font-size:8.5px; color:var(--muted); }
   .activity-item{ display:flex; gap:9px; padding:9px 0; border-bottom:1px solid var(--row-border); font-size:11px; }
   .activity-item:last-child{ border-bottom:0; }
   .dot{ width:7px; height:7px; border-radius:50%; margin-top:4px; flex-shrink:0; }
   .empty-note{ color:var(--muted); font-size:12px; padding:6px 0; }
+
+  /* ---------------- BIỂU ĐỒ (Home) ----------------
+     Màu series đã chạy bộ kiểm tra mù màu (CVD) cho cả nền sáng #FFF và nền
+     tối #111A2E - đổi màu thì phải kiểm tra lại, không chọn theo cảm tính. */
+  .viz{
+    --series-out:#2a78d6; --series-in:#1baf7a;
+    --dist-1:#2a78d6; --dist-2:#eb6834; --dist-3:#1baf7a; --dist-4:#eda100;
+    --viz-grid:#E9EDF2; --viz-axis:#C9D1DC;
+  }
+  :root[data-theme="dark"] .viz{
+    --series-out:#3987e5; --series-in:#199e70;
+    --dist-1:#3987e5; --dist-2:#d95926; --dist-3:#199e70; --dist-4:#c98500;
+    --viz-grid:#1E2A40; --viz-axis:#33425E;
+  }
+  .viz-head{ display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:8px; }
+  .panel h3.viz-title{ margin:0; padding:0; color:var(--ink); text-transform:none; letter-spacing:0; font-size:12.5px; }
+  .viz-seg{ display:flex; background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:2px; flex-shrink:0; }
+  .viz-seg button{ padding:5px 10px; min-height:30px; font-size:11px; font-weight:800; color:var(--muted); border-radius:6px; }
+  .viz-seg button.active{ background:var(--card); color:var(--ink); box-shadow:0 1px 2px rgba(16,24,40,.12); }
+  .viz-legend{ display:flex; gap:14px; font-size:11px; color:var(--muted); font-weight:700; margin-bottom:6px; }
+  .viz-legend > span{ display:flex; align-items:center; gap:6px; }
+  .viz-key{ width:10px; height:10px; border-radius:3px; display:inline-block; }
+  .viz-plot{ position:relative; width:100%; height:170px; touch-action:pan-y; }
+  .viz-plot svg{ display:block; width:100%; height:100%; overflow:visible; }
+  .viz-plot text{ font-family:inherit; font-size:10px; fill:var(--muted); font-variant-numeric:tabular-nums; }
+  .viz-plot .end-label{ fill:var(--ink); font-weight:800; }
+  .viz-tip{
+    position:absolute; top:0; pointer-events:none; background:var(--card); color:var(--ink);
+    border:1px solid var(--border); border-radius:8px; padding:7px 9px; font-size:11px; line-height:16px;
+    box-shadow:0 6px 16px rgba(16,24,40,.18); white-space:nowrap; display:none; z-index:5;
+  }
+  .viz-tip b{ font-variant-numeric:tabular-nums; }
+  .viz-tip .row{ display:flex; align-items:center; gap:6px; }
+  .viz-table{ margin-top:10px; }
+  .viz-table table{ width:100%; border-collapse:collapse; font-size:11.5px; margin-top:8px; font-variant-numeric:tabular-nums; }
+  .viz-table th, .viz-table td{ padding:5px 4px; border-bottom:1px solid var(--row-border); text-align:right; }
+  .viz-table th:first-child, .viz-table td:first-child{ text-align:left; }
+  .viz-table th{ color:var(--muted); font-weight:800; }
+  .dist-row{ display:flex; align-items:center; gap:14px; margin-top:8px; }
+  .dist-donut{ position:relative; width:128px; height:128px; flex-shrink:0; }
+  .dist-donut svg{ width:100%; height:100%; display:block; }
+  .dist-donut circle.seg{ cursor:pointer; transition:stroke-width .12s ease, opacity .12s ease; }
+  .dist-center{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; pointer-events:none; text-align:center; }
+  .dist-center b{ font-size:20px; line-height:22px; color:var(--ink); }
+  .dist-center span{ font-size:9.5px; color:var(--muted); font-weight:700; max-width:80px; }
+  .dist-legend{ flex:1; min-width:0; }
+  .dist-item{ display:flex; align-items:center; gap:8px; padding:6px 4px; border-bottom:1px solid var(--row-border); font-size:11.5px; border-radius:6px; cursor:pointer; }
+  .dist-item:last-child{ border-bottom:0; }
+  .dist-item.active{ background:var(--bg); }
+  .dist-item .name{ flex:1; min-width:0; color:var(--ink); font-weight:700; }
+  .dist-item .val{ font-weight:800; color:var(--ink); font-variant-numeric:tabular-nums; }
+  .dist-item .pct{ width:38px; text-align:right; color:var(--muted); font-variant-numeric:tabular-nums; }
 
   /* ---------------- FORM ELEMENTS ---------------- */
   label{ display:block; font-size:12px; font-weight:800; letter-spacing:.3px; text-transform:uppercase; color:var(--heading); margin:14px 0 7px; }
@@ -309,11 +380,21 @@
   .btn{
     width:100%; min-height:50px; margin-top:10px; font-size:14.5px; font-weight:800; letter-spacing:.2px;
     border-radius:var(--radius-sm); background:var(--navy); color:#fff; box-shadow:var(--shadow);
+    transition:transform .08s ease, background-color .15s ease, box-shadow .15s ease;
   }
-  .btn:active{ background:#081527; }
-  .btn:disabled{ background:#C7CEDA; color:#8592A8; box-shadow:none; }
+  .btn:active{ background:#081527; transform:scale(.97); box-shadow:none; }
+  .btn:disabled{ background:#C7CEDA; color:#8592A8; box-shadow:none; transform:none; }
   .btn-gray{ background:var(--card); color:var(--heading); border:1.5px solid var(--border); box-shadow:none; }
   .btn-gray:active{ background:var(--bg); }
+  .export-row{ display:flex; justify-content:flex-end; margin-top:10px; }
+  .btn-export{
+    display:inline-flex; align-items:center; gap:6px; height:34px; padding:0 12px;
+    border:1.5px solid var(--border); border-radius:8px; background:var(--card);
+    color:var(--heading); font-size:12px; font-weight:800;
+    transition:transform .08s ease, background-color .15s ease;
+  }
+  .btn-export svg{ width:16px; height:16px; flex-shrink:0; }
+  .btn-export:active{ transform:scale(.96); background:var(--bg); }
   .btn-link{
     background:none; border:none; padding:0; margin:0; width:auto; min-height:0;
     color:#fff; font-weight:800; font-size:11.5px; text-decoration:underline;
@@ -499,7 +580,7 @@
   <div id="loginPage" class="login-screen">
     <div class="login-hero">
       <div class="brand-mark">
-        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNiIgZmlsbD0iIzBBMTkzMCIgc3Ryb2tlPSIjMDBEMkEwIiBzdHJva2Utd2lkdGg9IjgiLz48L3N2Zz4K" alt="GS25 Binh Dien" class="brand-mark-icon">
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNiIgZmlsbD0iIzBBMTkzMCIgc3Ryb2tlPSIjMDBEMkEwIiBzdHJva2Utd2lkdGg9IjgiLz48cGF0aCBkPSJNNTAgMjQgNzQgMzggNTAgNTIgMjYgMzhaIiBmaWxsPSIjMDBEMkEwIi8+PHBhdGggZD0iTTI2IDM4IDUwIDUyIDUwIDgyIDI2IDY4WiIgZmlsbD0iIzAwQTc4NCIvPjxwYXRoIGQ9Ik01MCA1MiA3NCAzOCA3NCA2OCA1MCA4MloiIGZpbGw9IiMxNzNBNkIiLz48L3N2Zz4=" alt="GS25 Binh Dien" class="brand-mark-icon">
         <span>GS25 BÌNH ĐIỀN WAREHOUSE</span>
       </div>
       <div class="hero-copy">
@@ -560,7 +641,7 @@
     <div class="main">
       <div class="topbar">
         <div class="topbar-left">
-          <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNiIgZmlsbD0iIzBBMTkzMCIgc3Ryb2tlPSIjMDBEMkEwIiBzdHJva2Utd2lkdGg9IjgiLz48L3N2Zz4K" alt="GS25" class="topbar-logo">
+          <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNiIgZmlsbD0iIzBBMTkzMCIgc3Ryb2tlPSIjMDBEMkEwIiBzdHJva2Utd2lkdGg9IjgiLz48cGF0aCBkPSJNNTAgMjQgNzQgMzggNTAgNTIgMjYgMzhaIiBmaWxsPSIjMDBEMkEwIi8+PHBhdGggZD0iTTI2IDM4IDUwIDUyIDUwIDgyIDI2IDY4WiIgZmlsbD0iIzAwQTc4NCIvPjxwYXRoIGQ9Ik01MCA1MiA3NCAzOCA3NCA2OCA1MCA4MloiIGZpbGw9IiMxNzNBNkIiLz48L3N2Zz4=" alt="GS25" class="topbar-logo">
           <b>GS25 - Bình Điền</b>
         </div>
         <div style="display:flex;align-items:center;gap:8px;">
@@ -621,9 +702,31 @@
             </div>
           </div>
 
-          <div class="panel">
-            <h3 data-i18n="homeTrendTitle" style="margin:0 0 12px;padding:0;background:none;color:var(--ink);text-transform:none;letter-spacing:0;font-size:12.5px;">Xu hướng xuất kho 7 ngày</h3>
-            <div class="chart-bars" id="homeTrendChart"></div>
+          <div class="panel viz">
+            <div class="viz-head">
+              <h3 class="viz-title" data-i18n="homeTrendTitle">Xu hướng OUT vs IN</h3>
+              <div class="viz-seg" role="group">
+                <button id="trendRange7" class="active" data-i18n="range7" onclick="setTrendRange(7)">7 ngày</button>
+                <button id="trendRange30" data-i18n="range30" onclick="setTrendRange(30)">30 ngày</button>
+              </div>
+            </div>
+            <div class="viz-legend">
+              <span><i class="viz-key" style="background:var(--series-out)"></i><span data-i18n="seriesOut">Xuất (OUT)</span></span>
+              <span><i class="viz-key" style="background:var(--series-in)"></i><span data-i18n="seriesIn">Nhập (IN)</span></span>
+            </div>
+            <div class="viz-plot" id="homeTrendChart"></div>
+            <details class="viz-table">
+              <summary data-i18n="trendTableToggle">Xem bảng số liệu</summary>
+              <div id="homeTrendTable"></div>
+            </details>
+          </div>
+
+          <div class="panel viz hidden" id="homeDistPanel">
+            <h3 class="viz-title" data-i18n="homeDistTitle">Phân bổ rổ hiện tại</h3>
+            <div class="dist-row">
+              <div class="dist-donut" id="homeDistChart"></div>
+              <div class="dist-legend" id="homeDistLegend"></div>
+            </div>
           </div>
 
           <div class="panel">
@@ -979,8 +1082,12 @@
           <div id="dashStats" class="hidden"></div>
 
           <label id="dashLabel" data-i18n="dashFindLabel">Tìm Store Đang Nợ Tote</label>
-          <input id="dashSearch" data-i18n-placeholder="dashSearchPlaceholder" placeholder="STORE ID / NAME" onkeydown="handleDashKey(event)">
+          <div class="store-combo">
+            <input id="dashSearch" data-i18n-placeholder="dashSearchPlaceholder" placeholder="STORE ID / NAME" autocomplete="off" onkeydown="handleDashKey(event)">
+            <div id="dashStoreList" class="store-list"></div>
+          </div>
           <button class="btn" data-i18n="searchBtn" onclick="loadDashboard()">TÌM KIẾM</button>
+          <div class="export-row"><button class="btn-export" onclick="exportDashboard()"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="3" fill="#1D6F42"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg><span data-i18n="exportExcelBtn">Xuất Excel</span></button></div>
           <div id="dashResult"></div>
         </div>
 
@@ -1003,6 +1110,7 @@
           </div>
 
           <button class="btn btn-gray" data-i18n="refreshBtn" onclick="loadInTransitSummary()">LÀM MỚI</button>
+          <div class="export-row"><button class="btn-export" onclick="exportInTransit()"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="3" fill="#1D6F42"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg><span data-i18n="exportExcelBtn">Xuất Excel</span></button></div>
 
           <h3 data-i18n="transitToStoreHeading" style="margin-top:18px">Đang Giao Tới Cửa Hàng</h3>
           <div id="transitToStoreResult"></div>
@@ -1022,9 +1130,13 @@
           <input id="dailyOutDate" type="date">
 
           <label id="dailyOutSearchLabel" data-i18n="findStoreLabel">Tìm Store</label>
-          <input id="dailyOutSearch" data-i18n-placeholder="dashSearchPlaceholder" placeholder="STORE ID / NAME" onkeydown="handleDailyOutKey(event)">
+          <div class="store-combo">
+            <input id="dailyOutSearch" data-i18n-placeholder="dashSearchPlaceholder" placeholder="STORE ID / NAME" autocomplete="off" onkeydown="handleDailyOutKey(event)">
+            <div id="dailyOutStoreList" class="store-list"></div>
+          </div>
 
           <button class="btn" data-i18n="viewSummaryBtn" onclick="loadDailyOutSummary()">XEM TỔNG HỢP</button>
+          <div class="export-row"><button class="btn-export" onclick="exportDailyOut()"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="3" fill="#1D6F42"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg><span data-i18n="exportExcelBtn">Xuất Excel</span></button></div>
           <div id="dailyOutResult"></div>
         </div>
 
@@ -1051,9 +1163,13 @@
           </select>
 
           <label id="abnormalSearchLabel" data-i18n="findStoreToteUserLabel">Tìm Store / Tote / User</label>
-          <input id="abnormalSearch" placeholder="STORE ID / TOTE ID / USER" onkeydown="handleAbnormalKey(event)">
+          <div class="store-combo">
+            <input id="abnormalSearch" placeholder="STORE ID / TOTE ID / USER" autocomplete="off" onkeydown="handleAbnormalKey(event)">
+            <div id="abnormalStoreList" class="store-list"></div>
+          </div>
 
           <button class="btn" data-i18n="viewAbnormalBtn" onclick="loadAbnormalSummary()">XEM ABNORMAL</button>
+          <div class="export-row"><button class="btn-export" onclick="exportAbnormal()"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="3" fill="#1D6F42"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg><span data-i18n="exportExcelBtn">Xuất Excel</span></button></div>
           <div id="abnormalResult"></div>
         </div>
 
@@ -1136,7 +1252,7 @@
     </div>
 
     <div class="rail">
-      <img class="rail-logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNiIgZmlsbD0iIzBBMTkzMCIgc3Ryb2tlPSIjMDBEMkEwIiBzdHJva2Utd2lkdGg9IjgiLz48L3N2Zz4K" alt="GS25 Binh Dien">
+      <img class="rail-logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNiIgZmlsbD0iIzBBMTkzMCIgc3Ryb2tlPSIjMDBEMkEwIiBzdHJva2Utd2lkdGg9IjgiLz48cGF0aCBkPSJNNTAgMjQgNzQgMzggNTAgNTIgMjYgMzhaIiBmaWxsPSIjMDBEMkEwIi8+PHBhdGggZD0iTTI2IDM4IDUwIDUyIDUwIDgyIDI2IDY4WiIgZmlsbD0iIzAwQTc4NCIvPjxwYXRoIGQ9Ik01MCA1MiA3NCAzOCA3NCA2OCA1MCA4MloiIGZpbGw9IiMxNzNBNkIiLz48L3N2Zz4=" alt="GS25 Binh Dien">
 
       <div id="tabHome" class="rail-item active" onclick="showScreen('home')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7"/><path d="M5 10v9h14v-9"/></svg>
@@ -1314,7 +1430,15 @@
         kpiAbnormalToday: 'Bất thường hôm nay', kpiReservedQty: 'Kho ảo còn lại (chưa dán label)',
         quickOutTitle: 'XUẤT KHO — OUT', quickOutSub: 'Chọn store & bắt đầu scan',
         quickInTitle: 'NHẬP KHO — IN', quickInSub: 'Thu hồi tote về kho',
-        homeTrendTitle: 'Xu hướng xuất kho 7 ngày', homeActivityTitle: 'Hoạt động gần đây',
+        homeTrendTitle: 'Xu hướng OUT vs IN', homeActivityTitle: 'Hoạt động gần đây',
+        range7: '7 ngày', range30: '30 ngày', seriesOut: 'Xuất (OUT)', seriesIn: 'Nhập (IN)',
+        trendTableToggle: 'Xem bảng số liệu', colDate: 'Ngày',
+        homeDistTitle: 'Phân bổ rổ hiện tại', distTotalLabel: 'tổng rổ',
+        exportExcelBtn: 'Xuất Excel', noDataToExport: 'Chưa có dữ liệu để xuất - bấm tải/tìm dữ liệu trước.',
+        colStoreId: 'Mã store', colStoreName: 'Tên store', colToteId: 'Mã tote', colQty: 'Số lượng',
+        colLastUpdate: 'Cập nhật cuối', colHours: 'Số giờ', colDirection: 'Hướng', colTime: 'Thời gian',
+        colAction: 'Nghiệp vụ', colResult: 'Kết quả', colNote: 'Ghi chú', colUser: 'Người quét',
+        colOkQty: 'SL xuất (OK)', colRawRows: 'Dòng OUT gốc', colDupQty: 'Trùng bỏ qua', colAbnQty: 'Bất thường', colUsers: 'Người thao tác',
 
         modeOut: 'XUẤT KHO — OUT', modeIn: 'NHẬP KHO — IN', modeCurrentLabel: 'Chế độ hiện tại',
         chooseStoreLabel: 'Chọn Store', storeSearchPlaceholder: 'GÕ ID / TÊN CỬA HÀNG ĐỂ TÌM...',
@@ -1410,7 +1534,7 @@
         openingCameraMsg: 'ĐANG MỞ CAMERA...', readyScanFrameMsg: 'SẴN SÀNG QUÉT - ĐƯA MÃ VÀO KHUNG HÌNH',
         cameraOpenErrPrefix: 'KHÔNG MỞ ĐƯỢC CAMERA: ', cameraPermissionHint: ' (kiểm tra đã cho phép quyền Camera chưa)',
 
-        noDebtData: 'KHÔNG CÓ DỮ LIỆU NỢ TOTE', noStoreMatch: 'KHÔNG TÌM THẤY STORE PHÙ HỢP',
+        noDebtData: 'KHÔNG CÓ DỮ LIỆU NỢ TOTE', noStoreMatch: 'KHÔNG TÌM THẤY STORE PHÙ HỢP', storeNotFound: 'KHÔNG TÌM THẤY STORE', moreStoresHint: 'Còn {n} kết quả khác - gõ thêm để thu hẹp',
         viewDebtTotesMsg: 'Xem chi tiết {n} tote đang nợ',
         totalStoreQtyLabel: 'Tổng tote đang ở STORE', totalWarehouseQtyLabel: 'Tổng tote đang ở KHO',
         topDebtTitle: 'Nợ tote nhiều nhất',
@@ -1471,7 +1595,15 @@
         kpiAbnormalToday: 'Issues today', kpiReservedQty: 'Virtual stock remaining (unlabeled)',
         quickOutTitle: 'WAREHOUSE OUT', quickOutSub: 'Pick a store & start scanning',
         quickInTitle: 'WAREHOUSE IN', quickInSub: 'Recover totes back to warehouse',
-        homeTrendTitle: '7-day OUT trend', homeActivityTitle: 'Recent activity',
+        homeTrendTitle: 'OUT vs IN trend', homeActivityTitle: 'Recent activity',
+        range7: '7 days', range30: '30 days', seriesOut: 'Out', seriesIn: 'In',
+        trendTableToggle: 'View data table', colDate: 'Date',
+        homeDistTitle: 'Current tote distribution', distTotalLabel: 'total totes',
+        exportExcelBtn: 'Export Excel', noDataToExport: 'No data to export yet - load/search first.',
+        colStoreId: 'Store ID', colStoreName: 'Store name', colToteId: 'Tote ID', colQty: 'Qty',
+        colLastUpdate: 'Last update', colHours: 'Hours', colDirection: 'Direction', colTime: 'Time',
+        colAction: 'Action', colResult: 'Result', colNote: 'Note', colUser: 'User',
+        colOkQty: 'Out qty (OK)', colRawRows: 'Raw OUT rows', colDupQty: 'Duplicates skipped', colAbnQty: 'Abnormal', colUsers: 'Users',
 
         modeOut: 'WAREHOUSE OUT', modeIn: 'WAREHOUSE IN', modeCurrentLabel: 'Current mode',
         chooseStoreLabel: 'Select Store', storeSearchPlaceholder: 'TYPE ID / STORE NAME TO SEARCH...',
@@ -1567,7 +1699,7 @@
         openingCameraMsg: 'OPENING CAMERA...', readyScanFrameMsg: 'READY TO SCAN - PLACE CODE IN FRAME',
         cameraOpenErrPrefix: 'COULD NOT OPEN CAMERA: ', cameraPermissionHint: ' (check if Camera permission was granted)',
 
-        noDebtData: 'NO OUTSTANDING TOTE DATA', noStoreMatch: 'NO MATCHING STORE FOUND',
+        noDebtData: 'NO OUTSTANDING TOTE DATA', noStoreMatch: 'NO MATCHING STORE FOUND', storeNotFound: 'STORE NOT FOUND', moreStoresHint: '{n} more results - keep typing to narrow down',
         viewDebtTotesMsg: 'View {n} outstanding totes',
         totalStoreQtyLabel: 'Total totes at STORES', totalWarehouseQtyLabel: 'Total totes at WAREHOUSE',
         topDebtTitle: 'Highest outstanding totes',
@@ -1653,6 +1785,10 @@
       applyI18n();
       applyRoleLabels();
       renderSettingsUI();
+      if (lastHomeSummary) {
+        renderTrendChart();
+        renderDistChart(lastHomeSummary.distribution);
+      }
     }
 
     function renderSettingsUI() {
@@ -1765,6 +1901,7 @@
     // =====================================================================
     function init() {
       initSettings();
+      initReportStoreSuggest();
       setupInstallPrompt();
       document.addEventListener('keydown', globalScannerKeyHandler, true);
 
@@ -2448,7 +2585,7 @@
       if (filtered.length === 0) {
         const div = document.createElement('div');
         div.className = 'store-item';
-        div.innerHTML = 'KHÔNG TÌM THẤY STORE';
+        div.textContent = t('storeNotFound');
         box.appendChild(div);
         box.classList.add('open');
         return;
@@ -2487,7 +2624,7 @@
         hint.className = 'store-item';
         hint.style.color = 'var(--muted)';
         hint.style.fontWeight = '700';
-        hint.innerHTML = `Còn ${matches.length - MAX_SUGGESTIONS} kết quả khác - gõ thêm để thu hẹp`;
+        hint.textContent = tf('moreStoresHint', { n: matches.length - MAX_SUGGESTIONS });
         box.appendChild(hint);
       }
 
@@ -2954,7 +3091,7 @@
       if (filtered.length === 0) {
         const div = document.createElement('div');
         div.className = 'store-item';
-        div.innerHTML = 'KHÔNG TÌM THẤY STORE';
+        div.textContent = t('storeNotFound');
         box.appendChild(div);
         box.classList.add('open');
         return;
@@ -2987,7 +3124,7 @@
         hint.className = 'store-item';
         hint.style.color = 'var(--muted)';
         hint.style.fontWeight = '700';
-        hint.innerHTML = `Còn ${matches.length - MAX_SUGGESTIONS} kết quả khác - gõ thêm để thu hẹp`;
+        hint.textContent = tf('moreStoresHint', { n: matches.length - MAX_SUGGESTIONS });
         box.appendChild(hint);
       }
 
@@ -3648,6 +3785,7 @@
             return;
           }
 
+          lastTransitRes = res;
           document.getElementById('transitToStoreQty').innerText = res.totalToStore || 0;
           document.getElementById('transitToWarehouseQty').innerText = res.totalToWarehouse || 0;
 
@@ -3750,6 +3888,7 @@
     function renderDailyOutSummary(res) {
       const box = document.getElementById('dailyOutResult');
       box.innerHTML = '';
+      lastDailyOutRes = (res && res.success) ? res : null;
 
       if (!res || !res.success) {
         box.innerHTML = '<div class="dashboard-card">' + (res ? res.message : t('noDataGeneric')) + '</div>';
@@ -3862,6 +4001,7 @@
     function renderAbnormalSummary(res) {
       const box = document.getElementById('abnormalResult');
       box.innerHTML = '';
+      lastAbnormalRes = (res && res.success) ? res : null;
 
       if (!res || !res.success) {
         box.innerHTML = '<div class="dashboard-card">' + (res ? res.message : t('noDataGeneric')) + '</div>';
@@ -4302,23 +4442,9 @@
       document.getElementById('kpiAbnormalToday').innerText = res.abnormalToday;
       document.getElementById('kpiReservedQty').innerText = res.reservedQty || 0;
 
-      const chart = document.getElementById('homeTrendChart');
-      chart.innerHTML = '';
-      const maxQty = Math.max(1, ...((res.trend || []).map(pt => pt.qty)));
-      const dayLabels = currentLang === 'en'
-        ? ['Su','Mo','Tu','We','Th','Fr','Sa']
-        : ['CN','T2','T3','T4','T5','T6','T7'];
-
-      (res.trend || []).forEach(pt => {
-        const d = new Date(pt.date + 'T00:00:00');
-        const pct = Math.max(4, Math.round((pt.qty / maxQty) * 100));
-        const bar = document.createElement('div');
-        bar.className = 'bar';
-        bar.style.height = pct + '%';
-        bar.title = pt.date + ': ' + pt.qty;
-        bar.innerHTML = `<span>${dayLabels[d.getDay()]}</span>`;
-        chart.appendChild(bar);
-      });
+      lastHomeSummary = res;
+      renderTrendChart();
+      renderDistChart(res.distribution);
 
       const activityBox = document.getElementById('homeActivity');
       activityBox.innerHTML = '';
@@ -4347,6 +4473,443 @@
         div.innerHTML = `<div class="dot" style="background:${color}"></div><div>${label}<br><span style="color:var(--muted)">${r.time}</span></div>`;
         activityBox.appendChild(div);
       });
+    }
+
+    // =====================================================================
+    // NHÓM 26: DROPDOWN GỢI Ý STORE cho ô tìm kiếm ở các màn báo cáo (Tồn,
+    // Daily, Lỗi) - cùng kiểu với ô chọn store ở màn OUT/IN. Chọn 1 gợi ý
+    // thì điền mã store vào ô và tải kết quả luôn. Tài khoản STORE không có
+    // danh sách store (getStores không cho phép) nên không hiện gợi ý.
+    // =====================================================================
+    function setupStoreSuggest(inputId, listId, onPick) {
+      const input = document.getElementById(inputId);
+      const box = document.getElementById(listId);
+      if (!input || !box) return;
+
+      function close() {
+        box.innerHTML = '';
+        box.classList.remove('open');
+      }
+
+      function render() {
+        const q = normalizeText(input.value);
+        box.innerHTML = '';
+        if (!q || !stores.length) { close(); return; }
+
+        const MAX_SUGGESTIONS = 8;
+        const matches = stores.filter(st => normalizeText(`${st.id} ${st.name}`).includes(q));
+
+        // Ô Lỗi còn tìm theo tote/user - không khớp store nào thì im lặng,
+        // không báo "không tìm thấy store" gây hiểu nhầm.
+        if (!matches.length) {
+          if (inputId === 'abnormalSearch') { close(); return; }
+          const div = document.createElement('div');
+          div.className = 'store-item';
+          div.textContent = t('storeNotFound');
+          box.appendChild(div);
+          box.classList.add('open');
+          return;
+        }
+
+        matches.slice(0, MAX_SUGGESTIONS).forEach(st => {
+          const div = document.createElement('div');
+          div.className = 'store-item';
+          const b = document.createElement('b');
+          b.textContent = st.id;
+          div.appendChild(b);
+          div.appendChild(document.createElement('br'));
+          div.appendChild(document.createTextNode(st.name || ''));
+          div.onmousedown = function(e) {
+            e.preventDefault();
+            input.value = st.id;
+            close();
+            input.blur();
+            onPick();
+          };
+          box.appendChild(div);
+        });
+
+        if (matches.length > MAX_SUGGESTIONS) {
+          const hint = document.createElement('div');
+          hint.className = 'store-item';
+          hint.style.color = 'var(--muted)';
+          hint.style.fontWeight = '700';
+          hint.textContent = tf('moreStoresHint', { n: matches.length - MAX_SUGGESTIONS });
+          box.appendChild(hint);
+        }
+        box.classList.add('open');
+      }
+
+      input.addEventListener('input', render);
+      input.addEventListener('focus', render);
+      input.addEventListener('blur', function() { setTimeout(close, 150); });
+      input.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === 'Escape') close(); });
+    }
+
+    function initReportStoreSuggest() {
+      setupStoreSuggest('dashSearch', 'dashStoreList', function() {
+        if (dashboardData.length) renderDashboard(); else loadDashboard();
+      });
+      setupStoreSuggest('dailyOutSearch', 'dailyOutStoreList', loadDailyOutSummary);
+      setupStoreSuggest('abnormalSearch', 'abnormalStoreList', loadAbnormalSummary);
+    }
+
+    // =====================================================================
+    // NHÓM 24: BIỂU ĐỒ TRANG CHỦ - "OUT vs IN" (đường, 7/30 ngày) và
+    // "Phân bổ rổ hiện tại" (tròn, chỉ ADMIN/WAREHOUSE). Vẽ bằng SVG thuần,
+    // không thư viện ngoài - nhẹ cho PDA. Màu lấy từ biến CSS trong .viz.
+    // =====================================================================
+    let lastHomeSummary = null;
+    let trendRange = 7;
+    try { if (localStorage.getItem('TOTE_TREND_RANGE') === '30') trendRange = 30; } catch (e) {}
+
+    function setTrendRange(n) {
+      trendRange = n;
+      try { localStorage.setItem('TOTE_TREND_RANGE', String(n)); } catch (e) {}
+      renderTrendChart();
+    }
+
+    function getTrendPoints() {
+      const res = lastHomeSummary || {};
+      if (res.trend30 && res.trend30.length) return res.trend30.slice(-trendRange);
+      // Backend chưa cập nhật bản có trend30 -> chỉ có OUT 7 ngày
+      return (res.trend || []).map(p => ({ date: p.date, out: p.qty, in: null })).slice(-trendRange);
+    }
+
+    function niceTop(v) {
+      if (v <= 4) return 4;
+      const pow = Math.pow(10, Math.floor(Math.log10(v)));
+      for (const m of [1, 2, 4, 5, 10]) {
+        if (m * pow >= v) return m * pow;
+      }
+      return 10 * pow;
+    }
+
+    function trendDayLabel(dateStr, short) {
+      const d = new Date(dateStr + 'T00:00:00');
+      if (short) {
+        const days = currentLang === 'en'
+          ? ['Su','Mo','Tu','We','Th','Fr','Sa']
+          : ['CN','T2','T3','T4','T5','T6','T7'];
+        return days[d.getDay()];
+      }
+      return String(d.getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0');
+    }
+
+    function renderTrendChart() {
+      const box = document.getElementById('homeTrendChart');
+      const tableBox = document.getElementById('homeTrendTable');
+      if (!box) return;
+
+      document.getElementById('trendRange7').classList.toggle('active', trendRange === 7);
+      document.getElementById('trendRange30').classList.toggle('active', trendRange === 30);
+
+      const pts = getTrendPoints();
+      if (!pts.length) {
+        box.innerHTML = '<div class="empty-note">' + t('noDataGeneric') + '</div>';
+        tableBox.innerHTML = '';
+        return;
+      }
+
+      const hasIn = pts.some(p => p.in !== null && p.in !== undefined);
+      const n = pts.length;
+      const W = Math.max(240, box.clientWidth || 300);
+      const H = 170;
+      const L = 28, R = 30, T = 10, B = 22;
+      const pw = W - L - R, ph = H - T - B;
+      const maxV = Math.max(0, ...pts.map(p => Math.max(p.out || 0, hasIn ? (p.in || 0) : 0)));
+      const top = niceTop(maxV);
+      const x = i => L + (n === 1 ? pw / 2 : i * (pw / (n - 1)));
+      const y = v => T + ph - (v / top) * ph;
+
+      let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${t('homeTrendTitle')}">`;
+
+      [0, top / 2, top].forEach((v, k) => {
+        const yy = y(v).toFixed(1);
+        svg += `<line x1="${L}" x2="${W - R}" y1="${yy}" y2="${yy}" style="stroke:${k === 0 ? 'var(--viz-axis)' : 'var(--viz-grid)'}" stroke-width="1"/>`;
+        svg += `<text x="${L - 6}" y="${yy}" text-anchor="end" dominant-baseline="middle">${v}</text>`;
+      });
+
+      pts.forEach((p, i) => {
+        const show = n <= 7 || (n - 1 - i) % 5 === 0;
+        if (!show) return;
+        svg += `<text x="${x(i).toFixed(1)}" y="${H - 4}" text-anchor="middle">${trendDayLabel(p.date, n <= 7)}</text>`;
+      });
+
+      const series = [{ key: 'out', color: 'var(--series-out)' }];
+      if (hasIn) series.push({ key: 'in', color: 'var(--series-in)' });
+
+      series.forEach(sr => {
+        const d = pts.map((p, i) => (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(p[sr.key] || 0).toFixed(1)).join(' ');
+        svg += `<path d="${d}" fill="none" style="stroke:${sr.color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
+        pts.forEach((p, i) => {
+          if (n > 7 && i !== n - 1) return;
+          svg += `<circle cx="${x(i).toFixed(1)}" cy="${y(p[sr.key] || 0).toFixed(1)}" r="4" style="fill:${sr.color};stroke:var(--card)" stroke-width="2"/>`;
+        });
+      });
+
+      // Nhãn giá trị ngày cuối, đặt cạnh điểm cuối - tách xa nhau nếu sát nhau
+      const last = pts[n - 1];
+      const ends = series.map(sr => ({ v: last[sr.key] || 0, yy: y(last[sr.key] || 0) }));
+      if (ends.length === 2 && Math.abs(ends[0].yy - ends[1].yy) < 12) {
+        const mid = (ends[0].yy + ends[1].yy) / 2;
+        const upper = ends[0].v >= ends[1].v ? 0 : 1;
+        ends[upper].yy = mid - 6;
+        ends[1 - upper].yy = mid + 6;
+      }
+      ends.forEach(e => {
+        svg += `<text class="end-label" x="${(x(n - 1) + 8).toFixed(1)}" y="${e.yy.toFixed(1)}" dominant-baseline="middle">${e.v}</text>`;
+      });
+
+      svg += `<line id="trendCross" y1="${T}" y2="${T + ph}" style="stroke:var(--viz-axis);display:none" stroke-width="1"/>`;
+      series.forEach(sr => {
+        svg += `<circle class="trend-hover" data-key="${sr.key}" r="5" style="fill:${sr.color};stroke:var(--card);display:none" stroke-width="2"/>`;
+      });
+      svg += `<rect id="trendHit" x="${L - 10}" y="0" width="${pw + 20}" height="${H}" fill="transparent"/>`;
+      svg += '</svg><div class="viz-tip" id="trendTip"></div>';
+      box.innerHTML = svg;
+
+      const svgEl = box.querySelector('svg');
+      const cross = box.querySelector('#trendCross');
+      const tip = box.querySelector('#trendTip');
+      const hoverDots = box.querySelectorAll('.trend-hover');
+
+      function showAt(clientX) {
+        const rect = svgEl.getBoundingClientRect();
+        const scale = W / rect.width;
+        const px = (clientX - rect.left) * scale;
+        const i = n === 1 ? 0 : Math.max(0, Math.min(n - 1, Math.round((px - L) / (pw / (n - 1)))));
+        const p = pts[i];
+        const cx = x(i);
+        cross.setAttribute('x1', cx); cross.setAttribute('x2', cx);
+        cross.style.display = '';
+        hoverDots.forEach(dot => {
+          dot.setAttribute('cx', cx);
+          dot.setAttribute('cy', y(p[dot.dataset.key] || 0));
+          dot.style.display = '';
+        });
+        tip.innerHTML = `<div style="font-weight:800;margin-bottom:2px">${trendDayLabel(p.date, true)} · ${trendDayLabel(p.date, false)}</div>`
+          + `<div class="row"><i class="viz-key" style="background:var(--series-out)"></i>${t('seriesOut')} <b>${p.out || 0}</b></div>`
+          + (hasIn ? `<div class="row"><i class="viz-key" style="background:var(--series-in)"></i>${t('seriesIn')} <b>${p.in || 0}</b></div>` : '');
+        tip.style.display = 'block';
+        const boxW = box.clientWidth;
+        const tipW = tip.offsetWidth;
+        const left = cx / scale + 12 + tipW > boxW ? cx / scale - 12 - tipW : cx / scale + 12;
+        tip.style.left = Math.max(0, left) + 'px';
+      }
+
+      function hide() {
+        cross.style.display = 'none';
+        hoverDots.forEach(dot => { dot.style.display = 'none'; });
+        tip.style.display = 'none';
+      }
+
+      const hit = box.querySelector('#trendHit');
+      hit.addEventListener('pointermove', e => showAt(e.clientX));
+      hit.addEventListener('pointerdown', e => showAt(e.clientX));
+      hit.addEventListener('pointerleave', hide);
+      hit.addEventListener('pointercancel', hide);
+
+      // Bảng số liệu (mới nhất lên đầu) - thay thế cho người không đọc được màu
+      const rows = pts.slice().reverse().map(p =>
+        `<tr><td>${trendDayLabel(p.date, false)}</td><td>${p.out || 0}</td>${hasIn ? `<td>${p.in || 0}</td>` : ''}</tr>`
+      ).join('');
+      tableBox.innerHTML = `<table><thead><tr><th>${t('colDate')}</th><th>${t('seriesOut')}</th>${hasIn ? `<th>${t('seriesIn')}</th>` : ''}</tr></thead><tbody>${rows}</tbody></table>`;
+    }
+
+    function renderDistChart(dist) {
+      const panel = document.getElementById('homeDistPanel');
+      if (!panel) return;
+      if (!dist) { panel.classList.add('hidden'); return; }
+      panel.classList.remove('hidden');
+
+      const items = ['IN_WAREHOUSE', 'IN_STORE', 'IN_TRANSIT_TO_STORE', 'IN_TRANSIT_TO_WAREHOUSE'].map((k, i) => ({
+        key: k, label: statusLabel(k), value: dist[k] || 0, color: `var(--dist-${i + 1})`
+      }));
+      const total = items.reduce((sum, it) => sum + it.value, 0);
+      const nonZero = items.filter(it => it.value > 0).length;
+
+      const r = 50, C = 2 * Math.PI * r, gap = nonZero > 1 ? 2 : 0;
+      let offset = 0;
+      let svg = `<svg viewBox="0 0 128 128" role="img" aria-label="${t('homeDistTitle')}">`;
+      svg += `<circle cx="64" cy="64" r="${r}" fill="none" style="stroke:var(--viz-grid)" stroke-width="18"/>`;
+      items.forEach((it, i) => {
+        if (!it.value) return;
+        const full = (it.value / total) * C;
+        const len = Math.max(0.5, full - gap);
+        svg += `<circle class="seg" data-i="${i}" cx="64" cy="64" r="${r}" fill="none" style="stroke:${it.color}" stroke-width="18"`
+          + ` stroke-dasharray="${len.toFixed(2)} ${(C - len).toFixed(2)}" stroke-dashoffset="${(-offset).toFixed(2)}" transform="rotate(-90 64 64)"/>`;
+        offset += full;
+      });
+      svg += '</svg><div class="dist-center"><b id="distCenterVal"></b><span id="distCenterLbl"></span></div>';
+
+      const chart = document.getElementById('homeDistChart');
+      chart.innerHTML = svg;
+
+      const legend = document.getElementById('homeDistLegend');
+      legend.innerHTML = items.map((it, i) => {
+        const pct = total ? Math.round((it.value / total) * 100) : 0;
+        return `<div class="dist-item" data-i="${i}"><i class="viz-key" style="background:${it.color}"></i>`
+          + `<span class="name">${it.label}</span><span class="val">${it.value}</span><span class="pct">${pct}%</span></div>`;
+      }).join('');
+
+      const centerVal = document.getElementById('distCenterVal');
+      const centerLbl = document.getElementById('distCenterLbl');
+      let pinned = null;
+
+      function focus(i) {
+        chart.querySelectorAll('circle.seg').forEach(c => {
+          const on = i === null || Number(c.dataset.i) === i;
+          c.style.opacity = on ? '1' : '0.3';
+          c.setAttribute('stroke-width', i !== null && on ? '22' : '18');
+        });
+        legend.querySelectorAll('.dist-item').forEach(el => el.classList.toggle('active', Number(el.dataset.i) === i));
+        if (i === null) {
+          centerVal.textContent = total;
+          centerLbl.textContent = t('distTotalLabel');
+        } else {
+          centerVal.textContent = items[i].value;
+          centerLbl.textContent = items[i].label;
+        }
+      }
+
+      const bind = el => {
+        const i = Number(el.dataset.i);
+        el.addEventListener('pointerenter', () => { if (pinned === null) focus(i); });
+        el.addEventListener('pointerleave', () => { if (pinned === null) focus(null); });
+        el.addEventListener('click', () => { pinned = pinned === i ? null : i; focus(pinned); });
+      };
+      chart.querySelectorAll('circle.seg').forEach(bind);
+      legend.querySelectorAll('.dist-item').forEach(bind);
+      focus(null);
+    }
+
+    let trendResizeTimer = null;
+    window.addEventListener('resize', function() {
+      clearTimeout(trendResizeTimer);
+      trendResizeTimer = setTimeout(function() { if (lastHomeSummary) renderTrendChart(); }, 150);
+    });
+
+    // =====================================================================
+    // NHÓM 25: XUẤT EXCEL cho các màn báo cáo (Tồn, Vận chuyển, Daily, Lỗi).
+    // Xuất đúng dữ liệu đang tải trên màn hình, mỗi dòng = 1 tote để dễ lọc/
+    // đối soát. Thư viện SheetJS chỉ tải khi bấm nút lần đầu (không làm chậm
+    // app); mất mạng/không tải được thì tự lưu ra file .csv thay thế.
+    // =====================================================================
+    let lastTransitRes = null;
+    let lastDailyOutRes = null;
+    let lastAbnormalRes = null;
+    let xlsxLoading = null;
+
+    function loadXlsxLib() {
+      if (window.XLSX) return Promise.resolve(window.XLSX);
+      if (xlsxLoading) return xlsxLoading;
+      xlsxLoading = new Promise(function(resolve, reject) {
+        const sc = document.createElement('script');
+        sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+        sc.onload = function() { window.XLSX ? resolve(window.XLSX) : reject(new Error('XLSX missing')); };
+        sc.onerror = function() { xlsxLoading = null; reject(new Error('XLSX load failed')); };
+        setTimeout(function() { if (!window.XLSX) { xlsxLoading = null; reject(new Error('timeout')); } }, 15000);
+        document.head.appendChild(sc);
+      });
+      return xlsxLoading;
+    }
+
+    function todayStamp() {
+      const d = new Date();
+      return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    }
+
+    function downloadCsv(fileName, aoa) {
+      const esc = v => {
+        const str = v === null || v === undefined ? '' : String(v);
+        return /[",\n\r]/.test(str) ? '"' + str.replace(/"/g, '""') + '"' : str;
+      };
+      const csv = '\uFEFF' + aoa.map(row => row.map(esc).join(',')).join('\r\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(function() { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+    }
+
+    function exportTable(fileName, sheetName, header, rows) {
+      if (!rows.length) { alert(t('noDataToExport')); return; }
+      const aoa = [header].concat(rows);
+      loadXlsxLib().then(function(XLSX) {
+        const ws = XLSX.utils.aoa_to_sheet(aoa);
+        ws['!cols'] = header.map(function(h, i) {
+          let w = String(h).length;
+          for (let r = 0; r < rows.length; r++) {
+            const len = String(rows[r][i] === null || rows[r][i] === undefined ? '' : rows[r][i]).length;
+            if (len > w) w = len;
+          }
+          return { wch: Math.min(48, w + 2) };
+        });
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, sheetName);
+        XLSX.writeFile(wb, fileName + '.xlsx');
+      }).catch(function() {
+        downloadCsv(fileName + '.csv', aoa);
+      });
+    }
+
+    function exportDashboard() {
+      const q = normalizeText(document.getElementById('dashSearch').value);
+      const stores = q
+        ? dashboardData.filter(s => normalizeText(`${s.storeId} ${s.storeName || ''}`).includes(q))
+        : dashboardData;
+      const rows = [];
+      stores.forEach(s => {
+        (s.totes || []).forEach(tote => rows.push([s.storeId, s.storeName || '', s.qty, tote.toteId, tote.lastUpdate || '']));
+      });
+      exportTable('ton-cua-hang_' + todayStamp(), 'Ton',
+        [t('colStoreId'), t('colStoreName'), t('colQty'), t('colToteId'), t('colLastUpdate')], rows);
+    }
+
+    function exportInTransit() {
+      const res = lastTransitRes;
+      const rows = [];
+      if (res) {
+        [['toStore', 'IN_TRANSIT_TO_STORE'], ['toWarehouse', 'IN_TRANSIT_TO_WAREHOUSE']].forEach(pair => {
+          (res[pair[0]] || []).forEach(s => {
+            (s.totes || []).forEach(tote => rows.push([
+              statusLabel(pair[1]), s.storeId, s.storeName || '', tote.toteId, tote.lastUpdate || '',
+              tote.hours === null || tote.hours === undefined ? '' : tote.hours
+            ]));
+          });
+        });
+      }
+      exportTable('van-chuyen_' + todayStamp(), 'VanChuyen',
+        [t('colDirection'), t('colStoreId'), t('colStoreName'), t('colToteId'), t('colLastUpdate'), t('colHours')], rows);
+    }
+
+    function exportDailyOut() {
+      const res = lastDailyOutRes;
+      const rows = [];
+      if (res) {
+        (res.rows || []).forEach(r => {
+          const base = [res.date, r.storeId, r.storeName || '', r.okQty || 0, r.rawOutRows || 0,
+            r.duplicateOkQty || 0, r.abnormalQty || 0, (r.users || []).join(', ')];
+          const ids = r.toteIds || [];
+          if (!ids.length) rows.push(base.concat(['']));
+          ids.forEach(id => rows.push(base.concat([id])));
+        });
+      }
+      exportTable('xuat-kho_' + (res ? res.date : todayStamp()), 'XuatKho',
+        [t('colDate'), t('colStoreId'), t('colStoreName'), t('colOkQty'), t('colRawRows'),
+         t('colDupQty'), t('colAbnQty'), t('colUsers'), t('colToteId')], rows);
+    }
+
+    function exportAbnormal() {
+      const res = lastAbnormalRes;
+      const rows = res ? (res.rows || []).map(r => [
+        r.time, r.toteId || '', actionLabel(r.action), r.result, r.storeId || '', r.storeName || '', r.note || '', r.user || ''
+      ]) : [];
+      exportTable('bat-thuong_' + (res ? res.date : todayStamp()), 'BatThuong',
+        [t('colTime'), t('colToteId'), t('colAction'), t('colResult'), t('colStoreId'), t('colStoreName'), t('colNote'), t('colUser')], rows);
     }
 
     // =====================================================================
