@@ -94,7 +94,8 @@
 <title>GS25 Binh Dien · Tote Tracking</title>
 
 <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNiIgZmlsbD0iIzBBMTkzMCIgc3Ryb2tlPSIjMDBEMkEwIiBzdHJva2Utd2lkdGg9IjgiLz48cGF0aCBkPSJNNTAgMjQgNzQgMzggNTAgNTIgMjYgMzhaIiBmaWxsPSIjMDBEMkEwIi8+PHBhdGggZD0iTTI2IDM4IDUwIDUyIDUwIDgyIDI2IDY4WiIgZmlsbD0iIzAwQTc4NCIvPjxwYXRoIGQ9Ik01MCA1MiA3NCAzOCA3NCA2OCA1MCA4MloiIGZpbGw9IiMxNzNBNkIiLz48L3N2Zz4=">
-<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNiIgZmlsbD0iIzBBMTkzMCIgc3Ryb2tlPSIjMDBEMkEwIiBzdHJva2Utd2lkdGg9IjgiLz48cGF0aCBkPSJNNTAgMjQgNzQgMzggNTAgNTIgMjYgMzhaIiBmaWxsPSIjMDBEMkEwIi8+PHBhdGggZD0iTTI2IDM4IDUwIDUyIDUwIDgyIDI2IDY4WiIgZmlsbD0iIzAwQTc4NCIvPjxwYXRoIGQ9Ik01MCA1MiA3NCAzOCA3NCA2OCA1MCA4MloiIGZpbGw9IiMxNzNBNkIiLz48L3N2Zz4=">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
 
 <style>
   /* ===================================================================
@@ -538,7 +539,8 @@
     padding:12px; color:#fff; background:var(--navy); border-radius:var(--radius); box-shadow:var(--shadow);
   }
   .install-banner.show{ display:flex; }
-  .install-icon{ width:40px; height:40px; flex:0 0 40px; display:grid; place-items:center; font-size:11px; font-weight:800; background:var(--cyan); color:var(--navy); border-radius:10px; }
+  .install-icon{ width:40px; height:40px; flex:0 0 40px; }
+  .install-icon img{ width:100%; height:100%; display:block; }
   .install-text{ flex:1; min-width:0; }
   .install-title{ font-size:13px; font-weight:800; line-height:17px; }
   .install-sub{ margin-top:2px; font-size:10.5px; line-height:14px; color:#BFD3E6; font-weight:600; }
@@ -566,7 +568,7 @@
 <body>
 
   <div id="installBanner" class="install-banner">
-    <div class="install-icon">CS</div>
+    <div class="install-icon"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNiIgZmlsbD0iIzBBMTkzMCIgc3Ryb2tlPSIjMDBEMkEwIiBzdHJva2Utd2lkdGg9IjgiLz48cGF0aCBkPSJNNTAgMjQgNzQgMzggNTAgNTIgMjYgMzhaIiBmaWxsPSIjMDBEMkEwIi8+PHBhdGggZD0iTTI2IDM4IDUwIDUyIDUwIDgyIDI2IDY4WiIgZmlsbD0iIzAwQTc4NCIvPjxwYXRoIGQ9Ik01MCA1MiA3NCAzOCA3NCA2OCA1MCA4MloiIGZpbGw9IiMxNzNBNkIiLz48L3N2Zz4=" alt=""></div>
     <div class="install-text">
       <div class="install-title" data-i18n="installTitle">Cài GS25 Bình Điền Warehouse ra màn hình chính</div>
       <div id="installHelp" class="install-sub" data-i18n="installSub">Mở như app thật, nhanh hơn cho PDA/kho.</div>
@@ -1430,6 +1432,13 @@
         kpiAbnormalToday: 'Bất thường hôm nay', kpiReservedQty: 'Kho ảo còn lại (chưa dán label)',
         quickOutTitle: 'XUẤT KHO — OUT', quickOutSub: 'Chọn store & bắt đầu scan',
         quickInTitle: 'NHẬP KHO — IN', quickInSub: 'Thu hồi tote về kho',
+        installHintPrompt: 'Bấm CÀI để thêm app vào màn hình chính.',
+        installHintIOS: 'iPhone/iPad: bấm Share → Add to Home Screen.',
+        installHintAndroid: 'Android/PDA: bấm menu trình duyệt ⋮ → Add to Home screen.',
+        installHintOther: 'Bấm menu trình duyệt → Add to Home screen để ghim app.',
+        installAlertIOS: 'Cài trên iPhone/iPad: bấm nút Share, sau đó chọn Add to Home Screen.',
+        installAlertAndroid: 'Cài trên Android/PDA: bấm menu ⋮ của Chrome, sau đó chọn Add to Home screen.',
+        installAlertOther: 'Mở menu trình duyệt và chọn Add to Home screen / Install app.',
         homeTrendTitle: 'Xu hướng OUT vs IN', homeActivityTitle: 'Hoạt động gần đây',
         range7: '7 ngày', range30: '30 ngày', seriesOut: 'Xuất (OUT)', seriesIn: 'Nhập (IN)',
         trendTableToggle: 'Xem bảng số liệu', colDate: 'Ngày',
@@ -1595,6 +1604,13 @@
         kpiAbnormalToday: 'Issues today', kpiReservedQty: 'Virtual stock remaining (unlabeled)',
         quickOutTitle: 'WAREHOUSE OUT', quickOutSub: 'Pick a store & start scanning',
         quickInTitle: 'WAREHOUSE IN', quickInSub: 'Recover totes back to warehouse',
+        installHintPrompt: 'Tap INSTALL to add the app to your home screen.',
+        installHintIOS: 'iPhone/iPad: tap Share → Add to Home Screen.',
+        installHintAndroid: 'Android/PDA: tap the browser menu ⋮ → Add to Home screen.',
+        installHintOther: 'Open the browser menu → Add to Home screen to pin the app.',
+        installAlertIOS: 'Install on iPhone/iPad: tap Share, then choose Add to Home Screen.',
+        installAlertAndroid: 'Install on Android/PDA: tap the Chrome menu ⋮, then choose Add to Home screen.',
+        installAlertOther: 'Open the browser menu and choose Add to Home screen / Install app.',
         homeTrendTitle: 'OUT vs IN trend', homeActivityTitle: 'Recent activity',
         range7: '7 days', range30: '30 days', seriesOut: 'Out', seriesIn: 'In',
         trendTableToggle: 'View data table', colDate: 'Date',
@@ -1838,7 +1854,7 @@
       window.addEventListener('beforeinstallprompt', function(e) {
         e.preventDefault();
         deferredInstallPrompt = e;
-        showInstallBanner('Bấm CÀI để thêm app vào màn hình chính.');
+        showInstallBanner(t('installHintPrompt'));
       });
 
       setTimeout(function() {
@@ -1847,14 +1863,26 @@
           const isAndroid = /android/i.test(navigator.userAgent);
 
           if (isIOS) {
-            showInstallBanner('iPhone/iPad: bấm Share → Add to Home Screen.');
+            showInstallBanner(t('installHintIOS'));
           } else if (isAndroid) {
-            showInstallBanner('Android/PDA: bấm menu trình duyệt ⋮ → Add to Home screen.');
+            showInstallBanner(t('installHintAndroid'));
           } else {
-            showInstallBanner('Bấm menu trình duyệt → Add to Home screen để ghim app.');
+            showInstallBanner(t('installHintOther'));
           }
         }
       }, 1200);
+    }
+
+    function registerServiceWorker() {
+      if (!('serviceWorker' in navigator) || location.protocol !== 'https:') return;
+      if (/(^|\.)(google|googleusercontent)\.com$/.test(location.hostname)) return;
+      const register = function() {
+        navigator.serviceWorker.register('./sw.js').catch(function(err) {
+          if (window.console) console.warn('Service worker không đăng ký được:', err);
+        });
+      };
+      if (document.readyState === 'complete') register();
+      else window.addEventListener('load', register);
     }
 
     function showInstallBanner(helpText) {
@@ -1885,11 +1913,11 @@
       const isAndroid = /android/i.test(navigator.userAgent);
 
       if (isIOS) {
-        alert('Cài trên iPhone/iPad: bấm nút Share, sau đó chọn Add to Home Screen.');
+        alert(t('installAlertIOS'));
       } else if (isAndroid) {
-        alert('Cài trên Android/PDA: bấm menu ⋮ của Chrome, sau đó chọn Add to Home screen.');
+        alert(t('installAlertAndroid'));
       } else {
-        alert('Mở menu trình duyệt và chọn Add to Home screen / Install app.');
+        alert(t('installAlertOther'));
       }
     }
 
@@ -1902,6 +1930,7 @@
     function init() {
       initSettings();
       initReportStoreSuggest();
+      registerServiceWorker();
       setupInstallPrompt();
       document.addEventListener('keydown', globalScannerKeyHandler, true);
 

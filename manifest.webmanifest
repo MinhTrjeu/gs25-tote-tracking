@@ -1,0 +1,17 @@
+{
+  "name": "GS25 Bình Điền Warehouse",
+  "short_name": "GS25 Tote",
+  "description": "Theo dõi rổ (tote) giữa kho GS25 Bình Điền và cửa hàng",
+  "lang": "vi",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0A1930",
+  "theme_color": "#0A1930",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
