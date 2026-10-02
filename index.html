@@ -33,14 +33,28 @@
     'changePassword'
   ];
 
-  function callServer(fnName, args, successHandler, failureHandler) {
+  // Các lệnh CHỈ ĐỌC dữ liệu: nếu Google trả lỗi tạm thời (404/429/5xx,
+  // mất mạng) thì tự gửi lại tối đa 2 lần. KHÔNG áp dụng cho lệnh ghi dữ liệu
+  // (quét, thêm store, đổi mật khẩu...) để tránh ghi trùng 2 lần.
+  var RETRY_SAFE = {
+    getSession: 1, getStores: 1, getDashboard: 1, getInTransitSummary: 1, getToteHistory: 1,
+    getDailyOutSummary: 1, getAbnormalSummary: 1, getStoreAuditHistory: 1, getHomeSummary: 1
+  };
+  var MAX_RETRY = 2;
+
+  function callServer(fnName, args, successHandler, failureHandler, attempt) {
+    attempt = attempt || 0;
     fetch(APPS_SCRIPT_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({ fn: fnName, args: args })
     })
       .then(function (res) {
-        if (!res.ok) throw new Error('HTTP ' + res.status);
+        if (!res.ok) {
+          var httpErr = new Error('HTTP ' + res.status);
+          httpErr.status = res.status;
+          throw httpErr;
+        }
         return res.json();
       })
       .then(function (data) {
@@ -52,8 +66,18 @@
         if (successHandler) successHandler(data);
       })
       .catch(function (err) {
-        if (failureHandler) failureHandler(err);
-        else if (window.console) console.error('google.script.run (' + fnName + ') lỗi:', err);
+        var transient = !err.status || err.status === 404 || err.status === 429 || err.status >= 500;
+        if (RETRY_SAFE[fnName] && transient && attempt < MAX_RETRY) {
+          setTimeout(function () {
+            callServer(fnName, args, successHandler, failureHandler, attempt + 1);
+          }, 700 * (attempt + 1));
+          return;
+        }
+        if (window.console) console.error('google.script.run (' + fnName + ') lỗi:', err);
+        // Không hiện mã lỗi kỹ thuật ("HTTP 404"...) cho người dùng
+        var friendly = new Error('Máy chủ đang bận hoặc mạng chập chờn, vui lòng thử lại.');
+        friendly.status = err.status;
+        if (failureHandler) failureHandler(friendly);
       });
   }
 
@@ -63,7 +87,7 @@
     FUNCTION_NAMES.forEach(function (name) {
       proxy[name] = function () {
         var args = Array.prototype.slice.call(arguments);
-        callServer(name, args, successHandler, failureHandler);
+        callServer(name, args, successHandler, failureHandler, 0);
       };
     });
 
