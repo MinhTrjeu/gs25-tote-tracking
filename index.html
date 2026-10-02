@@ -29,7 +29,8 @@
   var FUNCTION_NAMES = [
     'login', 'logout', 'getSession', 'getStores', 'addStore', 'scanBatch',
     'getDashboard', 'getInTransitSummary', 'getToteHistory', 'getDailyOutSummary',
-    'getAbnormalSummary', 'submitStoreAudit', 'getStoreAuditHistory', 'getHomeSummary'
+    'getAbnormalSummary', 'submitStoreAudit', 'getStoreAuditHistory', 'getHomeSummary',
+    'changePassword', 'saveAvatar', 'getMyAvatar'
   ];
 
   function callServer(fnName, args, successHandler, failureHandler) {
@@ -389,6 +390,21 @@
   .btn-gray:active{ background:var(--bg); }
   .export-row{ display:flex; justify-content:flex-end; margin-top:10px; }
 
+  /* ---------------- TÀI KHOẢN (màn Cài Đặt) + ảnh đại diện ---------------- */
+  #userAvatar{ cursor:pointer; }
+  .avatar.has-img{ background:none; padding:0; overflow:hidden; }
+  .avatar img{ width:100%; height:100%; object-fit:cover; border-radius:50%; display:block; }
+  .account-card{
+    display:flex; align-items:center; gap:14px; background:var(--card); border:1px solid var(--border);
+    border-radius:var(--radius); padding:14px; box-shadow:var(--shadow);
+  }
+  .account-card .avatar{ width:64px; height:64px; font-size:20px; }
+  .account-info{ min-width:0; }
+  .account-info b{ font-size:15px; color:var(--heading); }
+  .account-info .sub{ font-size:11.5px; color:var(--muted); margin-top:2px; }
+  .account-actions{ display:flex; gap:8px; margin-top:10px; }
+  #avatarMsg:empty{ display:none; }
+
   /* ---------------- MÀN STORE: thống kê khu vực + danh sách chỉ đường ---------------- */
   .region-row{ display:flex; align-items:center; gap:10px; padding:7px 6px; border-radius:8px; cursor:pointer; font-size:12px; }
   .region-row.active{ background:var(--bg); box-shadow:inset 0 0 0 1px var(--border); }
@@ -677,7 +693,7 @@
             <div id="userLine" style="font-size:11.5px;font-weight:800;">USER</div>
             <div id="roleLine" style="font-size:9.5px;color:var(--muted);">ROLE</div>
           </div>
-          <div class="avatar" id="userAvatar">--</div>
+          <div class="avatar" id="userAvatar" onclick="showScreen('settings')">--</div>
         </div>
       </div>
 
@@ -1285,7 +1301,34 @@
              Lưu lựa chọn vào localStorage (chỉ trên máy này, không đồng bộ
              server) - xem NHÓM 23 phần JS. -->
         <div id="screen-settings" class="screen">
-          <h3 data-i18n="settingsThemeTitle" style="margin-top:0">Giao Diện</h3>
+          <h3 data-i18n="settingsAccountTitle" style="margin-top:0">Tài Khoản</h3>
+          <div class="account-card">
+            <div class="avatar" id="settingsAvatar">--</div>
+            <div class="account-info">
+              <b id="settingsLoginId">--</b>
+              <div id="settingsRoleLine" class="sub"></div>
+            </div>
+          </div>
+          <div class="account-actions">
+            <button class="btn-export" onclick="document.getElementById('avatarFileInput').click()"><span data-i18n="changeAvatarBtn">📷 Đổi ảnh</span></button>
+            <button class="btn-export hidden" id="avatarRemoveBtn" onclick="removeAvatar()"><span data-i18n="removeAvatarBtn">Xóa ảnh</span></button>
+          </div>
+          <input type="file" id="avatarFileInput" accept="image/*" class="hidden" onchange="onAvatarFilePicked(event)">
+          <div id="avatarMsg" class="empty-note"></div>
+
+          <details class="add-store">
+            <summary data-i18n="changePwToggle">🔒 Đổi mật khẩu</summary>
+            <label data-i18n="oldPwLabel">Mật khẩu hiện tại</label>
+            <input type="password" id="oldPw" autocomplete="current-password">
+            <label data-i18n="newPwLabel">Mật khẩu mới (ít nhất 6 ký tự)</label>
+            <input type="password" id="newPw" autocomplete="new-password">
+            <label data-i18n="newPw2Label">Nhập lại mật khẩu mới</label>
+            <input type="password" id="newPw2" autocomplete="new-password">
+            <button class="btn" data-i18n="changePwBtn" onclick="submitChangePassword()">ĐỔI MẬT KHẨU</button>
+            <div id="changePwMsg" class="result pending hidden"></div>
+          </details>
+
+          <h3 data-i18n="settingsThemeTitle">Giao Diện</h3>
           <div class="driver-mode-switch">
             <button id="themeLightBtn" class="btn driver-mode-btn" onclick="setTheme('light')">
               <span data-i18n="settingsThemeLight">☀️ Sáng</span>
@@ -1503,6 +1546,13 @@
         storeListLabel: 'Danh sách cửa hàng', storeListSearchPlaceholder: 'Tìm mã / tên / khu vực',
         filteringRegion: 'Đang lọc khu vực:', clearFilterBtn: 'Bỏ lọc', storeListCount: '{n} cửa hàng',
         directionsBtn: 'Chỉ đường', noLocationLabel: 'Chưa có vị trí',
+        settingsAccountTitle: 'Tài Khoản', changeAvatarBtn: '📷 Đổi ảnh', removeAvatarBtn: 'Xóa ảnh',
+        avatarUploading: 'Đang tải ảnh lên...', avatarSaved: 'Đã cập nhật ảnh đại diện', avatarRemoved: 'Đã xóa ảnh đại diện',
+        avatarInvalid: 'File không phải ảnh hợp lệ', changePwToggle: '🔒 Đổi mật khẩu',
+        oldPwLabel: 'Mật khẩu hiện tại', newPwLabel: 'Mật khẩu mới (ít nhất 6 ký tự)', newPw2Label: 'Nhập lại mật khẩu mới',
+        changePwBtn: 'ĐỔI MẬT KHẨU', pwMissing: 'Nhập đủ mật khẩu hiện tại và mật khẩu mới',
+        pwTooShort: 'Mật khẩu mới phải có ít nhất 6 ký tự', pwMismatch: 'Hai lần nhập mật khẩu mới không khớp',
+        pwSaving: 'Đang đổi mật khẩu...',
         homeTrendTitle: 'Xu hướng OUT vs IN', homeActivityTitle: 'Hoạt động gần đây',
         range7: '7 ngày', range30: '30 ngày', seriesOut: 'Xuất (OUT)', seriesIn: 'Nhập (IN)',
         trendTableToggle: 'Xem bảng số liệu', colDate: 'Ngày',
@@ -1683,6 +1733,13 @@
         storeListLabel: 'Store list', storeListSearchPlaceholder: 'Search ID / name / region',
         filteringRegion: 'Filtering region:', clearFilterBtn: 'Clear', storeListCount: '{n} stores',
         directionsBtn: 'Directions', noLocationLabel: 'No location',
+        settingsAccountTitle: 'Account', changeAvatarBtn: '📷 Change photo', removeAvatarBtn: 'Remove photo',
+        avatarUploading: 'Uploading photo...', avatarSaved: 'Profile photo updated', avatarRemoved: 'Profile photo removed',
+        avatarInvalid: 'Not a valid image file', changePwToggle: '🔒 Change password',
+        oldPwLabel: 'Current password', newPwLabel: 'New password (at least 6 characters)', newPw2Label: 'Confirm new password',
+        changePwBtn: 'CHANGE PASSWORD', pwMissing: 'Enter your current and new password',
+        pwTooShort: 'New password must be at least 6 characters', pwMismatch: 'The two new passwords do not match',
+        pwSaving: 'Changing password...',
         homeTrendTitle: 'OUT vs IN trend', homeActivityTitle: 'Recent activity',
         range7: '7 days', range30: '30 days', seriesOut: 'Out', seriesIn: 'In',
         trendTableToggle: 'View data table', colDate: 'Date',
@@ -2161,8 +2218,10 @@
       document.getElementById('userLine').innerText = session.loginId;
       document.getElementById('roleLine').innerText =
         session.role + (session.storeId ? ' | ' + session.storeId : '');
-      document.getElementById('userAvatar').innerText =
-        String(session.loginId || '??').slice(0, 2).toUpperCase();
+      document.getElementById('settingsLoginId').innerText = session.loginId;
+      document.getElementById('settingsRoleLine').innerText =
+        session.role + (session.storeId ? ' | ' + session.storeId + (session.storeName ? ' - ' + session.storeName : '') : '');
+      loadMyAvatar();
 
       setupRoleUI();
       setupDriverForRole();
@@ -4706,6 +4765,152 @@
         div.innerHTML = `<div class="dot" style="background:${color}"></div><div>${label}<br><span style="color:var(--muted)">${r.time}</span></div>`;
         activityBox.appendChild(div);
       });
+    }
+
+    // =====================================================================
+    // NHÓM 27: TÀI KHOẢN - ảnh đại diện + đổi mật khẩu (màn Cài Đặt).
+    // Ảnh được cắt vuông + thu nhỏ còn 160x160 JPEG ngay trên máy trước khi
+    // gửi lên (chỉ ~10-20KB), lưu thêm 1 bản trong máy để lần sau hiện ngay.
+    // =====================================================================
+    let myAvatarUrl = '';
+
+    function avatarCacheKey() {
+      return 'TOTE_AVATAR_' + (session ? session.loginId : '');
+    }
+
+    function renderAvatar() {
+      const initials = String((session && session.loginId) || '??').slice(0, 2).toUpperCase();
+      ['userAvatar', 'settingsAvatar'].forEach(function(id) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.textContent = '';
+        if (myAvatarUrl) {
+          const img = document.createElement('img');
+          img.src = myAvatarUrl;
+          img.alt = '';
+          el.appendChild(img);
+          el.classList.add('has-img');
+        } else {
+          el.textContent = initials;
+          el.classList.remove('has-img');
+        }
+      });
+      document.getElementById('avatarRemoveBtn').classList.toggle('hidden', !myAvatarUrl);
+    }
+
+    function setMyAvatar(url) {
+      myAvatarUrl = url || '';
+      try {
+        if (myAvatarUrl) localStorage.setItem(avatarCacheKey(), myAvatarUrl);
+        else localStorage.removeItem(avatarCacheKey());
+      } catch (e) {}
+      renderAvatar();
+    }
+
+    function loadMyAvatar() {
+      try { myAvatarUrl = localStorage.getItem(avatarCacheKey()) || ''; } catch (e) { myAvatarUrl = ''; }
+      renderAvatar();
+      document.getElementById('avatarMsg').textContent = '';
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          if (res && res.success) setMyAvatar(res.dataUrl);
+        })
+        .withFailureHandler(function() {})
+        .getMyAvatar({ token: session.token });
+    }
+
+    function setAvatarMsg(text) {
+      document.getElementById('avatarMsg').textContent = text || '';
+    }
+
+    function onAvatarFilePicked(e) {
+      const file = e.target.files && e.target.files[0];
+      e.target.value = '';
+      if (!file) return;
+      if (!/^image\//.test(file.type)) { setAvatarMsg(t('avatarInvalid')); return; }
+
+      setAvatarMsg(t('avatarUploading'));
+      const reader = new FileReader();
+      reader.onload = function() {
+        const img = new Image();
+        img.onload = function() {
+          const size = 160;
+          const canvas = document.createElement('canvas');
+          canvas.width = canvas.height = size;
+          const ctx = canvas.getContext('2d');
+          const side = Math.min(img.naturalWidth, img.naturalHeight);
+          const sx = (img.naturalWidth - side) / 2;
+          const sy = (img.naturalHeight - side) / 2;
+          ctx.fillStyle = '#fff';
+          ctx.fillRect(0, 0, size, size);
+          ctx.drawImage(img, sx, sy, side, side, 0, 0, size, size);
+
+          let quality = 0.85;
+          let url = canvas.toDataURL('image/jpeg', quality);
+          while (url.length > 40000 && quality > 0.4) {
+            quality -= 0.1;
+            url = canvas.toDataURL('image/jpeg', quality);
+          }
+          uploadAvatar(url);
+        };
+        img.onerror = function() { setAvatarMsg(t('avatarInvalid')); };
+        img.src = reader.result;
+      };
+      reader.onerror = function() { setAvatarMsg(t('avatarInvalid')); };
+      reader.readAsDataURL(file);
+    }
+
+    function uploadAvatar(url) {
+      google.script.run
+        .withSuccessHandler(function(res) {
+          if (res && res.success) {
+            setMyAvatar(url);
+            setAvatarMsg(url ? t('avatarSaved') : t('avatarRemoved'));
+          } else {
+            setAvatarMsg((res && res.message) || t('noDataGeneric'));
+          }
+        })
+        .withFailureHandler(function(err) {
+          if (handleSessionError(err)) return;
+          setAvatarMsg(getErrorMessage(err));
+        })
+        .saveAvatar({ token: session.token, dataUrl: url });
+    }
+
+    function removeAvatar() {
+      setAvatarMsg(t('avatarUploading'));
+      uploadAvatar('');
+    }
+
+    function submitChangePassword() {
+      const oldPw = document.getElementById('oldPw').value;
+      const newPw = document.getElementById('newPw').value;
+      const newPw2 = document.getElementById('newPw2').value;
+      const box = document.getElementById('changePwMsg');
+
+      function show(text, state) {
+        box.className = 'result ' + (state === true ? 'ok' : state === false ? 'fail' : 'pending');
+        box.textContent = text;
+      }
+
+      if (!oldPw.trim() || !newPw.trim()) return show(t('pwMissing'), false);
+      if (newPw.trim().length < 6) return show(t('pwTooShort'), false);
+      if (newPw !== newPw2) return show(t('pwMismatch'), false);
+
+      show(t('pwSaving'));
+      google.script.run
+        .withSuccessHandler(function(res) {
+          show((res && res.message) || '', !!(res && res.success));
+          if (res && res.success) {
+            ['oldPw', 'newPw', 'newPw2'].forEach(function(id) { document.getElementById(id).value = ''; });
+          }
+        })
+        .withFailureHandler(function(err) {
+          if (handleSessionError(err)) return;
+          show(getErrorMessage(err), false);
+        })
+        .changePassword({ token: session.token, oldPassword: oldPw, newPassword: newPw });
     }
 
     // =====================================================================
