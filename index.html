@@ -91,13 +91,13 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta name="application-name" content="GS25 Binh Dien Warehouse">
-<meta name="apple-mobile-web-app-title" content="GS25 Binh Dien Warehouse">
+<meta name="application-name" content="SDS - GS25 Bình Điền WH">
+<meta name="apple-mobile-web-app-title" content="SDS GS25 WH">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0A1930">
-<title>GS25 Binh Dien · Tote Tracking</title>
+<title>SDS - GS25 Bình Điền WH · Tote Tracking</title>
 
 <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNiIgZmlsbD0iIzBBMTkzMCIgc3Ryb2tlPSIjMDBEMkEwIiBzdHJva2Utd2lkdGg9IjgiLz48cGF0aCBkPSJNNTAgMjQgNzQgMzggNTAgNTIgMjYgMzhaIiBmaWxsPSIjMDBEMkEwIi8+PHBhdGggZD0iTTI2IDM4IDUwIDUyIDUwIDgyIDI2IDY4WiIgZmlsbD0iIzAwQTc4NCIvPjxwYXRoIGQ9Ik01MCA1MiA3NCAzOCA3NCA2OCA1MCA4MloiIGZpbGw9IiMxNzNBNkIiLz48L3N2Zz4=">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -105,7 +105,7 @@
 
 <style>
   /* ===================================================================
-     GS25 BINH DIEN WAREHOUSE — enterprise SaaS design system
+     SDS - GS25 BINH DIEN WH — enterprise SaaS design system
      Navy #0A1930 + Cyan #00D2A0 · soft cards, subtle elevation, roomy layout.
      =================================================================== */
   :root{
@@ -244,7 +244,10 @@
   }
   .topbar-left{ display:flex; align-items:center; gap:8px; min-width:0; }
   .topbar-logo{ width:20px; height:20px; object-fit:contain; flex-shrink:0; }
-  .topbar-left b{ font-size:12px; letter-spacing:.3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .topbar-left b{
+    font-size:12px; line-height:15px; letter-spacing:.3px; overflow:hidden;
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
+  }
   .avatar{
     width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,var(--navy-3),var(--navy));
     color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:12px;
@@ -613,7 +616,7 @@
   <div id="installBanner" class="install-banner">
     <div class="install-icon"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNiIgZmlsbD0iIzBBMTkzMCIgc3Ryb2tlPSIjMDBEMkEwIiBzdHJva2Utd2lkdGg9IjgiLz48cGF0aCBkPSJNNTAgMjQgNzQgMzggNTAgNTIgMjYgMzhaIiBmaWxsPSIjMDBEMkEwIi8+PHBhdGggZD0iTTI2IDM4IDUwIDUyIDUwIDgyIDI2IDY4WiIgZmlsbD0iIzAwQTc4NCIvPjxwYXRoIGQ9Ik01MCA1MiA3NCAzOCA3NCA2OCA1MCA4MloiIGZpbGw9IiMxNzNBNkIiLz48L3N2Zz4=" alt=""></div>
     <div class="install-text">
-      <div class="install-title" data-i18n="installTitle">Cài GS25 Bình Điền Warehouse ra màn hình chính</div>
+      <div class="install-title" data-i18n="installTitle">Cài SDS - GS25 Bình Điền WH ra màn hình chính</div>
       <div id="installHelp" class="install-sub" data-i18n="installSub">Mở như app thật, nhanh hơn cho PDA/kho.</div>
     </div>
     <div class="install-actions">
@@ -625,11 +628,11 @@
   <div id="loginPage" class="login-screen">
     <div class="login-hero">
       <div class="brand-mark">
-        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNiIgZmlsbD0iIzBBMTkzMCIgc3Ryb2tlPSIjMDBEMkEwIiBzdHJva2Utd2lkdGg9IjgiLz48cGF0aCBkPSJNNTAgMjQgNzQgMzggNTAgNTIgMjYgMzhaIiBmaWxsPSIjMDBEMkEwIi8+PHBhdGggZD0iTTI2IDM4IDUwIDUyIDUwIDgyIDI2IDY4WiIgZmlsbD0iIzAwQTc4NCIvPjxwYXRoIGQ9Ik01MCA1MiA3NCAzOCA3NCA2OCA1MCA4MloiIGZpbGw9IiMxNzNBNkIiLz48L3N2Zz4=" alt="GS25 Binh Dien" class="brand-mark-icon">
-        <span>GS25 BÌNH ĐIỀN WAREHOUSE</span>
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNiIgZmlsbD0iIzBBMTkzMCIgc3Ryb2tlPSIjMDBEMkEwIiBzdHJva2Utd2lkdGg9IjgiLz48cGF0aCBkPSJNNTAgMjQgNzQgMzggNTAgNTIgMjYgMzhaIiBmaWxsPSIjMDBEMkEwIi8+PHBhdGggZD0iTTI2IDM4IDUwIDUyIDUwIDgyIDI2IDY4WiIgZmlsbD0iIzAwQTc4NCIvPjxwYXRoIGQ9Ik01MCA1MiA3NCAzOCA3NCA2OCA1MCA4MloiIGZpbGw9IiMxNzNBNkIiLz48L3N2Zz4=" alt="SDS - GS25 Bình Điền WH" class="brand-mark-icon">
+        <span>SDS - GS25 BÌNH ĐIỀN WH</span>
       </div>
       <div class="hero-copy">
-        <h1>GS25 - Bình Điền<br>Warehouse</h1>
+        <h1>SDS - GS25<br>Bình Điền WH</h1>
         <p>Real time tracking basket.</p>
       </div>
 
@@ -686,8 +689,8 @@
     <div class="main">
       <div class="topbar">
         <div class="topbar-left">
-          <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNiIgZmlsbD0iIzBBMTkzMCIgc3Ryb2tlPSIjMDBEMkEwIiBzdHJva2Utd2lkdGg9IjgiLz48cGF0aCBkPSJNNTAgMjQgNzQgMzggNTAgNTIgMjYgMzhaIiBmaWxsPSIjMDBEMkEwIi8+PHBhdGggZD0iTTI2IDM4IDUwIDUyIDUwIDgyIDI2IDY4WiIgZmlsbD0iIzAwQTc4NCIvPjxwYXRoIGQ9Ik01MCA1MiA3NCAzOCA3NCA2OCA1MCA4MloiIGZpbGw9IiMxNzNBNkIiLz48L3N2Zz4=" alt="GS25" class="topbar-logo">
-          <b>GS25 - Bình Điền</b>
+          <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNiIgZmlsbD0iIzBBMTkzMCIgc3Ryb2tlPSIjMDBEMkEwIiBzdHJva2Utd2lkdGg9IjgiLz48cGF0aCBkPSJNNTAgMjQgNzQgMzggNTAgNTIgMjYgMzhaIiBmaWxsPSIjMDBEMkEwIi8+PHBhdGggZD0iTTI2IDM4IDUwIDUyIDUwIDgyIDI2IDY4WiIgZmlsbD0iIzAwQTc4NCIvPjxwYXRoIGQ9Ik01MCA1MiA3NCAzOCA3NCA2OCA1MCA4MloiIGZpbGw9IiMxNzNBNkIiLz48L3N2Zz4=" alt="SDS - GS25 Bình Điền WH" class="topbar-logo">
+          <b>SDS - GS25 Bình Điền WH</b>
         </div>
         <div style="display:flex;align-items:center;gap:8px;">
           <div style="text-align:right;">
@@ -1348,7 +1351,7 @@
     </div>
 
     <div class="rail">
-      <img class="rail-logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNiIgZmlsbD0iIzBBMTkzMCIgc3Ryb2tlPSIjMDBEMkEwIiBzdHJva2Utd2lkdGg9IjgiLz48cGF0aCBkPSJNNTAgMjQgNzQgMzggNTAgNTIgMjYgMzhaIiBmaWxsPSIjMDBEMkEwIi8+PHBhdGggZD0iTTI2IDM4IDUwIDUyIDUwIDgyIDI2IDY4WiIgZmlsbD0iIzAwQTc4NCIvPjxwYXRoIGQ9Ik01MCA1MiA3NCAzOCA3NCA2OCA1MCA4MloiIGZpbGw9IiMxNzNBNkIiLz48L3N2Zz4=" alt="GS25 Binh Dien">
+      <img class="rail-logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNiIgZmlsbD0iIzBBMTkzMCIgc3Ryb2tlPSIjMDBEMkEwIiBzdHJva2Utd2lkdGg9IjgiLz48cGF0aCBkPSJNNTAgMjQgNzQgMzggNTAgNTIgMjYgMzhaIiBmaWxsPSIjMDBEMkEwIi8+PHBhdGggZD0iTTI2IDM4IDUwIDUyIDUwIDgyIDI2IDY4WiIgZmlsbD0iIzAwQTc4NCIvPjxwYXRoIGQ9Ik01MCA1MiA3NCAzOCA3NCA2OCA1MCA4MloiIGZpbGw9IiMxNzNBNkIiLz48L3N2Zz4=" alt="SDS - GS25 Bình Điền WH">
 
       <div id="tabHome" class="rail-item active" onclick="showScreen('home')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7"/><path d="M5 10v9h14v-9"/></svg>
@@ -1622,7 +1625,7 @@
 
         optAll: 'TẤT CẢ NGHIỆP VỤ',
 
-        installTitle: 'Cài GS25 Bình Điền Warehouse ra màn hình chính',
+        installTitle: 'Cài SDS - GS25 Bình Điền WH ra màn hình chính',
         installSub: 'Mở như app thật, nhanh hơn cho PDA/kho.', installBtn: 'CÀI',
 
         dashFindLabelStore: 'Công Nợ Tote Cửa Hàng Của Bạn',
@@ -1807,7 +1810,7 @@
 
         optAll: 'ALL OPERATIONS',
 
-        installTitle: 'Install GS25 Binh Dien Warehouse to your home screen',
+        installTitle: 'Install SDS - GS25 Binh Dien WH to your home screen',
         installSub: 'Opens like a real app, faster for PDA/warehouse use.', installBtn: 'INSTALL',
 
         dashFindLabelStore: 'Your Store\'s Outstanding Totes',
