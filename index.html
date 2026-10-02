@@ -388,6 +388,32 @@
   .btn-gray{ background:var(--card); color:var(--heading); border:1.5px solid var(--border); box-shadow:none; }
   .btn-gray:active{ background:var(--bg); }
   .export-row{ display:flex; justify-content:flex-end; margin-top:10px; }
+
+  /* ---------------- MÀN STORE: thống kê khu vực + danh sách chỉ đường ---------------- */
+  .region-row{ display:flex; align-items:center; gap:10px; padding:7px 6px; border-radius:8px; cursor:pointer; font-size:12px; }
+  .region-row.active{ background:var(--bg); box-shadow:inset 0 0 0 1px var(--border); }
+  .region-name{ width:40%; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:700; color:var(--ink); }
+  .region-row.muted .region-name{ color:var(--muted); font-style:italic; }
+  .region-track{ flex:1; height:10px; background:var(--viz-grid); border-radius:4px; overflow:hidden; }
+  .region-bar{ height:100%; background:var(--series-out); border-radius:4px; min-width:3px; }
+  .region-count{ width:40px; text-align:right; font-weight:800; color:var(--ink); font-variant-numeric:tabular-nums; }
+  .add-store{ margin:4px 0 6px; }
+  .add-store summary{ cursor:pointer; font-size:12.5px; }
+  .store-filter-bar{ display:flex; align-items:center; gap:6px; margin-top:8px; font-size:12px; color:var(--muted); }
+  .store-filter-bar b{ color:var(--ink); flex:1; min-width:0; }
+  .store-row{ display:flex; align-items:center; gap:10px; padding:10px 13px; border-bottom:1px solid var(--row-border); font-size:12.5px; line-height:17px; }
+  .store-row:last-child{ border-bottom:0; }
+  .store-row .info{ flex:1; min-width:0; }
+  .store-row .info b{ color:var(--heading); }
+  .store-row .sub{ font-size:11px; color:var(--muted); margin-top:1px; }
+  .btn-map{
+    display:inline-flex; align-items:center; gap:5px; height:32px; padding:0 10px; flex-shrink:0;
+    border:1.5px solid var(--border); border-radius:8px; background:var(--card);
+    color:var(--heading); font-size:11.5px; font-weight:800; text-decoration:none;
+  }
+  .btn-map svg{ width:14px; height:14px; }
+  .btn-map:active{ transform:scale(.96); background:var(--bg); }
+  .no-loc{ font-size:11px; color:var(--muted); flex-shrink:0; }
   .btn-export{
     display:inline-flex; align-items:center; gap:6px; height:34px; padding:0 12px;
     border:1.5px solid var(--border); border-radius:8px; background:var(--card);
@@ -1068,13 +1094,43 @@
         </div>
 
         <div id="screen-store" class="screen">
-          <label data-i18n="storeIdLabel">Store ID</label>
-          <input id="newStoreId" class="upper" placeholder="VD: VN0123">
-          <label data-i18n="storeNameLabel">Store Name</label>
-          <input id="newStoreName" placeholder="TÊN CỬA HÀNG">
-          <button class="btn" data-i18n="addStoreBtn" onclick="addNewStore()">THÊM STORE</button>
-          <div id="storeMsg" class="result pending">---</div>
-          <div id="allStores"></div>
+          <div class="kpi-row">
+            <div class="kpi">
+              <div class="num" id="storeTotalQty">--</div>
+              <div class="lbl" data-i18n="storeTotalLabel">Tổng cửa hàng</div>
+            </div>
+            <div class="kpi">
+              <div class="num" id="storeLocatedQty">--</div>
+              <div class="lbl" data-i18n="storeWithLocationLabel">Đã có vị trí (chỉ đường được)</div>
+            </div>
+          </div>
+
+          <div class="panel viz">
+            <h3 class="viz-title" data-i18n="storeByRegionTitle">Số cửa hàng theo khu vực</h3>
+            <div id="storeRegionBars" style="margin-top:8px"></div>
+            <div id="storeRegionHint" class="empty-note hidden" data-i18n="storeRegionHint">Chưa có dữ liệu khu vực.</div>
+          </div>
+
+          <details class="add-store">
+            <summary data-i18n="addStoreToggle">＋ Thêm cửa hàng mới</summary>
+            <label data-i18n="storeIdLabel">Store ID</label>
+            <input id="newStoreId" class="upper" placeholder="VD: VN0123">
+            <label data-i18n="storeNameLabel">Store Name</label>
+            <input id="newStoreName" placeholder="TÊN CỬA HÀNG">
+            <label data-i18n="storeRegionLabel">Khu vực (không bắt buộc)</label>
+            <input id="newStoreRegion" class="upper" data-i18n-placeholder="storeRegionPlaceholder" placeholder="VD: HÀ NỘI - CẦU GIẤY">
+            <button class="btn" data-i18n="addStoreBtn" onclick="addNewStore()">THÊM STORE</button>
+            <div id="storeMsg" class="result pending">---</div>
+          </details>
+
+          <label data-i18n="storeListLabel">Danh sách cửa hàng</label>
+          <input id="storeListSearch" data-i18n-placeholder="storeListSearchPlaceholder" placeholder="Tìm mã / tên / khu vực" autocomplete="off" oninput="renderAllStores()">
+          <div id="storeFilterBar" class="store-filter-bar hidden">
+            <span data-i18n="filteringRegion">Đang lọc khu vực:</span> <b id="storeFilterName"></b>
+            <button class="btn-export" data-i18n="clearFilterBtn" onclick="setStoreRegionFilter(null)">Bỏ lọc</button>
+          </div>
+          <div id="storeListCount" class="empty-note"></div>
+          <div id="allStores" class="recent"></div>
         </div>
 
         <div id="screen-dash" class="screen">
@@ -1439,6 +1495,14 @@
         installAlertIOS: 'Cài trên iPhone/iPad: bấm nút Share, sau đó chọn Add to Home Screen.',
         installAlertAndroid: 'Cài trên Android/PDA: bấm menu ⋮ của Chrome, sau đó chọn Add to Home screen.',
         installAlertOther: 'Mở menu trình duyệt và chọn Add to Home screen / Install app.',
+        storeTotalLabel: 'Tổng cửa hàng', storeWithLocationLabel: 'Đã có vị trí (chỉ đường được)',
+        storeByRegionTitle: 'Số cửa hàng theo khu vực',
+        storeRegionHint: 'Chưa có dữ liệu khu vực. Thêm cột KHU VỰC vào sheet STORE ID để thống kê theo khu vực.',
+        noRegion: 'Chưa phân khu vực', addStoreToggle: '＋ Thêm cửa hàng mới',
+        storeRegionLabel: 'Khu vực (không bắt buộc)', storeRegionPlaceholder: 'VD: HÀ NỘI - CẦU GIẤY',
+        storeListLabel: 'Danh sách cửa hàng', storeListSearchPlaceholder: 'Tìm mã / tên / khu vực',
+        filteringRegion: 'Đang lọc khu vực:', clearFilterBtn: 'Bỏ lọc', storeListCount: '{n} cửa hàng',
+        directionsBtn: 'Chỉ đường', noLocationLabel: 'Chưa có vị trí',
         homeTrendTitle: 'Xu hướng OUT vs IN', homeActivityTitle: 'Hoạt động gần đây',
         range7: '7 ngày', range30: '30 ngày', seriesOut: 'Xuất (OUT)', seriesIn: 'Nhập (IN)',
         trendTableToggle: 'Xem bảng số liệu', colDate: 'Ngày',
@@ -1611,6 +1675,14 @@
         installAlertIOS: 'Install on iPhone/iPad: tap Share, then choose Add to Home Screen.',
         installAlertAndroid: 'Install on Android/PDA: tap the Chrome menu ⋮, then choose Add to Home screen.',
         installAlertOther: 'Open the browser menu and choose Add to Home screen / Install app.',
+        storeTotalLabel: 'Total stores', storeWithLocationLabel: 'With location (directions ready)',
+        storeByRegionTitle: 'Stores by region',
+        storeRegionHint: 'No region data yet. Add a KHU VỰC (REGION) column to the STORE ID sheet to see stores by region.',
+        noRegion: 'No region', addStoreToggle: '+ Add a new store',
+        storeRegionLabel: 'Region (optional)', storeRegionPlaceholder: 'e.g. HANOI - CAU GIAY',
+        storeListLabel: 'Store list', storeListSearchPlaceholder: 'Search ID / name / region',
+        filteringRegion: 'Filtering region:', clearFilterBtn: 'Clear', storeListCount: '{n} stores',
+        directionsBtn: 'Directions', noLocationLabel: 'No location',
         homeTrendTitle: 'OUT vs IN trend', homeActivityTitle: 'Recent activity',
         range7: '7 days', range30: '30 days', seriesOut: 'Out', seriesIn: 'In',
         trendTableToggle: 'View data table', colDate: 'Date',
@@ -1805,6 +1877,7 @@
         renderTrendChart();
         renderDistChart(lastHomeSummary.distribution);
       }
+      if (stores.length) renderAllStores();
     }
 
     function renderSettingsUI() {
@@ -2684,6 +2757,7 @@
     function addNewStore() {
       const storeId = document.getElementById('newStoreId').value.trim().toUpperCase();
       const storeName = document.getElementById('newStoreName').value.trim();
+      const region = document.getElementById('newStoreRegion').value.trim().toUpperCase();
 
       google.script.run
         .withSuccessHandler(function(res) {
@@ -2694,6 +2768,7 @@
           if (res.success) {
             document.getElementById('newStoreId').value = '';
             document.getElementById('newStoreName').value = '';
+            document.getElementById('newStoreRegion').value = '';
             loadStores();
           }
         })
@@ -2706,20 +2781,149 @@
         .addStore({
           token: session.token,
           storeId,
-          storeName
+          storeName,
+          region
         });
     }
 
-    function renderAllStores() {
-      const box = document.getElementById('allStores');
-      box.innerHTML = '';
+    // Màn Store (ADMIN): thống kê số cửa hàng theo khu vực + danh sách có
+    // nút "Chỉ đường" mở Google Maps. Khu vực/toạ độ/địa chỉ lấy từ các cột
+    // tuỳ chọn trong sheet STORE ID (xem getStores ở backend).
+    let storeRegionFilter = null;
+    const NO_REGION_KEY = '__none__';
 
-      stores.forEach(s => {
-        const div = document.createElement('div');
-        div.className = 'recent-item';
-        div.innerHTML = `<b>${s.id}</b> - ${s.name}`;
-        box.appendChild(div);
+    function storeRegionKey(st) {
+      return (st.region || '').trim().toUpperCase() || NO_REGION_KEY;
+    }
+
+    function storeMapsUrl(st) {
+      if (st.lat !== null && st.lat !== undefined && st.lng !== null && st.lng !== undefined) {
+        return 'https://www.google.com/maps/dir/?api=1&destination=' + st.lat + ',' + st.lng;
+      }
+      if (st.address) {
+        return 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(st.address);
+      }
+      return '';
+    }
+
+    function setStoreRegionFilter(key) {
+      storeRegionFilter = storeRegionFilter === key ? null : key;
+      renderAllStores();
+    }
+
+    function renderStoreStats() {
+      document.getElementById('storeTotalQty').innerText = stores.length;
+      document.getElementById('storeLocatedQty').innerText = stores.filter(st => storeMapsUrl(st)).length;
+
+      const counts = {};
+      stores.forEach(st => {
+        const key = storeRegionKey(st);
+        counts[key] = (counts[key] || 0) + 1;
       });
+
+      const keys = Object.keys(counts);
+      const hasRegions = keys.some(k => k !== NO_REGION_KEY);
+      const barsBox = document.getElementById('storeRegionBars');
+      document.getElementById('storeRegionHint').classList.toggle('hidden', hasRegions);
+      barsBox.innerHTML = '';
+      if (!hasRegions) return;
+
+      keys.sort((a, b) => {
+        if (a === NO_REGION_KEY) return 1;
+        if (b === NO_REGION_KEY) return -1;
+        return counts[b] - counts[a] || a.localeCompare(b);
+      });
+      const max = Math.max(...keys.map(k => counts[k]));
+
+      keys.forEach(key => {
+        const row = document.createElement('div');
+        row.className = 'region-row' + (key === NO_REGION_KEY ? ' muted' : '') + (storeRegionFilter === key ? ' active' : '');
+        row.title = (key === NO_REGION_KEY ? t('noRegion') : key) + ': ' + counts[key];
+        row.onclick = function() { setStoreRegionFilter(key); };
+
+        const name = document.createElement('div');
+        name.className = 'region-name';
+        name.textContent = key === NO_REGION_KEY ? t('noRegion') : key;
+
+        const track = document.createElement('div');
+        track.className = 'region-track';
+        const bar = document.createElement('div');
+        bar.className = 'region-bar';
+        bar.style.width = (counts[key] / max * 100).toFixed(1) + '%';
+        track.appendChild(bar);
+
+        const count = document.createElement('div');
+        count.className = 'region-count';
+        count.textContent = counts[key];
+
+        row.appendChild(name);
+        row.appendChild(track);
+        row.appendChild(count);
+        barsBox.appendChild(row);
+      });
+    }
+
+    function renderAllStores() {
+      renderStoreStats();
+
+      const box = document.getElementById('allStores');
+      const q = normalizeText(document.getElementById('storeListSearch').value);
+      const list = stores.filter(st => {
+        if (storeRegionFilter && storeRegionKey(st) !== storeRegionFilter) return false;
+        return !q || normalizeText(`${st.id} ${st.name} ${st.region || ''}`).includes(q);
+      });
+
+      const filterBar = document.getElementById('storeFilterBar');
+      filterBar.classList.toggle('hidden', !storeRegionFilter);
+      document.getElementById('storeFilterName').textContent =
+        storeRegionFilter === NO_REGION_KEY ? t('noRegion') : (storeRegionFilter || '');
+      document.getElementById('storeListCount').textContent = tf('storeListCount', { n: list.length });
+
+      const PIN = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z" fill="#E1364A"/><circle cx="12" cy="10" r="2.6" fill="#fff"/></svg>';
+      const frag = document.createDocumentFragment();
+
+      list.forEach(st => {
+        const row = document.createElement('div');
+        row.className = 'store-row';
+
+        const info = document.createElement('div');
+        info.className = 'info';
+        const idEl = document.createElement('b');
+        idEl.textContent = st.id;
+        info.appendChild(idEl);
+        info.appendChild(document.createTextNode(' - ' + (st.name || '')));
+        if (st.region) {
+          const sub = document.createElement('div');
+          sub.className = 'sub';
+          sub.textContent = st.region;
+          info.appendChild(sub);
+        }
+        row.appendChild(info);
+
+        const url = storeMapsUrl(st);
+        if (url) {
+          const a = document.createElement('a');
+          a.className = 'btn-map';
+          a.href = url;
+          a.target = '_blank';
+          a.rel = 'noopener';
+          a.innerHTML = PIN;
+          const label = document.createElement('span');
+          label.textContent = t('directionsBtn');
+          a.appendChild(label);
+          row.appendChild(a);
+        } else {
+          const none = document.createElement('span');
+          none.className = 'no-loc';
+          none.textContent = t('noLocationLabel');
+          row.appendChild(none);
+        }
+
+        frag.appendChild(row);
+      });
+
+      box.innerHTML = '';
+      box.appendChild(frag);
     }
 
     // =====================================================================
