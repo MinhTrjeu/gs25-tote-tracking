@@ -420,7 +420,25 @@
   .btn:disabled{ background:#C7CEDA; color:#8592A8; box-shadow:none; transform:none; }
   .btn-gray{ background:var(--card); color:var(--heading); border:1.5px solid var(--border); box-shadow:none; }
   .btn-gray:active{ background:var(--bg); }
-  .export-row{ display:flex; justify-content:flex-end; margin-top:10px; }
+  .export-row{ display:flex; justify-content:flex-end; align-items:center; gap:8px; margin-top:10px; }
+  .btn-icon{
+    width:34px; height:34px; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;
+    border:1.5px solid var(--border); border-radius:50%; background:var(--card); color:var(--heading);
+    transition:transform .08s ease, background-color .15s ease;
+  }
+  .btn-icon svg{ width:16px; height:16px; }
+  .btn-icon:active{ transform:scale(.92); background:var(--bg); }
+  .btn-icon.spinning svg{ animation:spin .7s linear infinite; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  /* Thông báo nổi ngắn (VD "Nhấn Back lần nữa để thoát") */
+  .toast{
+    position:fixed; left:50%; bottom:28px; transform:translateX(-50%) translateY(20px); z-index:10000;
+    background:var(--navy); color:#fff; padding:10px 16px; border-radius:999px; font-size:12.5px; font-weight:700;
+    box-shadow:0 8px 20px rgba(10,25,48,.3); opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease;
+    max-width:calc(100% - 40px); text-align:center;
+  }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
 
   /* ---------------- TÀI KHOẢN (màn Cài Đặt) ---------------- */
   #userAvatar{ cursor:pointer; }
@@ -1189,7 +1207,7 @@
             <div id="dashStoreList" class="store-list"></div>
           </div>
           <button class="btn" data-i18n="searchBtn" onclick="loadDashboard()">TÌM KIẾM</button>
-          <div class="export-row"><button class="btn-export" onclick="exportDashboard()"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="3" fill="#1D6F42"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg><span data-i18n="exportExcelBtn">Xuất Excel</span></button></div>
+          <div class="export-row"><button class="btn-icon" data-i18n-title="refreshBtn" title="Làm mới" onclick="refreshClick(this, loadDashboard)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg></button><button class="btn-export" onclick="exportDashboard()"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="3" fill="#1D6F42"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg><span data-i18n="exportExcelBtn">Xuất Excel</span></button></div>
           <div id="dashResult"></div>
         </div>
 
@@ -1211,8 +1229,7 @@
             </div>
           </div>
 
-          <button class="btn btn-gray" data-i18n="refreshBtn" onclick="loadInTransitSummary()">LÀM MỚI</button>
-          <div class="export-row"><button class="btn-export" onclick="exportInTransit()"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="3" fill="#1D6F42"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg><span data-i18n="exportExcelBtn">Xuất Excel</span></button></div>
+          <div class="export-row"><button class="btn-icon" data-i18n-title="refreshBtn" title="Làm mới" onclick="refreshClick(this, loadInTransitSummary)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg></button><button class="btn-export" onclick="exportInTransit()"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="3" fill="#1D6F42"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg><span data-i18n="exportExcelBtn">Xuất Excel</span></button></div>
 
           <h3 data-i18n="transitToStoreHeading" style="margin-top:18px">Đang Giao Tới Cửa Hàng</h3>
           <div id="transitToStoreResult"></div>
@@ -1238,7 +1255,7 @@
           </div>
 
           <button class="btn" data-i18n="viewSummaryBtn" onclick="loadDailyOutSummary()">XEM TỔNG HỢP</button>
-          <div class="export-row"><button class="btn-export" onclick="exportDailyOut()"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="3" fill="#1D6F42"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg><span data-i18n="exportExcelBtn">Xuất Excel</span></button></div>
+          <div class="export-row"><button class="btn-icon" data-i18n-title="refreshBtn" title="Làm mới" onclick="refreshClick(this, loadDailyOutSummary)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg></button><button class="btn-export" onclick="exportDailyOut()"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="3" fill="#1D6F42"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg><span data-i18n="exportExcelBtn">Xuất Excel</span></button></div>
           <div id="dailyOutResult"></div>
         </div>
 
@@ -1271,7 +1288,7 @@
           </div>
 
           <button class="btn" data-i18n="viewAbnormalBtn" onclick="loadAbnormalSummary()">XEM ABNORMAL</button>
-          <div class="export-row"><button class="btn-export" onclick="exportAbnormal()"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="3" fill="#1D6F42"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg><span data-i18n="exportExcelBtn">Xuất Excel</span></button></div>
+          <div class="export-row"><button class="btn-icon" data-i18n-title="refreshBtn" title="Làm mới" onclick="refreshClick(this, loadAbnormalSummary)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg></button><button class="btn-export" onclick="exportAbnormal()"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="3" fill="#1D6F42"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg><span data-i18n="exportExcelBtn">Xuất Excel</span></button></div>
           <div id="abnormalResult"></div>
         </div>
 
@@ -1573,6 +1590,7 @@
         changePwBtn: 'ĐỔI MẬT KHẨU', pwMissing: 'Nhập đủ mật khẩu hiện tại và mật khẩu mới',
         pwTooShort: 'Mật khẩu mới phải có ít nhất 6 ký tự', pwMismatch: 'Hai lần nhập mật khẩu mới không khớp',
         pwSaving: 'Đang đổi mật khẩu...',
+        pressBackAgainToExit: 'Nhấn Back thêm lần nữa để thoát app',
         homeTrendTitle: 'Xu hướng OUT vs IN', homeActivityTitle: 'Hoạt động gần đây',
         range7: '7 ngày', range30: '30 ngày', seriesOut: 'Xuất (OUT)', seriesIn: 'Nhập (IN)',
         trendTableToggle: 'Xem bảng số liệu', colDate: 'Ngày',
@@ -1625,7 +1643,7 @@
         transitDesc1c: '(kho đã xuất, chưa ai quét nhận) và', transitDesc1d: 'đang về kho', transitDesc1e: '(cửa hàng đã trả vỏ, kho chưa quét nhận lại).',
         transitDesc2: 'Sắp xếp theo tote nằm lâu nhất trước - dùng để phát hiện tote bị quên quét/thất lạc.',
         transitToStoreLabel: 'Đang giao tới cửa hàng', transitToWarehouseLabel: 'Đang về kho',
-        refreshBtn: 'LÀM MỚI', transitToStoreHeading: 'Đang Giao Tới Cửa Hàng', transitToWarehouseHeading: 'Đang Về Kho',
+        refreshBtn: 'Làm mới', transitToStoreHeading: 'Đang Giao Tới Cửa Hàng', transitToWarehouseHeading: 'Đang Về Kho',
 
         dailyOutTitle: 'Tổng Hợp Tote Xuất Theo Ngày',
         dailyOutDesc1: 'Dùng để đối chiếu số tote xuất thực tế với chứng từ viết tay.',
@@ -1758,6 +1776,7 @@
         changePwBtn: 'CHANGE PASSWORD', pwMissing: 'Enter your current and new password',
         pwTooShort: 'New password must be at least 6 characters', pwMismatch: 'The two new passwords do not match',
         pwSaving: 'Changing password...',
+        pressBackAgainToExit: 'Press Back again to exit the app',
         homeTrendTitle: 'OUT vs IN trend', homeActivityTitle: 'Recent activity',
         range7: '7 days', range30: '30 days', seriesOut: 'Out', seriesIn: 'In',
         trendTableToggle: 'View data table', colDate: 'Date',
@@ -1810,7 +1829,7 @@
         transitDesc1c: '(shipped by warehouse, not yet received) and', transitDesc1d: 'returning to warehouse', transitDesc1e: '(returned by store, not yet received by warehouse).',
         transitDesc2: 'Sorted by longest time in transit first - helps spot totes that were forgotten or lost.',
         transitToStoreLabel: 'Heading to store', transitToWarehouseLabel: 'Returning to warehouse',
-        refreshBtn: 'REFRESH', transitToStoreHeading: 'Heading To Store', transitToWarehouseHeading: 'Returning To Warehouse',
+        refreshBtn: 'Refresh', transitToStoreHeading: 'Heading To Store', transitToWarehouseHeading: 'Returning To Warehouse',
 
         dailyOutTitle: 'Daily Outbound Tote Summary',
         dailyOutDesc1: 'Used to reconcile actual outbound totes against paper records.',
@@ -1932,6 +1951,10 @@
       });
       document.querySelectorAll('[data-i18n-placeholder]').forEach(function (el) {
         el.placeholder = t(el.getAttribute('data-i18n-placeholder'));
+      });
+      document.querySelectorAll('[data-i18n-title]').forEach(function (el) {
+        el.title = t(el.getAttribute('data-i18n-title'));
+        el.setAttribute('aria-label', el.title);
       });
     }
 
@@ -2251,6 +2274,8 @@
         loadStores();
       }
 
+      history.replaceState({ app: 'base' }, '');
+
       showScreen('home');
       focusScanLoop();
     }
@@ -2328,7 +2353,9 @@
       ].includes(active.id);
     }
 
-    function showScreen(name) {
+    function showScreen(name, fromHistory) {
+      if (!fromHistory) pushScreenState(name);
+      currentScreen = name;
       document.querySelectorAll('.screen').forEach(x => x.classList.remove('active'));
       document.querySelectorAll('.rail-item').forEach(x => x.classList.remove('active'));
 
@@ -4818,6 +4845,98 @@
           show(getErrorMessage(err), false);
         })
         .changePassword({ token: session.token, oldPassword: oldPw, newPassword: newPw });
+    }
+
+    // =====================================================================
+    // NHÓM 28: NÚT BACK (điện thoại/PDA) + NÚT LÀM MỚI + THÔNG BÁO NỔI
+    // App chỉ có 1 trang web nên mặc định bấm Back là thoát luôn. Giờ mỗi
+    // lần chuyển màn được ghi vào lịch sử trình duyệt:
+    //   - Back khi đang mở popup / danh sách gợi ý -> chỉ đóng nó.
+    //   - Back ở các màn khác -> quay lại màn trước đó.
+    //   - Back ở Trang chủ -> nhắc "Nhấn Back thêm lần nữa để thoát",
+    //     bấm thêm lần nữa mới thoát app.
+    // =====================================================================
+    let currentScreen = 'home';
+
+    function pushScreenState(name) {
+      if (!session) return;
+      const st = history.state;
+      if (st && st.app === 'screen' && st.screen === name) return;
+      history.pushState({ app: 'screen', screen: name }, '');
+    }
+
+    // Đóng lớp đang nổi trên cùng (popup xác nhận phiên, danh sách gợi ý store).
+    // Trả về true nếu có lớp nào đó để đóng.
+    function closeTopLayer() {
+      const overlays = {
+        sessionConfirmOverlay: cancelEndScanSession,
+        cancelSessionOverlay: closeCancelSessionOverlay,
+        cancelInSessionOverlay: closeCancelInSessionOverlay,
+        driverSessionConfirmOverlay: cancelEndDriverSession,
+        driverCancelSessionOverlay: closeDriverCancelOverlay
+      };
+      for (const id in overlays) {
+        const el = document.getElementById(id);
+        if (el && !el.classList.contains('hidden')) {
+          // Đang xử lý (nút bị khóa) thì không đóng ngang, chỉ chặn Back.
+          if (!el.querySelector('button:disabled')) overlays[id]();
+          return true;
+        }
+      }
+      const openList = document.querySelector('.store-list.open');
+      if (openList) {
+        openList.classList.remove('open');
+        openList.innerHTML = '';
+        if (document.activeElement) document.activeElement.blur();
+        return true;
+      }
+      return false;
+    }
+
+    window.addEventListener('popstate', function(e) {
+      if (!session || document.getElementById('appPage').classList.contains('hidden')) return;
+      const st = e.state || {};
+
+      if (closeTopLayer()) {
+        history.pushState({ app: 'screen', screen: currentScreen }, '');
+        return;
+      }
+
+      if (st.app === 'screen' && st.screen) {
+        showScreen(st.screen, true);
+        return;
+      }
+
+      // Đã lùi về mốc gốc của app
+      if (currentScreen !== 'home') {
+        showScreen('home', true);
+        history.pushState({ app: 'screen', screen: 'home' }, '');
+        return;
+      }
+
+      // Đang ở Trang chủ: đứng yên ở mốc gốc, lần Back kế tiếp hệ điều hành sẽ đóng app.
+      showToast(t('pressBackAgainToExit'));
+    });
+
+    let toastTimer = null;
+    function showToast(text) {
+      let el = document.getElementById('appToast');
+      if (!el) {
+        el = document.createElement('div');
+        el.id = 'appToast';
+        el.className = 'toast';
+        document.body.appendChild(el);
+      }
+      el.textContent = text;
+      el.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function() { el.classList.remove('show'); }, 2000);
+    }
+
+    function refreshClick(btn, loadFn) {
+      btn.classList.add('spinning');
+      setTimeout(function() { btn.classList.remove('spinning'); }, 800);
+      loadFn();
     }
 
     // =====================================================================
