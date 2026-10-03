@@ -440,6 +440,66 @@
   }
   .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
 
+  /* ---------------- MÀN VẬN CHUYỂN: 2 thẻ chọn + 1 bảng chi tiết ----------------
+     Hai mục dùng 2 màu + 2 mũi tên khác hướng (xanh dương -> đi tới cửa hàng,
+     xanh lá <- về kho), cùng cặp màu với biểu đồ OUT/IN ở Trang chủ. Màu luôn
+     đi kèm biểu tượng + chữ nên người mù màu vẫn phân biệt được. */
+  #screen-transit{ --tr-store:#2a78d6; --tr-wh:#1baf7a; --tr-store-tint:rgba(42,120,214,.10); --tr-wh-tint:rgba(27,175,122,.11); }
+  :root[data-theme="dark"] #screen-transit{ --tr-store:#3987e5; --tr-wh:#199e70; --tr-store-tint:rgba(57,135,229,.18); --tr-wh-tint:rgba(25,158,112,.20); }
+  .to-store{ --c:var(--tr-store); --tint:var(--tr-store-tint); }
+  .to-wh{ --c:var(--tr-wh); --tint:var(--tr-wh-tint); }
+  .transit-tabs{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; }
+  .transit-tab{
+    text-align:left; display:flex; flex-direction:column; gap:3px; padding:10px 12px 11px; min-height:84px;
+    background:var(--card); border:1.5px solid var(--border); border-top:5px solid var(--c);
+    border-radius:var(--radius); box-shadow:var(--shadow);
+    transition:transform .08s ease, background-color .15s ease, border-color .15s ease;
+  }
+  .transit-tab:active{ transform:scale(.98); }
+  .transit-tab.active{ background-image:linear-gradient(var(--tint), var(--tint)); border-color:var(--c); }
+  .tt-top{ display:flex; align-items:center; justify-content:space-between; gap:6px; }
+  .tt-icon{
+    width:28px; height:28px; border-radius:50%; background:var(--c); color:#fff; flex-shrink:0;
+    display:inline-flex; align-items:center; justify-content:center;
+  }
+  .tt-icon svg{ width:15px; height:15px; }
+  .transit-tab .num{ font-size:26px; font-weight:800; color:var(--ink); line-height:30px; }
+  .transit-tab .lbl{ font-size:11px; font-weight:700; color:var(--muted); line-height:14px; }
+  .transit-tab.active .lbl{ color:var(--ink); }
+  .tt-stuck{ font-size:10.5px; font-weight:800; color:var(--red); line-height:13px; }
+  .transit-panel{
+    background:var(--card); border:1px solid var(--border); border-top:5px solid var(--c);
+    border-radius:var(--radius); padding:12px; box-shadow:var(--shadow);
+  }
+  .tp-head{ display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+  .tp-head b{ flex:1; min-width:0; font-size:14px; color:var(--heading); }
+  .tp-count{ font-size:11.5px; font-weight:700; color:var(--muted); white-space:nowrap; }
+  .tp-hint{
+    display:block; width:100%; margin-top:8px; padding:9px 12px; text-align:left; font-size:12px; font-weight:700;
+    color:var(--heading); background:var(--blue-soft); border-radius:var(--radius-sm);
+  }
+  #transitList{ margin-top:6px; }
+  .transit-store{ border:0; border-bottom:1px solid var(--row-border); border-radius:0; padding:0; margin:0; background:none; }
+  .transit-store:last-child{ border-bottom:0; }
+  .transit-store > summary{
+    list-style:none; display:flex; align-items:center; gap:8px; padding:11px 2px; cursor:pointer; font-size:13px;
+  }
+  .transit-store > summary::-webkit-details-marker{ display:none; }
+  .transit-store .ts-main{ flex:1; min-width:0; font-weight:600; color:var(--ink); line-height:18px; }
+  .transit-store .ts-main b{ color:var(--heading); font-size:14px; }
+  .ts-old{ display:block; font-size:11px; font-weight:700; color:var(--muted); margin-top:1px; }
+  .ts-old.stuck{ color:var(--red); font-weight:800; }
+  .ts-badge{
+    min-width:34px; padding:3px 9px; text-align:center; font-size:15px; font-weight:800; color:var(--ink);
+    border:2px solid var(--c); background:var(--tint); border-radius:999px; flex-shrink:0;
+  }
+  .transit-store .chev{ width:16px; height:16px; color:var(--muted); flex-shrink:0; transition:transform .15s ease; }
+  .transit-store[open] > summary .chev{ transform:rotate(180deg); }
+  .ts-chips{ padding:0 2px 12px; }
+  .chip.stuck{ background:var(--red-soft); color:var(--red); border-color:var(--red); }
+  .tp-actions{ display:flex; justify-content:center; gap:8px; margin-top:10px; flex-wrap:wrap; }
+  .tp-actions:empty{ display:none; }
+
   /* ---------------- TÀI KHOẢN (màn Cài Đặt) ---------------- */
   #userAvatar{ cursor:pointer; }
   .account-card{
@@ -1218,24 +1278,35 @@
             <div data-i18n="transitDesc2">Sắp xếp theo tote nằm lâu nhất trước - dùng để phát hiện tote bị quên quét/thất lạc.</div>
           </div>
 
-          <div id="transitStats" class="kpi-row" style="margin-bottom:14px">
-            <div class="kpi">
-              <div class="num" id="transitToStoreQty">0</div>
-              <div class="lbl" data-i18n="transitToStoreLabel">Đang giao tới cửa hàng</div>
-            </div>
-            <div class="kpi">
-              <div class="num" id="transitToWarehouseQty">0</div>
-              <div class="lbl" data-i18n="transitToWarehouseLabel">Đang về kho</div>
-            </div>
-          </div>
-
           <div class="export-row"><button class="btn-icon" data-i18n-title="refreshBtn" title="Làm mới" onclick="refreshClick(this, loadInTransitSummary)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg></button><button class="btn-export" onclick="exportInTransit()"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="3" fill="#1D6F42"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg><span data-i18n="exportExcelBtn">Xuất Excel</span></button></div>
 
-          <h3 data-i18n="transitToStoreHeading" style="margin-top:18px">Đang Giao Tới Cửa Hàng</h3>
-          <div id="transitToStoreResult"></div>
+          <div id="transitStats" class="transit-tabs" role="tablist">
+            <button id="transitTabToStore" class="transit-tab to-store active" role="tab" aria-selected="true" onclick="selectTransitTab('toStore')">
+              <span class="tt-top"><span class="tt-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></span><span class="num" id="transitToStoreQty">0</span></span>
+              <span class="lbl" data-i18n="transitToStoreLabel">Đang giao tới cửa hàng</span>
+              <span class="tt-stuck hidden" id="transitStuckToStore"></span>
+            </button>
+            <button id="transitTabToWarehouse" class="transit-tab to-wh" role="tab" aria-selected="false" onclick="selectTransitTab('toWarehouse')">
+              <span class="tt-top"><span class="tt-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12H5"/><path d="M11 6l-6 6 6 6"/></svg></span><span class="num" id="transitToWarehouseQty">0</span></span>
+              <span class="lbl" data-i18n="transitToWarehouseLabel">Đang về kho</span>
+              <span class="tt-stuck hidden" id="transitStuckToWarehouse"></span>
+            </button>
+          </div>
 
-          <h3 data-i18n="transitToWarehouseHeading" style="margin-top:18px">Đang Về Kho</h3>
-          <div id="transitToWarehouseResult"></div>
+          <div id="transitPanel" class="transit-panel to-store">
+            <div class="tp-head">
+              <span class="tt-icon" id="transitPanelIcon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></span>
+              <b id="transitPanelTitle">-</b>
+              <span class="tp-count" id="transitPanelCount"></span>
+            </div>
+            <input id="transitSearch" data-i18n-placeholder="transitSearchPlaceholder" placeholder="Tìm cửa hàng hoặc mã rổ..." autocomplete="off" oninput="onTransitSearch()">
+            <button id="transitOtherHint" class="tp-hint hidden" onclick="switchTransitTabFromHint()"></button>
+            <div id="transitList"></div>
+            <div class="tp-actions">
+              <button id="transitMoreBtn" class="btn-export hidden" onclick="showMoreTransit()"></button>
+              <button id="transitLessBtn" class="btn-export hidden" data-i18n="transitShowLess" onclick="collapseTransit()">Thu gọn</button>
+            </div>
+          </div>
         </div>
 
         <div id="screen-dailyOut" class="screen">
@@ -1590,6 +1661,11 @@
         changePwBtn: 'ĐỔI MẬT KHẨU', pwMissing: 'Nhập đủ mật khẩu hiện tại và mật khẩu mới',
         pwTooShort: 'Mật khẩu mới phải có ít nhất 6 ký tự', pwMismatch: 'Hai lần nhập mật khẩu mới không khớp',
         pwSaving: 'Đang đổi mật khẩu...',
+        transitSearchPlaceholder: 'Tìm cửa hàng hoặc mã rổ...', transitStoresCount: '{n} cửa hàng',
+        transitShowMore: 'Xem thêm {n} cửa hàng (còn {rest})', transitShowLess: 'Thu gọn',
+        transitStuckCount: '⚠ {n} rổ quá 24 giờ', transitOldest: 'Lâu nhất: {time}',
+        transitOtherHint: 'Có {n} cửa hàng khớp ở mục «{name}» - bấm để xem', transitNoMatch: 'Không có kết quả khớp',
+        transitToteCount: '{n} rổ',
         pressBackAgainToExit: 'Nhấn Back thêm lần nữa để thoát app',
         homeTrendTitle: 'Xu hướng OUT vs IN', homeActivityTitle: 'Hoạt động gần đây',
         range7: '7 ngày', range30: '30 ngày', seriesOut: 'Xuất (OUT)', seriesIn: 'Nhập (IN)',
@@ -1776,6 +1852,11 @@
         changePwBtn: 'CHANGE PASSWORD', pwMissing: 'Enter your current and new password',
         pwTooShort: 'New password must be at least 6 characters', pwMismatch: 'The two new passwords do not match',
         pwSaving: 'Changing password...',
+        transitSearchPlaceholder: 'Search store or tote ID...', transitStoresCount: '{n} stores',
+        transitShowMore: 'Show {n} more stores ({rest} left)', transitShowLess: 'Show less',
+        transitStuckCount: '⚠ {n} totes over 24 hrs', transitOldest: 'Oldest: {time}',
+        transitOtherHint: '{n} store(s) also match under "{name}" - tap to view', transitNoMatch: 'No matching results',
+        transitToteCount: '{n} totes',
         pressBackAgainToExit: 'Press Back again to exit the app',
         homeTrendTitle: 'OUT vs IN trend', homeActivityTitle: 'Recent activity',
         range7: '7 days', range30: '30 days', seriesOut: 'Out', seriesIn: 'In',
@@ -1976,6 +2057,7 @@
         renderDistChart(lastHomeSummary.distribution);
       }
       if (stores.length) renderAllStores();
+      if (lastTransitRes) renderTransit();
     }
 
     function renderSettingsUI() {
@@ -4112,29 +4194,44 @@
     // trạng thái trung gian IN_TRANSIT_TO_STORE / IN_TRANSIT_TO_WAREHOUSE,
     // sắp xếp theo tote nằm lâu nhất trước để dễ phát hiện tote bị quên quét.
     // =====================================================================
+    let transitTab = 'toStore';          // 'toStore' | 'toWarehouse'
+    const TRANSIT_PREVIEW = 3;            // mặc định chỉ hiện 3 cửa hàng đầu
+    const TRANSIT_STEP = 20;              // mỗi lần "Xem thêm" mở thêm 20 cửa hàng
+    let transitShown = TRANSIT_PREVIEW;
+    const TRANSIT_META = {
+      toStore:     { cls: 'to-store', titleKey: 'transitToStoreHeading',     tabId: 'transitTabToStore' },
+      toWarehouse: { cls: 'to-wh',    titleKey: 'transitToWarehouseHeading', tabId: 'transitTabToWarehouse' }
+    };
+
+    function escHtml_(v) {
+      return String(v === null || v === undefined ? '' : v).replace(/[&<>"']/g, function(c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    }
+
+    function setTransitMessage(text) {
+      document.getElementById('transitList').innerHTML = '<div class="empty-note">' + escHtml_(text) + '</div>';
+      document.getElementById('transitMoreBtn').classList.add('hidden');
+      document.getElementById('transitLessBtn').classList.add('hidden');
+    }
+
     function loadInTransitSummary() {
-      document.getElementById('transitToStoreResult').innerHTML = t('loadingMsg');
-      document.getElementById('transitToWarehouseResult').innerHTML = '';
+      setTransitMessage(t('loadingMsg'));
 
       google.script.run
         .withSuccessHandler(function(res) {
           if (!res || !res.success) {
-            document.getElementById('transitToStoreResult').innerHTML = t('genericErrPrefix') + ((res && res.message) || t('couldNotLoadData'));
-            document.getElementById('transitToWarehouseResult').innerHTML = '';
+            setTransitMessage(t('genericErrPrefix') + ((res && res.message) || t('couldNotLoadData')));
             return;
           }
 
           lastTransitRes = res;
-          document.getElementById('transitToStoreQty').innerText = res.totalToStore || 0;
-          document.getElementById('transitToWarehouseQty').innerText = res.totalToWarehouse || 0;
-
-          renderInTransitGroup('transitToStoreResult', res.toStore, 'transitVerbToStore');
-          renderInTransitGroup('transitToWarehouseResult', res.toWarehouse, 'transitVerbToWarehouse');
+          transitShown = TRANSIT_PREVIEW;
+          renderTransit();
         })
         .withFailureHandler(function(err) {
           if (handleSessionError(err)) return;
-          document.getElementById('transitToStoreResult').innerHTML = t('genericErrPrefix') + getErrorMessage(err);
-          document.getElementById('transitToWarehouseResult').innerHTML = '';
+          setTransitMessage(t('genericErrPrefix') + getErrorMessage(err));
         })
         .getInTransitSummary({ token: session.token });
     }
@@ -4144,41 +4241,148 @@
     function formatTransitHours(hours) {
       if (hours === null || hours === undefined) return '';
       if (hours < 1) return Math.round(hours * 60) + t('minutesSuffix');
-      return hours + t('hoursSuffix');
+      return (Math.round(hours * 10) / 10) + t('hoursSuffix');
     }
 
-    function renderInTransitGroup(boxId, groups, verbKey) {
-      const box = document.getElementById(boxId);
-      box.innerHTML = '';
+    function selectTransitTab(tab) {
+      if (transitTab === tab) return;
+      transitTab = tab;
+      transitShown = TRANSIT_PREVIEW;
+      renderTransit();
+    }
 
-      if (!groups || !groups.length) {
-        box.innerHTML = '<div class="dashboard-card">' + t('noTotesFound') + '</div>';
+    function onTransitSearch() {
+      transitShown = TRANSIT_PREVIEW;
+      renderTransit();
+    }
+
+    function showMoreTransit() {
+      transitShown += TRANSIT_STEP;
+      renderTransit();
+    }
+
+    function collapseTransit() {
+      transitShown = TRANSIT_PREVIEW;
+      renderTransit();
+      document.getElementById('transitPanel').scrollIntoView({ block: 'start' });
+    }
+
+    function switchTransitTabFromHint() {
+      selectTransitTab(transitTab === 'toStore' ? 'toWarehouse' : 'toStore');
+    }
+
+    // Lọc 1 nhóm cửa hàng theo ô tìm kiếm: khớp mã/tên cửa hàng -> giữ nguyên
+    // toàn bộ rổ; chỉ khớp mã rổ -> chỉ giữ các rổ khớp và tự mở ra.
+    function filterTransitGroup(groups, q) {
+      if (!q) return (groups || []).map(function(g) { return { g: g, totes: g.totes || [], open: false }; });
+
+      const out = [];
+      (groups || []).forEach(function(g) {
+        if (normalizeText(g.storeId + ' ' + (g.storeName || '')).includes(q)) {
+          out.push({ g: g, totes: g.totes || [], open: false });
+          return;
+        }
+        const hit = (g.totes || []).filter(function(x) { return normalizeText(x.toteId).includes(q); });
+        if (hit.length) out.push({ g: g, totes: hit, open: true });
+      });
+      return out;
+    }
+
+    function transitStuckCount(groups) {
+      let n = 0;
+      (groups || []).forEach(function(g) {
+        (g.totes || []).forEach(function(x) { if ((x.hours || 0) >= 24) n++; });
+      });
+      return n;
+    }
+
+    function renderTransit() {
+      const res = lastTransitRes;
+      if (!res) return;
+
+      const meta = TRANSIT_META[transitTab];
+      const otherTab = transitTab === 'toStore' ? 'toWarehouse' : 'toStore';
+
+      // Thẻ chọn: số lượng + số rổ quá 24 giờ + trạng thái đang chọn
+      document.getElementById('transitToStoreQty').innerText = res.totalToStore || 0;
+      document.getElementById('transitToWarehouseQty').innerText = res.totalToWarehouse || 0;
+      [['toStore', 'transitStuckToStore'], ['toWarehouse', 'transitStuckToWarehouse']].forEach(function(pair) {
+        const n = transitStuckCount(res[pair[0]]);
+        const el = document.getElementById(pair[1]);
+        el.classList.toggle('hidden', n === 0);
+        el.textContent = n ? tf('transitStuckCount', { n: n }) : '';
+      });
+      Object.keys(TRANSIT_META).forEach(function(key) {
+        const tab = document.getElementById(TRANSIT_META[key].tabId);
+        tab.classList.toggle('active', key === transitTab);
+        tab.setAttribute('aria-selected', key === transitTab ? 'true' : 'false');
+      });
+
+      // Bảng chi tiết: màu + mũi tên + tiêu đề của mục đang chọn
+      const panel = document.getElementById('transitPanel');
+      panel.classList.remove('to-store', 'to-wh');
+      panel.classList.add(meta.cls);
+      document.getElementById('transitPanelTitle').textContent = t(meta.titleKey);
+      const icon = document.getElementById('transitPanelIcon');
+      icon.innerHTML = document.querySelector('#' + meta.tabId + ' .tt-icon').innerHTML;
+
+      const q = normalizeText(document.getElementById('transitSearch').value);
+      const rows = filterTransitGroup(res[transitTab], q);
+      const total = (res[transitTab] || []).length;
+      document.getElementById('transitPanelCount').textContent =
+        q ? tf('transitStoresCount', { n: rows.length }) + ' / ' + total : tf('transitStoresCount', { n: total });
+
+      // Gợi ý: tìm không thấy ở mục này nhưng có ở mục kia
+      const hint = document.getElementById('transitOtherHint');
+      const otherRows = q && rows.length === 0 ? filterTransitGroup(res[otherTab], q) : [];
+      hint.classList.toggle('hidden', otherRows.length === 0);
+      if (otherRows.length) {
+        hint.textContent = tf('transitOtherHint', { n: otherRows.length, name: t(TRANSIT_META[otherTab].titleKey) });
+      }
+
+      const list = document.getElementById('transitList');
+      const moreBtn = document.getElementById('transitMoreBtn');
+      const lessBtn = document.getElementById('transitLessBtn');
+
+      if (!rows.length) {
+        list.innerHTML = '<div class="empty-note">' + escHtml_(q ? t('transitNoMatch') : t('noTotesFound')) + '</div>';
+        moreBtn.classList.add('hidden');
+        lessBtn.classList.add('hidden');
         return;
       }
 
-      groups.forEach(s => {
-        const div = document.createElement('div');
-        div.className = 'dashboard-card';
+      const verb = t(transitTab === 'toStore' ? 'transitVerbToStore' : 'transitVerbToWarehouse');
+      const shown = rows.slice(0, transitShown);
+      const CHEV = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
 
-        const chips = (s.totes || []).map(tote => {
-          const stuck = (tote.hours || 0) >= 24;
-          const timeText = formatTransitHours(tote.hours);
-          return `<span class="chip"${stuck ? ' style="background:var(--red-soft);color:#E1364A"' : ''}>${tote.toteId}${timeText ? ' · ' + timeText : ''}</span>`;
+      list.innerHTML = shown.map(function(r) {
+        const g = r.g;
+        const maxHours = (g.totes || []).reduce(function(m, x) { return Math.max(m, x.hours || 0); }, 0);
+        const stuck = maxHours >= 24;
+        const oldText = maxHours ? tf('transitOldest', { time: formatTransitHours(maxHours) }) : '';
+        const chips = r.totes.map(function(x) {
+          const isStuck = (x.hours || 0) >= 24;
+          const timeText = formatTransitHours(x.hours);
+          return '<span class="chip' + (isStuck ? ' stuck' : '') + '">' + escHtml_(x.toteId) + (timeText ? ' · ' + escHtml_(timeText) : '') + '</span>';
         }).join('') || '-';
 
-        div.innerHTML = `
-          <div class="dashboard-header">
-            <div class="dashboard-title">${s.storeId} - ${s.storeName || ''}</div>
-            <div class="qty">${s.qty}</div>
-          </div>
-          <details>
-            <summary>${tf('viewTransitTotesMsg', { n: s.qty, verb: t(verbKey) })}</summary>
-            <div style="margin-top:8px">${chips}</div>
-          </details>
-        `;
+        return '<details class="transit-store"' + (r.open ? ' open' : '') + '>' +
+          '<summary>' +
+            '<span class="ts-main"><b>' + escHtml_(g.storeId) + '</b> - ' + escHtml_(g.storeName || '') +
+              (oldText ? '<span class="ts-old' + (stuck ? ' stuck' : '') + '">' + (stuck ? '⚠ ' : '') + escHtml_(oldText) + '</span>' : '') +
+            '</span>' +
+            '<span class="ts-badge" title="' + escHtml_(tf('transitToteCount', { n: g.qty }) + ' ' + verb) + '">' + g.qty + '</span>' +
+            CHEV +
+          '</summary>' +
+          '<div class="ts-chips">' + chips + '</div>' +
+        '</details>';
+      }).join('');
 
-        box.appendChild(div);
-      });
+      // Nút "Xem thêm ... (còn N cửa hàng)" / "Thu gọn"
+      const rest = rows.length - shown.length;
+      moreBtn.classList.toggle('hidden', rest <= 0);
+      if (rest > 0) moreBtn.textContent = tf('transitShowMore', { n: Math.min(TRANSIT_STEP, rest), rest: rest });
+      lessBtn.classList.toggle('hidden', transitShown <= TRANSIT_PREVIEW || rows.length <= TRANSIT_PREVIEW);
     }
 
     // =====================================================================
