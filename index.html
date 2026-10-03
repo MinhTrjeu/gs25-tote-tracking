@@ -466,7 +466,6 @@
   .transit-tab .num{ font-size:26px; font-weight:800; color:var(--ink); line-height:30px; }
   .transit-tab .lbl{ font-size:11px; font-weight:700; color:var(--muted); line-height:14px; }
   .transit-tab.active .lbl{ color:var(--ink); }
-  .tt-stuck{ font-size:10.5px; font-weight:800; color:var(--red); line-height:13px; }
   .transit-panel{
     background:var(--card); border:1px solid var(--border); border-top:5px solid var(--c);
     border-radius:var(--radius); padding:12px; box-shadow:var(--shadow);
@@ -488,7 +487,6 @@
   .transit-store .ts-main{ flex:1; min-width:0; font-weight:600; color:var(--ink); line-height:18px; }
   .transit-store .ts-main b{ color:var(--heading); font-size:14px; }
   .ts-old{ display:block; font-size:11px; font-weight:700; color:var(--muted); margin-top:1px; }
-  .ts-old.stuck{ color:var(--red); font-weight:800; }
   .ts-badge{
     min-width:34px; padding:3px 9px; text-align:center; font-size:15px; font-weight:800; color:var(--ink);
     border:2px solid var(--c); background:var(--tint); border-radius:999px; flex-shrink:0;
@@ -496,7 +494,13 @@
   .transit-store .chev{ width:16px; height:16px; color:var(--muted); flex-shrink:0; transition:transform .15s ease; }
   .transit-store[open] > summary .chev{ transform:rotate(180deg); }
   .ts-chips{ padding:0 2px 12px; }
-  .chip.stuck{ background:var(--red-soft); color:var(--red); border-color:var(--red); }
+  #transitSuggest .store-item{ display:flex; align-items:center; gap:8px; }
+  #transitSuggest .sg-main{ flex:1; min-width:0; }
+  .sg-tag{
+    display:inline-flex; align-items:center; gap:4px; flex-shrink:0; padding:3px 8px; font-size:10.5px; font-weight:800;
+    color:var(--ink); border:1.5px solid var(--c); background:var(--tint); border-radius:999px;
+  }
+  .sg-tag svg{ width:11px; height:11px; color:var(--c); }
   .tp-actions{ display:flex; justify-content:center; gap:8px; margin-top:10px; flex-wrap:wrap; }
   .tp-actions:empty{ display:none; }
 
@@ -1284,12 +1288,10 @@
             <button id="transitTabToStore" class="transit-tab to-store active" role="tab" aria-selected="true" onclick="selectTransitTab('toStore')">
               <span class="tt-top"><span class="tt-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></span><span class="num" id="transitToStoreQty">0</span></span>
               <span class="lbl" data-i18n="transitToStoreLabel">Đang giao tới cửa hàng</span>
-              <span class="tt-stuck hidden" id="transitStuckToStore"></span>
             </button>
             <button id="transitTabToWarehouse" class="transit-tab to-wh" role="tab" aria-selected="false" onclick="selectTransitTab('toWarehouse')">
               <span class="tt-top"><span class="tt-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12H5"/><path d="M11 6l-6 6 6 6"/></svg></span><span class="num" id="transitToWarehouseQty">0</span></span>
               <span class="lbl" data-i18n="transitToWarehouseLabel">Đang về kho</span>
-              <span class="tt-stuck hidden" id="transitStuckToWarehouse"></span>
             </button>
           </div>
 
@@ -1299,7 +1301,12 @@
               <b id="transitPanelTitle">-</b>
               <span class="tp-count" id="transitPanelCount"></span>
             </div>
-            <input id="transitSearch" data-i18n-placeholder="transitSearchPlaceholder" placeholder="Tìm cửa hàng hoặc mã rổ..." autocomplete="off" oninput="onTransitSearch()">
+            <div class="store-combo">
+              <input id="transitSearch" data-i18n-placeholder="transitSearchPlaceholder" placeholder="Tìm cửa hàng hoặc mã rổ..." autocomplete="off"
+                oninput="onTransitSearch()" onfocus="renderTransitSuggest()" onblur="closeTransitSuggestSoon()"
+                onkeydown="if (event.key === 'Enter' || event.key === 'Escape') closeTransitSuggest()">
+              <div id="transitSuggest" class="store-list"></div>
+            </div>
             <button id="transitOtherHint" class="tp-hint hidden" onclick="switchTransitTabFromHint()"></button>
             <div id="transitList"></div>
             <div class="tp-actions">
@@ -1663,7 +1670,7 @@
         pwSaving: 'Đang đổi mật khẩu...',
         transitSearchPlaceholder: 'Tìm cửa hàng hoặc mã rổ...', transitStoresCount: '{n} cửa hàng',
         transitShowMore: 'Xem thêm {n} cửa hàng (còn {rest})', transitShowLess: 'Thu gọn',
-        transitStuckCount: '⚠ {n} rổ quá 24 giờ', transitOldest: 'Lâu nhất: {time}',
+        transitOldest: 'Lâu nhất: {time}',
         transitOtherHint: 'Có {n} cửa hàng khớp ở mục «{name}» - bấm để xem', transitNoMatch: 'Không có kết quả khớp',
         transitToteCount: '{n} rổ',
         pressBackAgainToExit: 'Nhấn Back thêm lần nữa để thoát app',
@@ -1854,7 +1861,7 @@
         pwSaving: 'Changing password...',
         transitSearchPlaceholder: 'Search store or tote ID...', transitStoresCount: '{n} stores',
         transitShowMore: 'Show {n} more stores ({rest} left)', transitShowLess: 'Show less',
-        transitStuckCount: '⚠ {n} totes over 24 hrs', transitOldest: 'Oldest: {time}',
+        transitOldest: 'Oldest: {time}',
         transitOtherHint: '{n} store(s) also match under "{name}" - tap to view', transitNoMatch: 'No matching results',
         transitToteCount: '{n} totes',
         pressBackAgainToExit: 'Press Back again to exit the app',
@@ -4254,6 +4261,97 @@
     function onTransitSearch() {
       transitShown = TRANSIT_PREVIEW;
       renderTransit();
+      renderTransitSuggest();
+    }
+
+    function closeTransitSuggest() {
+      const box = document.getElementById('transitSuggest');
+      box.classList.remove('open');
+      box.innerHTML = '';
+    }
+
+    function closeTransitSuggestSoon() {
+      setTimeout(closeTransitSuggest, 150);
+    }
+
+    // Dropdown gợi ý khi gõ: cửa hàng khớp mã/tên (mục đang xem lên trước, rồi
+    // tới mục còn lại) và, từ 3 ký tự trở đi, cả mã rổ khớp. Chọn 1 gợi ý sẽ
+    // chuyển sang đúng mục của nó và lọc đúng cửa hàng / rổ đó.
+    function renderTransitSuggest() {
+      const box = document.getElementById('transitSuggest');
+      const res = lastTransitRes;
+      const input = document.getElementById('transitSearch');
+      const q = normalizeText(input.value);
+      const qUpper = input.value.trim().toUpperCase();
+
+      box.innerHTML = '';
+      if (!q || !res) { box.classList.remove('open'); return; }
+
+      const MAX = 8;
+      const order = [transitTab, transitTab === 'toStore' ? 'toWarehouse' : 'toStore'];
+      const items = [];
+
+      order.forEach(function(tab) {
+        (res[tab] || []).forEach(function(g) {
+          if (items.length < MAX && normalizeText(g.storeId + ' ' + (g.storeName || '')).includes(q)) {
+            items.push({ tab: tab, g: g, tote: null });
+          }
+        });
+      });
+
+      if (qUpper.length >= 3) {
+        order.forEach(function(tab) {
+          (res[tab] || []).forEach(function(g) {
+            (g.totes || []).forEach(function(x) {
+              if (items.length < MAX && String(x.toteId).toUpperCase().includes(qUpper)) {
+                items.push({ tab: tab, g: g, tote: x });
+              }
+            });
+          });
+        });
+      }
+
+      if (!items.length) { box.classList.remove('open'); return; }
+
+      const ARROW = {
+        toStore: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg>',
+        toWarehouse: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12H5"/><path d="M11 6l-6 6 6 6"/></svg>'
+      };
+
+      items.forEach(function(it) {
+        const div = document.createElement('div');
+        div.className = 'store-item';
+
+        const main = document.createElement('div');
+        main.className = 'sg-main';
+        const b = document.createElement('b');
+        b.textContent = it.tote ? it.tote.toteId : it.g.storeId;
+        main.appendChild(b);
+        main.appendChild(document.createElement('br'));
+        main.appendChild(document.createTextNode(it.g.storeName || it.g.storeId));
+        div.appendChild(main);
+
+        const tag = document.createElement('span');
+        tag.className = 'sg-tag ' + TRANSIT_META[it.tab].cls;
+        tag.innerHTML = ARROW[it.tab];
+        tag.appendChild(document.createTextNode(t(it.tab === 'toStore' ? 'transitVerbToStore' : 'transitVerbToWarehouse')));
+        div.appendChild(tag);
+
+        // onmousedown (không phải onclick) để việc chọn xảy ra TRƯỚC khi ô nhập
+        // mất focus và đóng dropdown - cùng cách với các ô tìm cửa hàng khác.
+        div.onmousedown = function(e) {
+          e.preventDefault();
+          input.value = it.tote ? it.tote.toteId : it.g.storeId;
+          closeTransitSuggest();
+          input.blur();
+          transitTab = it.tab;
+          transitShown = TRANSIT_PREVIEW;
+          renderTransit();
+        };
+        box.appendChild(div);
+      });
+
+      box.classList.add('open');
     }
 
     function showMoreTransit() {
@@ -4288,14 +4386,6 @@
       return out;
     }
 
-    function transitStuckCount(groups) {
-      let n = 0;
-      (groups || []).forEach(function(g) {
-        (g.totes || []).forEach(function(x) { if ((x.hours || 0) >= 24) n++; });
-      });
-      return n;
-    }
-
     function renderTransit() {
       const res = lastTransitRes;
       if (!res) return;
@@ -4306,12 +4396,6 @@
       // Thẻ chọn: số lượng + số rổ quá 24 giờ + trạng thái đang chọn
       document.getElementById('transitToStoreQty').innerText = res.totalToStore || 0;
       document.getElementById('transitToWarehouseQty').innerText = res.totalToWarehouse || 0;
-      [['toStore', 'transitStuckToStore'], ['toWarehouse', 'transitStuckToWarehouse']].forEach(function(pair) {
-        const n = transitStuckCount(res[pair[0]]);
-        const el = document.getElementById(pair[1]);
-        el.classList.toggle('hidden', n === 0);
-        el.textContent = n ? tf('transitStuckCount', { n: n }) : '';
-      });
       Object.keys(TRANSIT_META).forEach(function(key) {
         const tab = document.getElementById(TRANSIT_META[key].tabId);
         tab.classList.toggle('active', key === transitTab);
@@ -4358,18 +4442,16 @@
       list.innerHTML = shown.map(function(r) {
         const g = r.g;
         const maxHours = (g.totes || []).reduce(function(m, x) { return Math.max(m, x.hours || 0); }, 0);
-        const stuck = maxHours >= 24;
         const oldText = maxHours ? tf('transitOldest', { time: formatTransitHours(maxHours) }) : '';
         const chips = r.totes.map(function(x) {
-          const isStuck = (x.hours || 0) >= 24;
           const timeText = formatTransitHours(x.hours);
-          return '<span class="chip' + (isStuck ? ' stuck' : '') + '">' + escHtml_(x.toteId) + (timeText ? ' · ' + escHtml_(timeText) : '') + '</span>';
+          return '<span class="chip">' + escHtml_(x.toteId) + (timeText ? ' · ' + escHtml_(timeText) : '') + '</span>';
         }).join('') || '-';
 
         return '<details class="transit-store"' + (r.open ? ' open' : '') + '>' +
           '<summary>' +
             '<span class="ts-main"><b>' + escHtml_(g.storeId) + '</b> - ' + escHtml_(g.storeName || '') +
-              (oldText ? '<span class="ts-old' + (stuck ? ' stuck' : '') + '">' + (stuck ? '⚠ ' : '') + escHtml_(oldText) + '</span>' : '') +
+              (oldText ? '<span class="ts-old">' + escHtml_(oldText) + '</span>' : '') +
             '</span>' +
             '<span class="ts-badge" title="' + escHtml_(tf('transitToteCount', { n: g.qty }) + ' ' + verb) + '">' + g.qty + '</span>' +
             CHEV +
